@@ -223,6 +223,7 @@ jobs:
           git add -A
           git diff --staged --quiet && echo "No changes" && exit 0
           git commit -m "feat: add ${SKILL_SLUG} skill from ${REPO_FULL}"
+          git pull --rebase origin main || true
           git push
 
       - name: Register on skills.sh
