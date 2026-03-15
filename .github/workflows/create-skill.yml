@@ -1,9 +1,9 @@
 name: Create Trending Skill
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '17 * * * *'  # every hour at :17
-  workflow_dispatch:       # manual trigger
+    - cron: '17 * * * *'
 
 permissions:
   contents: write
