@@ -1,0 +1,194 @@
+name: Create Trending Skill
+
+on:
+  schedule:
+    - cron: '17 * * * *'  # every hour at :17
+  workflow_dispatch:       # manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  create-skill:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Fetch GitHub Trending
+        id: trending
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Fetch trending page and extract repo info
+          TRENDING_JSON=$(curl -s "https://api.github.com/search/repositories?q=created:>$(date -d '7 days ago' +%Y-%m-%d 2>/dev/null || date -v-7d +%Y-%m-%d)&sort=stars&order=desc&per_page=20" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json")
+
+          # Get list of existing skills
+          EXISTING_SKILLS=$(ls -1 skills/ 2>/dev/null | tr '\n' '|')
+          echo "Existing skills: $EXISTING_SKILLS"
+
+          # Find first repo that doesn't already have a skill
+          for i in $(seq 0 19); do
+            REPO_FULL=$(echo "$TRENDING_JSON" | jq -r ".items[$i].full_name // empty")
+            REPO_NAME=$(echo "$TRENDING_JSON" | jq -r ".items[$i].name // empty")
+            REPO_DESC=$(echo "$TRENDING_JSON" | jq -r ".items[$i].description // empty")
+            REPO_LANG=$(echo "$TRENDING_JSON" | jq -r ".items[$i].language // \"Unknown\"")
+            REPO_STARS=$(echo "$TRENDING_JSON" | jq -r ".items[$i].stargazers_count // 0")
+            REPO_OWNER=$(echo "$TRENDING_JSON" | jq -r ".items[$i].owner.login // empty")
+
+            if [ -z "$REPO_FULL" ]; then continue; fi
+
+            # Generate a slug from repo name (lowercase, hyphens)
+            SKILL_SLUG=$(echo "$REPO_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//')
+
+            # Check if skill already exists (by slug or partial match)
+            if [ -d "skills/$SKILL_SLUG" ]; then
+              echo "Skill $SKILL_SLUG already exists, skipping..."
+              continue
+            fi
+
+            # Check if any existing skill folder contains the repo name
+            SKIP=false
+            for existing in skills/*/; do
+              if [ -f "$existing/SKILL.md" ]; then
+                if grep -qi "$REPO_FULL" "$existing/SKILL.md" 2>/dev/null; then
+                  echo "Repo $REPO_FULL already covered in $existing, skipping..."
+                  SKIP=true
+                  break
+                fi
+              fi
+            done
+            if [ "$SKIP" = true ]; then continue; fi
+
+            echo "Selected: $REPO_FULL ($REPO_STARS stars) - $REPO_DESC"
+            echo "repo_full=$REPO_FULL" >> $GITHUB_OUTPUT
+            echo "repo_name=$REPO_NAME" >> $GITHUB_OUTPUT
+            echo "repo_desc=$REPO_DESC" >> $GITHUB_OUTPUT
+            echo "repo_lang=$REPO_LANG" >> $GITHUB_OUTPUT
+            echo "repo_stars=$REPO_STARS" >> $GITHUB_OUTPUT
+            echo "repo_owner=$REPO_OWNER" >> $GITHUB_OUTPUT
+            echo "skill_slug=$SKILL_SLUG" >> $GITHUB_OUTPUT
+            break
+          done
+
+      - name: Fetch repo README
+        if: steps.trending.outputs.repo_full
+        id: readme
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO_FULL="${{ steps.trending.outputs.repo_full }}"
+          README=$(curl -s "https://api.github.com/repos/$REPO_FULL/readme" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" | jq -r '.content // empty' | base64 -d 2>/dev/null || echo "No README available")
+
+          # Truncate to ~8000 chars to fit in API call
+          README_TRUNCATED=$(echo "$README" | head -c 8000)
+          echo "$README_TRUNCATED" > /tmp/repo_readme.md
+
+      - name: Generate skill with Claude API
+        if: steps.trending.outputs.repo_full
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          REPO_FULL="${{ steps.trending.outputs.repo_full }}"
+          REPO_NAME="${{ steps.trending.outputs.repo_name }}"
+          REPO_DESC="${{ steps.trending.outputs.repo_desc }}"
+          REPO_LANG="${{ steps.trending.outputs.repo_lang }}"
+          REPO_STARS="${{ steps.trending.outputs.repo_stars }}"
+          SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
+
+          README_CONTENT=$(cat /tmp/repo_readme.md | jq -Rs .)
+
+          # Build the prompt
+          PROMPT="You are creating an agent skill (SKILL.md) for the open source project: $REPO_FULL
+
+Description: $REPO_DESC
+Language: $REPO_LANG
+Stars: $REPO_STARS
+
+Here is the project's README:
+$(cat /tmp/repo_readme.md)
+
+---
+
+Create a comprehensive SKILL.md file with this EXACT format. The skill should help AI coding agents work with this project effectively.
+
+Requirements:
+1. Start with YAML frontmatter: name, description (one line), and triggers (6-8 relevant trigger phrases)
+2. Add a tagline: '> Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection'
+3. Cover: what it does, installation, key commands/API, configuration, common patterns, integration examples, troubleshooting
+4. Include real code examples in the project's primary language ($REPO_LANG)
+5. Be thorough but practical — focus on what an AI agent would need to help a developer use this project
+6. Do NOT include any placeholder API keys or secrets
+7. The skill name should be descriptive: use '$SKILL_SLUG' as the name field
+
+Output ONLY the SKILL.md content, nothing else."
+
+          # Call Claude API
+          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+            -H "content-type: application/json" \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "anthropic-version: 2023-06-01" \
+            -d "$(jq -n \
+              --arg prompt "$PROMPT" \
+              '{
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 8000,
+                messages: [{role: "user", content: $prompt}]
+              }')")
+
+          # Extract the text content
+          SKILL_CONTENT=$(echo "$RESPONSE" | jq -r '.content[0].text // empty')
+
+          if [ -z "$SKILL_CONTENT" ]; then
+            echo "Failed to generate skill content"
+            echo "$RESPONSE" | jq .
+            exit 1
+          fi
+
+          # Write the skill file
+          mkdir -p "skills/$SKILL_SLUG"
+          echo "$SKILL_CONTENT" > "skills/$SKILL_SLUG/SKILL.md"
+          echo "Created skills/$SKILL_SLUG/SKILL.md"
+
+      - name: Update README skill index
+        if: steps.trending.outputs.repo_full
+        run: |
+          SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
+          REPO_FULL="${{ steps.trending.outputs.repo_full }}"
+          REPO_DESC="${{ steps.trending.outputs.repo_desc }}"
+          DATE=$(date +%Y-%m-%d)
+
+          # Append to skill index in README
+          if ! grep -q "$SKILL_SLUG" README.md 2>/dev/null; then
+            sed -i "/<!-- SKILL_INDEX -->/a | [$SKILL_SLUG](skills/$SKILL_SLUG/) | $REPO_DESC | [$REPO_FULL](https://github.com/$REPO_FULL) | $DATE |" README.md
+          fi
+
+      - name: Commit and push
+        if: steps.trending.outputs.repo_full
+        run: |
+          SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
+          REPO_FULL="${{ steps.trending.outputs.repo_full }}"
+
+          git config user.name "ara-bot"
+          git config user.email "bot@ara.so"
+          git add -A
+          git diff --staged --quiet && echo "No changes to commit" && exit 0
+          git commit -m "feat: add $SKILL_SLUG skill from $REPO_FULL
+
+          Auto-generated from GitHub trending by ara.so Daily Skills."
+          git push
+
+      - name: Register on skills.sh
+        if: steps.trending.outputs.repo_full
+        run: |
+          npx skills add Arasoai/daily-2026-skills --yes --global 2>&1 || true
+          echo "Registered on skills.sh"
