@@ -2,18 +2,18 @@
 
 Auto-generated agent skills from GitHub's trending open source projects, by [ara.so](https://ara.so).
 
-Every 15 minutes, a GitHub Actions workflow checks what's trending on GitHub and creates a comprehensive agent skill for the top project. Skills are published to [skills.sh](https://skills.sh/Arasoai/trending-skills) and installable by any AI coding agent.
+Every 15 minutes, a GitHub Actions workflow checks what's trending on GitHub and creates a comprehensive agent skill for the top project. Skills are published to [skills.sh](https://skills.sh/Aradotso/trending-skills) and installable by any AI coding agent.
 
 ## Install all skills
 
 ```bash
-npx skills add Arasoai/trending-skills
+npx skills add Aradotso/trending-skills
 ```
 
 ## Install a specific skill
 
 ```bash
-npx skills add Arasoai/trending-skills --skill lightpanda-browser
+npx skills add Aradotso/trending-skills --skill lightpanda-browser
 ```
 
 ## Skills Index

@@ -228,4 +228,4 @@ jobs:
       - name: Register on skills.sh
         if: steps.trending.outputs.repo_full
         run: |
-          npx -y skills add Arasoai/trending-skills --yes --global 2>&1 || true
+          npx -y skills add Aradotso/trending-skills --yes --global 2>&1 || true
