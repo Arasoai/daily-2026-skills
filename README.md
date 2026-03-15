@@ -38,3 +38,4 @@ npx skills add Arasoai/daily-2026-skills --skill lightpanda-browser
 ## License
 
 MIT
+
