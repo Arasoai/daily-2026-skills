@@ -193,38 +193,23 @@ jobs:
 
           REPO_META=$(cat /tmp/repo_meta.json 2>/dev/null || echo "{}")
 
-          cat > /tmp/prompt.txt << 'PROMPT_END'
-You are creating an agent skill (SKILL.md) for an open source project. This skill will be installed by AI coding agents (Claude Code, Cursor, Codex, etc.) to give them expertise in using this project.
+          PROMPT_INSTRUCTIONS="You are creating an agent skill (SKILL.md) for an open source project. This skill will be installed by AI coding agents (Claude Code, Cursor, Codex, etc.) to give them expertise in using this project. Requirements: 1) Start with YAML frontmatter: name (kebab-case, descriptive), description (one line), triggers (6-8 natural phrases a user might say). 2) First line after the main heading: > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection. 3) Cover: what the project does, how to install it, key commands/API, configuration, real code examples, common patterns, troubleshooting. 4) Include real, working code examples in the project's primary language. 5) Be thorough but practical — focus on what an AI coding agent needs to help a developer USE this project. 6) Do NOT include placeholder API keys or secrets — use env var references instead. 7) Make the skill name descriptive (e.g. lightpanda-browser not browser, supabase-realtime not realtime). 8) If the project has a CLI, document the key commands. If it's a library, show import/usage patterns. Output ONLY the SKILL.md content starting with --- (YAML frontmatter). No extra commentary."
 
-Requirements:
-1. Start with YAML frontmatter: name (kebab-case, descriptive), description (one line), triggers (6-8 natural phrases a user might say)
-2. First line after the main heading: > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection
-3. Cover: what the project does, how to install it, key commands/API, configuration, real code examples, common patterns, troubleshooting
-4. Include real, working code examples in the project's primary language
-5. Be thorough but practical — focus on what an AI coding agent needs to help a developer USE this project
-6. Do NOT include placeholder API keys or secrets — use env var references instead
-7. Make the skill name descriptive (e.g. lightpanda-browser not browser, supabase-realtime not realtime)
-8. If the project has a CLI, document the key commands. If it's a library, show import/usage patterns.
+          README_CONTENT=$(cat /tmp/repo_readme.md)
 
-Output ONLY the SKILL.md content starting with --- (YAML frontmatter). No extra commentary.
-PROMPT_END
+          FULL_PROMPT="Project: ${REPO_FULL}
+          Description: ${REPO_DESC}
+          Language: ${REPO_LANG}
+          Stars: ${REPO_STARS}
+          Topics: ${REPO_TOPICS}
+          Metadata: ${REPO_META}
+          Suggested slug: ${SKILL_SLUG}
 
-          FULL_PROMPT=$(cat << EOF
-Project: ${REPO_FULL}
-Description: ${REPO_DESC}
-Language: ${REPO_LANG}
-Stars: ${REPO_STARS}
-Topics: ${REPO_TOPICS}
-Metadata: ${REPO_META}
-Suggested slug: ${SKILL_SLUG}
+          README (first 12k chars):
+          ${README_CONTENT}
 
-README (first 12k chars):
-$(cat /tmp/repo_readme.md)
-
----
-$(cat /tmp/prompt.txt)
-EOF
-          )
+          ---
+          ${PROMPT_INSTRUCTIONS}"
 
           jq -n --arg prompt "${FULL_PROMPT}" '{
             model: "claude-sonnet-4-6",
@@ -309,9 +294,7 @@ EOF
           git config user.email "bot@ara.so"
           git add -A
           git diff --staged --quiet && echo "No changes" && exit 0
-          git commit -m "feat: add ${SKILL_SLUG} skill from ${REPO_FULL}
-
-strategy: ${STRATEGY}"
+          git commit -m "feat: add ${SKILL_SLUG} skill from ${REPO_FULL} (strategy ${STRATEGY})"
           git pull --rebase origin main || true
           git push
 
