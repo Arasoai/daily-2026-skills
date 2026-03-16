@@ -31,6 +31,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [tavily-key-generator](skills/tavily-key-generator/) | [install](https://skills.sh/aradotso/trending-skills/tavily-key-generator) | [skernelx/tavily-key-generator](https://github.com/skernelx/tavily-key-generator) | 2026-03-16 |
 | [inkos](skills/inkos/) | [install](https://skills.sh/aradotso/trending-skills/inkos) | [Narcooo/inkos](https://github.com/Narcooo/inkos) | 2026-03-16 |
 | [brreg](skills/brreg/) | [install](https://skills.sh/aradotso/trending-skills/brreg) | [Brønnøysundregistrene API](https://data.brreg.no) | 2026-03-16 |
+| [freecodecamp](skills/freecodecamp/) | [install](https://skills.sh/aradotso/trending-skills/freecodecamp) | [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) | 2026-03-16 |
 <!-- SKILL_INDEX -->
 
 ## How it works
