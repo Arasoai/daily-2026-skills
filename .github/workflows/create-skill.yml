@@ -3,7 +3,7 @@ name: Create Trending Skill
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/30 * * * *'
 
 permissions:
   contents: write
@@ -20,64 +20,127 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Fetch GitHub Trending
+      - name: Find trending repo
         id: trending
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
 
-          # Get date 7 days ago (Linux)
-          SINCE=$(date -d '7 days ago' +%Y-%m-%d)
+          # Collect existing skill slugs and referenced repos for dedup
+          EXISTING_SLUGS=$(ls -1 skills/ 2>/dev/null | tr '\n' '|')
+          EXISTING_REPOS=$(grep -rh 'github\.com/' skills/*/SKILL.md 2>/dev/null | grep -oP 'github\.com/\K[^/)"\s]+/[^/)"\s]+' | sort -u || true)
 
-          # Fetch top new repos by stars
-          TRENDING_JSON=$(curl -sf \
-            "https://api.github.com/search/repositories?q=created:>${SINCE}&sort=stars&order=desc&per_page=20" \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/vnd.github.v3+json")
+          echo "Existing skills: $(ls -1 skills/ 2>/dev/null | wc -l)"
 
-          echo "Existing skills:"
-          ls -1 skills/ 2>/dev/null || echo "(none)"
+          # --- Multiple discovery strategies ---
+          # Pick one randomly each run for variety
+          STRATEGY=$((RANDOM % 6))
+          echo "Strategy: ${STRATEGY}"
 
-          # Find first repo without a skill yet
-          for i in $(seq 0 19); do
-            REPO_FULL=$(echo "${TRENDING_JSON}" | jq -r ".items[$i].full_name // empty")
-            REPO_NAME=$(echo "${TRENDING_JSON}" | jq -r ".items[$i].name // empty")
-            REPO_DESC=$(echo "${TRENDING_JSON}" | jq -r ".items[$i].description // empty")
-            REPO_LANG=$(echo "${TRENDING_JSON}" | jq -r ".items[$i].language // \"Unknown\"")
-            REPO_STARS=$(echo "${TRENDING_JSON}" | jq -r ".items[$i].stargazers_count // 0")
+          SINCE_7D=$(date -d '7 days ago' +%Y-%m-%d)
+          SINCE_30D=$(date -d '30 days ago' +%Y-%m-%d)
+          SINCE_90D=$(date -d '90 days ago' +%Y-%m-%d)
+
+          fetch_repos() {
+            local QUERY="$1"
+            local LABEL="$2"
+            echo "--- ${LABEL} ---"
+            curl -sf \
+              "https://api.github.com/search/repositories?q=${QUERY}&sort=stars&order=desc&per_page=30" \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github.v3+json" 2>/dev/null || echo '{"items":[]}'
+          }
+
+          case $STRATEGY in
+            0)
+              # New repos exploding in the last 7 days (original strategy)
+              RESULTS=$(fetch_repos "created:>${SINCE_7D}&stars:>50" "New repos (7d, 50+ stars)")
+              ;;
+            1)
+              # Repos with big star spikes recently (pushed recently, high stars)
+              RESULTS=$(fetch_repos "pushed:>${SINCE_7D}&stars:>1000&created:<${SINCE_30D}" "Established repos with recent activity (1k+ stars)")
+              ;;
+            2)
+              # AI/ML/agent topics — the skills.sh audience
+              TOPICS=("ai-agent" "llm" "mcp-server" "rag" "vector-database" "ai-coding" "developer-tools" "cli" "automation" "devops")
+              TOPIC=${TOPICS[$((RANDOM % ${#TOPICS[@]}))]}
+              RESULTS=$(fetch_repos "topic:${TOPIC}&stars:>100&pushed:>${SINCE_30D}" "Topic: ${TOPIC}")
+              ;;
+            3)
+              # Trending by language — catch language-specific gems
+              LANGS=("rust" "go" "typescript" "python" "zig" "swift" "kotlin")
+              LANG=${LANGS[$((RANDOM % ${#LANGS[@]}))]}
+              RESULTS=$(fetch_repos "language:${LANG}&created:>${SINCE_30D}&stars:>200" "Language: ${LANG} (30d)")
+              ;;
+            4)
+              # Fast-growing repos (created 30-90 days ago, already 500+ stars)
+              RESULTS=$(fetch_repos "created:${SINCE_90D}..${SINCE_30D}&stars:>500" "Fast growers (30-90d old, 500+ stars)")
+              ;;
+            5)
+              # GitHub trending page scrape via the unofficial API
+              RESULTS=$(curl -sf "https://api.github.com/search/repositories?q=created:>${SINCE_7D}&sort=stars&order=desc&per_page=30" \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github.v3+json" 2>/dev/null || echo '{"items":[]}')
+              # Also fetch from topics that are hot right now
+              RESULTS2=$(fetch_repos "topic:agent-skills OR topic:mcp OR topic:ai-tools&stars:>50&pushed:>${SINCE_7D}" "Agent ecosystem repos")
+              # Merge: prefer RESULTS2 items first (more targeted), then RESULTS
+              RESULTS=$(echo "${RESULTS2}" "${RESULTS}" | jq -s '{ items: (.[0].items + .[1].items) | unique_by(.full_name) }')
+              ;;
+          esac
+
+          ITEM_COUNT=$(echo "${RESULTS}" | jq '.items | length')
+          echo "Found ${ITEM_COUNT} candidates"
+
+          # Find first repo we haven't covered yet
+          for i in $(seq 0 $((ITEM_COUNT - 1))); do
+            REPO_FULL=$(echo "${RESULTS}" | jq -r ".items[$i].full_name // empty")
+            REPO_NAME=$(echo "${RESULTS}" | jq -r ".items[$i].name // empty")
+            REPO_DESC=$(echo "${RESULTS}" | jq -r ".items[$i].description // empty")
+            REPO_LANG=$(echo "${RESULTS}" | jq -r ".items[$i].language // \"Unknown\"")
+            REPO_STARS=$(echo "${RESULTS}" | jq -r ".items[$i].stargazers_count // 0")
+            REPO_TOPICS=$(echo "${RESULTS}" | jq -r ".items[$i].topics // [] | join(\", \")")
 
             [ -z "${REPO_FULL}" ] && continue
 
-            # Slugify repo name
+            # Skip forks
+            IS_FORK=$(echo "${RESULTS}" | jq -r ".items[$i].fork // false")
+            [ "${IS_FORK}" = "true" ] && { echo "SKIP fork: ${REPO_FULL}"; continue; }
+
+            # Skip repos with no description
+            [ -z "${REPO_DESC}" ] || [ "${REPO_DESC}" = "null" ] && { echo "SKIP no desc: ${REPO_FULL}"; continue; }
+
+            # Slugify
             SKILL_SLUG=$(echo "${REPO_NAME}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g; s/--*/-/g; s/^-//; s/-$//')
 
-            # Skip if skill directory exists
+            # Skip if slug exists
             if [ -d "skills/${SKILL_SLUG}" ]; then
-              echo "SKIP: skills/${SKILL_SLUG} already exists"
+              echo "SKIP exists: ${SKILL_SLUG}"
               continue
             fi
 
-            # Skip if repo is already referenced in any existing skill
-            SKIP=false
-            for existing in skills/*/SKILL.md; do
-              [ -f "${existing}" ] || continue
-              if grep -qi "${REPO_FULL}" "${existing}" 2>/dev/null; then
-                echo "SKIP: ${REPO_FULL} already covered in ${existing}"
-                SKIP=true
-                break
-              fi
-            done
-            [ "${SKIP}" = true ] && continue
+            # Skip if repo already referenced
+            if echo "${EXISTING_REPOS}" | grep -qi "^${REPO_FULL}$" 2>/dev/null; then
+              echo "SKIP referenced: ${REPO_FULL}"
+              continue
+            fi
 
-            echo "SELECTED: ${REPO_FULL} (${REPO_STARS} stars)"
+            # Skip if slug is substring of existing slug (catch near-dupes)
+            if echo "${EXISTING_SLUGS}" | grep -q "${SKILL_SLUG}" 2>/dev/null; then
+              echo "SKIP near-dupe: ${SKILL_SLUG}"
+              continue
+            fi
+
+            echo "SELECTED: ${REPO_FULL} (${REPO_STARS} stars, strategy=${STRATEGY})"
             {
               echo "repo_full=${REPO_FULL}"
               echo "repo_name=${REPO_NAME}"
               echo "repo_desc=${REPO_DESC}"
               echo "repo_lang=${REPO_LANG}"
               echo "repo_stars=${REPO_STARS}"
+              echo "repo_topics=${REPO_TOPICS}"
               echo "skill_slug=${SKILL_SLUG}"
+              echo "strategy=${STRATEGY}"
             } >> "${GITHUB_OUTPUT}"
             break
           done
@@ -90,14 +153,21 @@ jobs:
           set +e
           REPO_FULL="${{ steps.trending.outputs.repo_full }}"
 
+          # Fetch README
           curl -s "https://api.github.com/repos/${REPO_FULL}/readme" \
             -H "Authorization: Bearer ${GH_TOKEN}" \
             -H "Accept: application/vnd.github.v3+json" \
             | jq -r '.content // empty' > /tmp/readme_b64.txt
 
           if [ -s /tmp/readme_b64.txt ]; then
-            base64 -d /tmp/readme_b64.txt 2>/dev/null | head -c 8000 > /tmp/repo_readme.md
+            base64 -d /tmp/readme_b64.txt 2>/dev/null | head -c 12000 > /tmp/repo_readme.md
           fi
+
+          # Also fetch repo metadata for richer context
+          curl -s "https://api.github.com/repos/${REPO_FULL}" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            | jq '{homepage, topics, license: .license.spdx_id, forks: .forks_count, open_issues: .open_issues_count, created_at, updated_at}' > /tmp/repo_meta.json 2>/dev/null
 
           if [ ! -s /tmp/repo_readme.md ]; then
             echo "No README available" > /tmp/repo_readme.md
@@ -117,41 +187,44 @@ jobs:
           REPO_DESC="${{ steps.trending.outputs.repo_desc }}"
           REPO_LANG="${{ steps.trending.outputs.repo_lang }}"
           REPO_STARS="${{ steps.trending.outputs.repo_stars }}"
+          REPO_TOPICS="${{ steps.trending.outputs.repo_topics }}"
           SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
 
-          # Build prompt as a file to avoid shell escaping issues
+          REPO_META=$(cat /tmp/repo_meta.json 2>/dev/null || echo "{}")
+
           cat > /tmp/prompt.txt << 'PROMPT_END'
-          You are creating an agent skill (SKILL.md) for an open source project.
+You are creating an agent skill (SKILL.md) for an open source project. This skill will be installed by AI coding agents (Claude Code, Cursor, Codex, etc.) to give them expertise in using this project.
 
-          Requirements:
-          1. Start with YAML frontmatter: name (kebab-case, descriptive), description (one line), triggers (6-8 phrases)
-          2. First line after the heading: > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection
-          3. Cover: what it does, installation, key commands/API, configuration, code examples, integration patterns, troubleshooting
-          4. Include real code examples in the project's primary language
-          5. Be thorough but practical — focus on what an AI coding agent needs
-          6. Do NOT include placeholder API keys or secrets
-          7. Make the name descriptive (e.g. lightpanda-browser not browser)
+Requirements:
+1. Start with YAML frontmatter: name (kebab-case, descriptive), description (one line), triggers (6-8 natural phrases a user might say)
+2. First line after the main heading: > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection
+3. Cover: what the project does, how to install it, key commands/API, configuration, real code examples, common patterns, troubleshooting
+4. Include real, working code examples in the project's primary language
+5. Be thorough but practical — focus on what an AI coding agent needs to help a developer USE this project
+6. Do NOT include placeholder API keys or secrets — use env var references instead
+7. Make the skill name descriptive (e.g. lightpanda-browser not browser, supabase-realtime not realtime)
+8. If the project has a CLI, document the key commands. If it's a library, show import/usage patterns.
 
-          Output ONLY the SKILL.md content starting with --- (YAML frontmatter).
-          PROMPT_END
+Output ONLY the SKILL.md content starting with --- (YAML frontmatter). No extra commentary.
+PROMPT_END
 
-          # Build the full prompt with repo context
           FULL_PROMPT=$(cat << EOF
-          Project: ${REPO_FULL}
-          Description: ${REPO_DESC}
-          Language: ${REPO_LANG}
-          Stars: ${REPO_STARS}
-          Suggested slug: ${SKILL_SLUG}
+Project: ${REPO_FULL}
+Description: ${REPO_DESC}
+Language: ${REPO_LANG}
+Stars: ${REPO_STARS}
+Topics: ${REPO_TOPICS}
+Metadata: ${REPO_META}
+Suggested slug: ${SKILL_SLUG}
 
-          README:
-          $(cat /tmp/repo_readme.md)
+README (first 12k chars):
+$(cat /tmp/repo_readme.md)
 
-          ---
-          $(cat /tmp/prompt.txt)
-          EOF
+---
+$(cat /tmp/prompt.txt)
+EOF
           )
 
-          # Call Claude API using jq to safely encode the prompt
           jq -n --arg prompt "${FULL_PROMPT}" '{
             model: "claude-sonnet-4-6",
             max_tokens: 8000,
@@ -177,7 +250,6 @@ jobs:
           fi
 
           RESPONSE="${BODY}"
-
           SKILL_CONTENT=$(echo "${RESPONSE}" | jq -r '.content[0].text // empty')
 
           if [ -z "${SKILL_CONTENT}" ]; then
@@ -186,18 +258,15 @@ jobs:
             exit 1
           fi
 
-          # Extract skill name from generated frontmatter
+          # Extract skill name from generated frontmatter (Claude may improve the slug)
           GENERATED_NAME=$(echo "${SKILL_CONTENT}" | grep -m1 '^name:' | sed 's/name: *//' | tr -d "\"'" | xargs)
           if [ -n "${GENERATED_NAME}" ]; then
             SKILL_SLUG="${GENERATED_NAME}"
           fi
 
-          # Write skill
           mkdir -p "skills/${SKILL_SLUG}"
           echo "${SKILL_CONTENT}" > "skills/${SKILL_SLUG}/SKILL.md"
           echo "Created: skills/${SKILL_SLUG}/SKILL.md"
-
-          # Export final slug for later steps
           echo "skill_slug=${SKILL_SLUG}" >> "${GITHUB_OUTPUT}"
 
       - name: Update README
@@ -205,24 +274,43 @@ jobs:
         run: |
           SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
           REPO_FULL="${{ steps.trending.outputs.repo_full }}"
-          REPO_DESC="${{ steps.trending.outputs.repo_desc }}"
           DATE=$(date +%Y-%m-%d)
 
           if ! grep -q "${SKILL_SLUG}" README.md 2>/dev/null; then
             sed -i "/<!-- SKILL_INDEX -->/i | [${SKILL_SLUG}](skills/${SKILL_SLUG}/) | [install](https:\/\/skills.sh\/aradotso\/trending-skills\/${SKILL_SLUG}) | [${REPO_FULL}](https:\/\/github.com\/${REPO_FULL}) | ${DATE} |" README.md
           fi
 
+      - name: Publish to ClawHub
+        if: steps.trending.outputs.repo_full
+        continue-on-error: true
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+        run: |
+          SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
+          if [ -z "${CLAWHUB_TOKEN}" ]; then
+            echo "CLAWHUB_TOKEN not set, skipping"
+            exit 0
+          fi
+          npx clawhub@latest publish "skills/${SKILL_SLUG}" \
+            --slug "${SKILL_SLUG}" \
+            --name "${SKILL_SLUG}" \
+            --version "1.0.0" \
+            --changelog "Auto-generated from trending by ara.so" 2>&1 || echo "ClawHub publish failed (non-fatal)"
+
       - name: Commit and push
         if: steps.trending.outputs.repo_full
         run: |
           SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
           REPO_FULL="${{ steps.trending.outputs.repo_full }}"
+          STRATEGY="${{ steps.trending.outputs.strategy }}"
 
           git config user.name "ara-bot"
           git config user.email "bot@ara.so"
           git add -A
           git diff --staged --quiet && echo "No changes" && exit 0
-          git commit -m "feat: add ${SKILL_SLUG} skill from ${REPO_FULL}"
+          git commit -m "feat: add ${SKILL_SLUG} skill from ${REPO_FULL}
+
+strategy: ${STRATEGY}"
           git pull --rebase origin main || true
           git push
 
