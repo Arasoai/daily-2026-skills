@@ -181,6 +181,7 @@ jobs:
           echo "README size: $(wc -c < /tmp/repo_readme.md) bytes"
 
       - name: Generate skill with Claude API
+        id: generate
         if: steps.trending.outputs.repo_full
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -194,7 +195,7 @@ jobs:
           REPO_STARS="${{ steps.trending.outputs.repo_stars }}"
           REPO_TOPICS="${{ steps.trending.outputs.repo_topics }}"
           STARS_PER_DAY="${{ steps.trending.outputs.stars_per_day }}"
-          SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
+          SKILL_SLUG="${{ steps.generate.outputs.skill_slug }}"
 
           REPO_META=$(cat /tmp/repo_meta.json 2>/dev/null || echo "{}")
 
@@ -262,7 +263,7 @@ jobs:
       - name: Update README
         if: steps.trending.outputs.repo_full
         run: |
-          SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
+          SKILL_SLUG="${{ steps.generate.outputs.skill_slug }}"
           REPO_FULL="${{ steps.trending.outputs.repo_full }}"
           DATE=$(date +%Y-%m-%d)
 
@@ -276,11 +277,12 @@ jobs:
         env:
           CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
         run: |
-          SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
+          SKILL_SLUG="${{ steps.generate.outputs.skill_slug }}"
           if [ -z "${CLAWHUB_TOKEN}" ]; then
             echo "CLAWHUB_TOKEN not set, skipping"
             exit 0
           fi
+          npx clawhub@latest login --token "${CLAWHUB_TOKEN}" --no-browser
           npx clawhub@latest publish "skills/${SKILL_SLUG}" \
             --slug "${SKILL_SLUG}" \
             --name "${SKILL_SLUG}" \
@@ -290,7 +292,7 @@ jobs:
       - name: Commit and push
         if: steps.trending.outputs.repo_full
         run: |
-          SKILL_SLUG="${{ steps.trending.outputs.skill_slug }}"
+          SKILL_SLUG="${{ steps.generate.outputs.skill_slug }}"
           REPO_FULL="${{ steps.trending.outputs.repo_full }}"
           STARS_PER_DAY="${{ steps.trending.outputs.stars_per_day }}"
 
