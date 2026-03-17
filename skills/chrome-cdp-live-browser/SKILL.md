@@ -1,293 +1,302 @@
 ---
 name: chrome-cdp-live-browser
-description: Connect AI agents to your live Chrome session via CDP for real-time tab interaction, screenshots, and JS evaluation without re-login
+description: Give AI agents access to your live Chrome session via CDP — interact with open tabs, logged-in accounts, and current page state
 triggers:
-  - browse the web in chrome
-  - interact with my open browser tabs
-  - take a screenshot of the current page
-  - click elements on a webpage
-  - evaluate javascript in the browser
-  - read page content from chrome
-  - automate my existing chrome session
-  - navigate to a url in chrome
+  - "control my chrome browser"
+  - "interact with open chrome tabs"
+  - "automate my live browser session"
+  - "take a screenshot of a webpage"
+  - "click elements on a webpage"
+  - "read content from a browser tab"
+  - "navigate to a URL in chrome"
+  - "use chrome devtools protocol"
 ---
 
-# Chrome CDP Live Browser Skill
+# chrome-cdp: Live Chrome Session for AI Agents
 
-> Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection
+> Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection.
 
-Connect your AI agent to a **live, already-running Chrome session** — no fresh browser, no re-login, no automation framework. This skill uses Chrome DevTools Protocol (CDP) directly to interact with tabs you have open right now.
+`chrome-cdp` connects your AI agent directly to your running Chrome browser via the Chrome DevTools Protocol (CDP). Unlike browser automation tools that spin up fresh isolated browsers, this connects to tabs you already have open — with your logins, cookies, and current page state intact.
 
 ## What It Does
 
-- **Reads and interacts with authenticated pages** (Gmail, GitHub, internal tools) without re-authenticating
-- **Takes screenshots** of live tab state
-- **Evaluates JavaScript** in page context
-- **Clicks elements**, types text, navigates URLs
-- **Extracts accessibility trees and HTML** for structured page analysis
-- Maintains **persistent daemon per tab** — Chrome's "Allow debugging" prompt fires once, then stays silent
-
-## Prerequisites
-
-- Node.js 22+
-- Chrome, Chromium, Brave, Edge, or Vivaldi
-- Remote debugging enabled in Chrome
+- **Live session access** — reads and interacts with tabs you're already logged into
+- **Persistent daemon** — one WebSocket daemon per tab; the "Allow debugging" modal appears once, not on every command
+- **No npm install** — only Node.js 22+ required
+- **100+ tab support** — handles large numbers of open tabs reliably
+- **Cross-origin iframe support** — `type` command works even inside cross-origin iframes
 
 ## Installation
 
-### Enable Remote Debugging in Chrome
-
-Navigate to `chrome://inspect/#remote-debugging` and toggle the switch. That's it — no flags, no restart needed.
-
-### Install as a pi skill
+### As a pi skill
 
 ```bash
 pi install git:github.com/pasky/chrome-cdp-skill@v1.0.1
 ```
 
-### For other agents (Claude Code, Cursor, Amp, etc.)
-
-Clone the repo and use the `skills/chrome-cdp/` directory:
+### Manual (for Amp, Claude Code, Cursor, Codex, etc.)
 
 ```bash
-git clone https://github.com/pasky/chrome-cdp-skill.git
-# Point your agent's skill loader at skills/chrome-cdp/
+git clone https://github.com/pasky/chrome-cdp-skill
+# Copy the skills/chrome-cdp/ directory to wherever your agent loads context from
 ```
 
-No `npm install` needed — zero runtime dependencies beyond Node.js 22+.
+### Enable Remote Debugging in Chrome
+
+1. Open Chrome and navigate to: `chrome://inspect/#remote-debugging`
+2. Toggle the **"Enable remote debugging"** switch
+
+That's all. No flags, no relaunching Chrome.
+
+The script auto-detects Chrome, Chromium, Brave, Edge, and Vivaldi on macOS, Linux, and Windows. For non-standard installs:
+
+```bash
+export CDP_PORT_FILE=/path/to/DevToolsActivePort
+```
 
 ## Key Commands
 
-```bash
-# List all open tabs with their targetIds
-scripts/cdp.mjs list
+All commands use `scripts/cdp.mjs` as the entry point. `<target>` is a unique prefix of the targetId shown by `list`.
 
-# Take a screenshot (saves to runtime dir)
-scripts/cdp.mjs shot <target>
-
-# Get accessibility tree (compact, semantic — best for understanding page structure)
-scripts/cdp.mjs snap <target>
-
-# Get full HTML or scoped to a CSS selector
-scripts/cdp.mjs html <target>
-scripts/cdp.mjs html <target> ".main-content"
-
-# Evaluate JavaScript in the page
-scripts/cdp.mjs eval <target> "document.title"
-scripts/cdp.mjs eval <target> "window.location.href"
-
-# Navigate to a URL and wait for load
-scripts/cdp.mjs nav <target> https://example.com
-
-# Click an element by CSS selector
-scripts/cdp.mjs click <target> "button.submit"
-
-# Click at specific pixel coordinates
-scripts/cdp.mjs clickxy <target> 320 480
-
-# Type text at the currently focused element (works in cross-origin iframes)
-scripts/cdp.mjs type <target> "hello world"
-
-# Get network resource timing
-scripts/cdp.mjs net <target>
-
-# Click "load more" repeatedly until selector disappears
-scripts/cdp.mjs loadall <target> ".load-more-btn"
-
-# Raw CDP command passthrough
-scripts/cdp.mjs evalraw <target> Runtime.evaluate '{"expression":"1+1"}'
-
-# Open a new tab (triggers Allow prompt)
-scripts/cdp.mjs open https://example.com
-
-# Stop daemon for a specific tab, or all daemons
-scripts/cdp.mjs stop <target>
-scripts/cdp.mjs stop
-```
-
-`<target>` is a unique prefix of the `targetId` shown by `list`.
-
-## Typical Agent Workflow
-
-### 1. Discover open tabs
+### List Open Tabs
 
 ```bash
-scripts/cdp.mjs list
+node scripts/cdp.mjs list
 # Output:
-# abc123  https://github.com/user/repo  GitHub - user/repo
-# def456  https://mail.google.com       Gmail
-# ghi789  https://app.internal.co       Internal Dashboard
+# A1B2C3  https://github.com/pasky/chrome-cdp-skill  chrome-cdp-skill
+# D4E5F6  https://mail.google.com/mail/u/0/           Gmail
 ```
 
-### 2. Inspect page structure
+### Screenshot a Tab
 
 ```bash
-# Accessibility tree is fastest for understanding layout
-scripts/cdp.mjs snap abc123
-
-# Scoped HTML for a specific component
-scripts/cdp.mjs html abc123 "#issue-list"
+node scripts/cdp.mjs shot A1B2
+# Saves screenshot to runtime dir, prints the file path
 ```
 
-### 3. Extract data with JavaScript
+### Accessibility Tree (Semantic Snapshot)
 
-```javascript
-// Using eval to collect structured data from a live page
-scripts/cdp.mjs eval abc123 "
-  JSON.stringify(
-    Array.from(document.querySelectorAll('.issue-title'))
-      .map(el => ({ title: el.textContent.trim(), href: el.closest('a')?.href }))
+```bash
+node scripts/cdp.mjs snap A1B2
+# Returns compact, semantic accessibility tree — best for understanding page structure
+```
+
+### Full HTML or Scoped HTML
+
+```bash
+node scripts/cdp.mjs html A1B2                    # full page HTML
+node scripts/cdp.mjs html A1B2 ".main-content"    # scoped to CSS selector
+node scripts/cdp.mjs html A1B2 "#article-body"    # scoped to ID
+```
+
+### Evaluate JavaScript
+
+```bash
+node scripts/cdp.mjs eval A1B2 "document.title"
+node scripts/cdp.mjs eval A1B2 "window.location.href"
+node scripts/cdp.mjs eval A1B2 "document.querySelectorAll('a').length"
+```
+
+### Navigate to URL
+
+```bash
+node scripts/cdp.mjs nav A1B2 https://example.com
+# Navigates and waits for page load
+```
+
+### Network Resource Timing
+
+```bash
+node scripts/cdp.mjs net A1B2
+# Shows network resource timing for the current page
+```
+
+### Click an Element
+
+```bash
+node scripts/cdp.mjs click A1B2 "button.submit"
+node scripts/cdp.mjs click A1B2 "#login-btn"
+node scripts/cdp.mjs click A1B2 "[data-testid='confirm']"
+```
+
+### Click at Coordinates
+
+```bash
+node scripts/cdp.mjs clickxy A1B2 320 480
+# Clicks at CSS pixel coordinates (x=320, y=480)
+```
+
+### Type Text
+
+```bash
+node scripts/cdp.mjs type A1B2 "Hello, world!"
+# Types at the currently focused element — works in cross-origin iframes
+```
+
+### Load More (Click Until Gone)
+
+```bash
+node scripts/cdp.mjs loadall A1B2 "button.load-more"
+# Keeps clicking the selector until it disappears from the DOM
+```
+
+### Open a New Tab
+
+```bash
+node scripts/cdp.mjs open
+node scripts/cdp.mjs open https://example.com
+# Note: triggers Chrome's "Allow" prompt
+```
+
+### Stop Daemons
+
+```bash
+node scripts/cdp.mjs stop          # stop all daemons
+node scripts/cdp.mjs stop A1B2     # stop daemon for specific tab
+```
+
+### Raw CDP Command Passthrough
+
+```bash
+node scripts/cdp.mjs evalraw A1B2 "Page.getFrameTree"
+node scripts/cdp.mjs evalraw A1B2 "Runtime.evaluate" '{"expression":"1+1"}'
+```
+
+## Common Patterns
+
+### Pattern: Read a Page You're Logged Into
+
+```bash
+# List tabs to find your target
+node scripts/cdp.mjs list
+
+# Grab the accessibility tree for a semantic view
+node scripts/cdp.mjs snap D4E5
+
+# Or get scoped HTML for a specific section
+node scripts/cdp.mjs html D4E5 ".email-list"
+```
+
+### Pattern: Fill and Submit a Form
+
+```bash
+# Click the input field
+node scripts/cdp.mjs click A1B2 "input[name='search']"
+
+# Type into it
+node scripts/cdp.mjs type A1B2 "my search query"
+
+# Click submit
+node scripts/cdp.mjs click A1B2 "button[type='submit']"
+
+# Take a screenshot to verify result
+node scripts/cdp.mjs shot A1B2
+```
+
+### Pattern: Extract Data with JavaScript
+
+```bash
+# Get all link hrefs on a page
+node scripts/cdp.mjs eval A1B2 "Array.from(document.querySelectorAll('a')).map(a => a.href)"
+
+# Get text content of a specific element
+node scripts/cdp.mjs eval A1B2 "document.querySelector('.price').textContent.trim()"
+
+# Get table data as JSON
+node scripts/cdp.mjs eval A1B2 "
+  Array.from(document.querySelectorAll('table tr')).map(row =>
+    Array.from(row.querySelectorAll('td,th')).map(cell => cell.textContent.trim())
   )
 "
 ```
 
-### 4. Interact with the page
+### Pattern: Navigate and Wait
 
 ```bash
-# Fill a search box and submit
-scripts/cdp.mjs click abc123 "input[name='q']"
-scripts/cdp.mjs type  abc123 "my search query"
-scripts/cdp.mjs click abc123 "button[type='submit']"
-
-# Wait for navigation and check result
-scripts/cdp.mjs snap abc123
+# Navigate and then immediately read the page
+node scripts/cdp.mjs nav A1B2 https://news.ycombinator.com
+node scripts/cdp.mjs snap A1B2
 ```
 
-### 5. Screenshot for visual verification
+### Pattern: Paginated Content
 
 ```bash
-scripts/cdp.mjs shot abc123
-# Saves PNG to runtime dir, path printed to stdout
+# Keep loading content until "Load More" button disappears
+node scripts/cdp.mjs loadall A1B2 "button[data-action='load-more']"
+
+# Then extract all loaded content
+node scripts/cdp.mjs eval A1B2 "document.querySelectorAll('.item').length"
+```
+
+### Pattern: Script Integration (Node.js)
+
+```javascript
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const exec = promisify(execFile);
+const CDP = (...args) => exec('node', ['scripts/cdp.mjs', ...args]);
+
+async function getPageTitle(tabPrefix) {
+  const { stdout } = await CDP('eval', tabPrefix, 'document.title');
+  return stdout.trim();
+}
+
+async function takeScreenshot(tabPrefix) {
+  const { stdout } = await CDP('shot', tabPrefix);
+  return stdout.trim(); // returns file path
+}
+
+async function navigateAndSnap(tabPrefix, url) {
+  await CDP('nav', tabPrefix, url);
+  const { stdout } = await CDP('snap', tabPrefix);
+  return stdout;
+}
+
+// Usage
+const tabs = (await CDP('list')).stdout;
+console.log(tabs);
 ```
 
 ## Configuration
 
-### Non-standard browser profile location
+| Environment Variable | Purpose |
+|----------------------|---------|
+| `CDP_PORT_FILE` | Path to `DevToolsActivePort` file for non-standard browser installs |
 
-If Chrome stores `DevToolsActivePort` in a non-default path:
-
-```bash
-export CDP_PORT_FILE="/path/to/your/chrome/profile/DevToolsActivePort"
-scripts/cdp.mjs list
-```
-
-Default search locations (auto-detected):
-- macOS: `~/Library/Application Support/Google/Chrome/`
-- Linux: `~/.config/google-chrome/`, `~/.config/chromium/`, `~/.config/brave-browser/`
-- Also checks Vivaldi, Edge, Canary variants
-
-### Daemon lifecycle
-
-Daemons auto-exit after **20 minutes of inactivity**. You can manually stop them:
-
-```bash
-scripts/cdp.mjs stop          # stop all
-scripts/cdp.mjs stop abc123   # stop one tab's daemon
-```
-
-## Integration Patterns
-
-### Reading a logged-in page (e.g. GitHub notifications)
-
-```bash
-# No login needed — uses your existing session
-TARGET=$(scripts/cdp.mjs list | grep github.com | awk '{print $1}' | head -1)
-scripts/cdp.mjs eval $TARGET "
-  JSON.stringify(
-    Array.from(document.querySelectorAll('.notification-list-item'))
-      .slice(0, 10)
-      .map(n => n.querySelector('a')?.textContent?.trim())
-  )
-"
-```
-
-### Scraping a page that requires infinite scroll
-
-```bash
-# Click "load more" until the button disappears, then extract all content
-scripts/cdp.mjs loadall abc123 "button.load-more"
-scripts/cdp.mjs html abc123 ".results-container"
-```
-
-### Running a multi-step form automation
-
-```bash
-TARGET=abc123
-
-# Fill form fields
-scripts/cdp.mjs click  $TARGET "#first-name"
-scripts/cdp.mjs type   $TARGET "Jane"
-scripts/cdp.mjs click  $TARGET "#last-name"
-scripts/cdp.mjs type   $TARGET "Smith"
-
-# Select a dropdown via JS
-scripts/cdp.mjs eval   $TARGET "document.querySelector('#country').value = 'US'"
-
-# Submit
-scripts/cdp.mjs click  $TARGET "button[type='submit']"
-
-# Verify result
-scripts/cdp.mjs snap   $TARGET
-```
-
-### Raw CDP for advanced use cases
-
-```bash
-# Capture full page PDF
-scripts/cdp.mjs evalraw abc123 Page.printToPDF '{}'
-
-# Get all cookies for the page
-scripts/cdp.mjs evalraw abc123 Network.getCookies '{}'
-
-# Emulate mobile viewport
-scripts/cdp.mjs evalraw abc123 Emulation.setDeviceMetricsOverride \
-  '{"width":375,"height":812,"deviceScaleFactor":3,"mobile":true}'
-```
+Daemons auto-exit after **20 minutes of inactivity** — no manual cleanup needed in normal use.
 
 ## Troubleshooting
 
-### "Cannot connect to Chrome" / no output from `list`
+### "Allow debugging" modal keeps appearing
+This happens if daemons aren't persisting. Make sure you're using the same `scripts/cdp.mjs` entry point — it manages daemon lifecycle automatically. If you switched tools mid-session, run `stop` and let daemons restart fresh.
 
-1. Confirm remote debugging is enabled: visit `chrome://inspect/#remote-debugging`
-2. Check that `DevToolsActivePort` exists:
-   ```bash
-   ls ~/Library/Application\ Support/Google/Chrome/DevToolsActivePort   # macOS
-   ls ~/.config/google-chrome/DevToolsActivePort                        # Linux
-   ```
-3. Set `CDP_PORT_FILE` explicitly if using a non-standard profile
-
-### "Allow debugging" prompt keeps appearing
-
-This prompt fires **once per tab per daemon start**. After the first command to a tab, the daemon persists and subsequent commands skip the prompt. If it keeps appearing, the daemon may be crashing — check for Node.js version (`node --version` should be 22+).
-
-### Timeout with many tabs open
-
-Unlike tools that re-enumerate all targets on every command, `chrome-cdp` targets tabs by prefix ID directly. If you see slowness, use a more specific target prefix to avoid ambiguity.
-
-### Commands work but screenshot is blank
-
-The page may not have finished rendering. Chain an `eval` to wait:
+### Browser not detected
+If auto-detection fails, find your `DevToolsActivePort` file and set the env var:
 
 ```bash
-scripts/cdp.mjs eval abc123 "
-  new Promise(r => {
-    if (document.readyState === 'complete') r();
-    else window.addEventListener('load', r);
-  })
-"
-scripts/cdp.mjs shot abc123
+# macOS Chrome example
+export CDP_PORT_FILE="$HOME/Library/Application Support/Google/Chrome/Default/DevToolsActivePort"
+
+# Linux Chrome example
+export CDP_PORT_FILE="$HOME/.config/google-chrome/Default/DevToolsActivePort"
 ```
 
-### Type command not working in iframes
+### Target not found / prefix ambiguous
+Run `list` again — tab IDs change when tabs are closed/reopened. Use a longer prefix if multiple tabs share the same prefix characters.
 
-The `type` command is specifically designed to work across **cross-origin iframes** — make sure you're using `type` (not a click+eval workaround) for iframe inputs.
+### Remote debugging toggle not visible
+Ensure you're on `chrome://inspect/#remote-debugging` (not just `chrome://inspect/`). The toggle is in the top-right of the page.
 
-## How It Works Internally
+### Node.js version error
+This project requires **Node.js 22+**. Check with `node --version` and upgrade if needed via [nvm](https://github.com/nvm-sh/nvm) or your package manager.
 
-1. Reads `DevToolsActivePort` to find Chrome's debugging WebSocket port
-2. On first access to a `<target>`, spawns a lightweight Node.js daemon that holds the WebSocket session open
-3. Commands communicate with the daemon via a local socket
-4. Daemons auto-clean after 20 minutes idle
-5. No Puppeteer, no intermediary — raw CDP messages only
+### Screenshots are blank or wrong size
+The screenshot reflects the actual rendered viewport. If the tab is in a background window or the OS has display scaling, pixel coordinates for `clickxy` may need adjustment. Use `snap` or `eval` to inspect DOM state instead of relying solely on screenshots.
 
-This architecture is why it handles 100+ open tabs reliably: target enumeration only touches the specific tab you address, not all tabs at once.
+## Architecture Notes
+
+- No Puppeteer, no Playwright, no intermediary — pure CDP WebSocket
+- One persistent daemon process per tab (auto-spawned on first access)
+- Daemon reuse is why 100+ tabs work reliably (no timeout on target enumeration)
+- `type` uses CDP Input domain directly, bypassing iframe origin restrictions
