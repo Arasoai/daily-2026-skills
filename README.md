@@ -61,6 +61,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [opencli-web-automation](skills/opencli-web-automation/) | [install](https://skills.sh/aradotso/trending-skills/opencli-web-automation) | [jackwener/opencli](https://github.com/jackwener/opencli) | 2026-03-17 |
 | [ui-ux-pro-max-skill](skills/ui-ux-pro-max-skill/) | [install](https://skills.sh/aradotso/trending-skills/ui-ux-pro-max-skill) | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 2026-03-17 |
 | [antigravity-awesome-skills](skills/antigravity-awesome-skills/) | [install](https://skills.sh/aradotso/trending-skills/antigravity-awesome-skills) | [sickn33/antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills) | 2026-03-17 |
+| [corridorkey-green-screen](skills/corridorkey-green-screen/) | [install](https://skills.sh/aradotso/trending-skills/corridorkey-green-screen) | [nikopueringer/CorridorKey](https://github.com/nikopueringer/CorridorKey) | 2026-03-17 |
 <!-- SKILL_INDEX -->
 
 ## How it works
