@@ -71,6 +71,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [daily-stock-analysis](skills/daily-stock-analysis/) | [install](https://skills.sh/aradotso/trending-skills/daily-stock-analysis) | [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) | 2026-03-17 |
 | [agency-agents-ai-specialists](skills/agency-agents-ai-specialists/) | [install](https://skills.sh/aradotso/trending-skills/agency-agents-ai-specialists) | [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) | 2026-03-17 |
 | [vinext-vite-nextjs](skills/vinext-vite-nextjs/) | [install](https://skills.sh/aradotso/trending-skills/vinext-vite-nextjs) | [cloudflare/vinext](https://github.com/cloudflare/vinext) | 2026-03-17 |
+| [nanochat-llm-training](skills/nanochat-llm-training/) | [install](https://skills.sh/aradotso/trending-skills/nanochat-llm-training) | [karpathy/nanochat](https://github.com/karpathy/nanochat) | 2026-03-17 |
 <!-- SKILL_INDEX -->
 
 ## How it works
