@@ -45,6 +45,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [awesome-openclaw-skills](skills/awesome-openclaw-skills/) | [install](https://skills.sh/aradotso/trending-skills/awesome-openclaw-skills) | [VoltAgent/awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills) | 2026-03-17 |
 | [openfang-agent-os](skills/openfang-agent-os/) | [install](https://skills.sh/aradotso/trending-skills/openfang-agent-os) | [RightNow-AI/openfang](https://github.com/RightNow-AI/openfang) | 2026-03-17 |
 | [nvidia-nemoclaw](skills/nvidia-nemoclaw/) | [install](https://skills.sh/aradotso/trending-skills/nvidia-nemoclaw) | [NVIDIA/NemoClaw](https://github.com/NVIDIA/NemoClaw) | 2026-03-17 |
+| [awesome-openclaw-usecases](skills/awesome-openclaw-usecases/) | [install](https://skills.sh/aradotso/trending-skills/awesome-openclaw-usecases) | [hesamsheikh/awesome-openclaw-usecases](https://github.com/hesamsheikh/awesome-openclaw-usecases) | 2026-03-17 |
 <!-- SKILL_INDEX -->
 
 ## How it works
