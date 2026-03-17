@@ -68,6 +68,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [minecraftconsoles-lce](skills/minecraftconsoles-lce/) | [install](https://skills.sh/aradotso/trending-skills/minecraftconsoles-lce) | [smartcmd/MinecraftConsoles](https://github.com/smartcmd/MinecraftConsoles) | 2026-03-17 |
 | [understand-anything-knowledge-graph](skills/understand-anything-knowledge-graph/) | [install](https://skills.sh/aradotso/trending-skills/understand-anything-knowledge-graph) | [Lum1104/Understand-Anything](https://github.com/Lum1104/Understand-Anything) | 2026-03-17 |
 | [llm-architecture-gallery](skills/llm-architecture-gallery/) | [install](https://skills.sh/aradotso/trending-skills/llm-architecture-gallery) | [rasbt/llm-architecture-gallery](https://github.com/rasbt/llm-architecture-gallery) | 2026-03-17 |
+| [daily-stock-analysis](skills/daily-stock-analysis/) | [install](https://skills.sh/aradotso/trending-skills/daily-stock-analysis) | [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) | 2026-03-17 |
 <!-- SKILL_INDEX -->
 
 ## How it works
