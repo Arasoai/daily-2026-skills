@@ -70,6 +70,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [llm-architecture-gallery](skills/llm-architecture-gallery/) | [install](https://skills.sh/aradotso/trending-skills/llm-architecture-gallery) | [rasbt/llm-architecture-gallery](https://github.com/rasbt/llm-architecture-gallery) | 2026-03-17 |
 | [daily-stock-analysis](skills/daily-stock-analysis/) | [install](https://skills.sh/aradotso/trending-skills/daily-stock-analysis) | [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) | 2026-03-17 |
 | [agency-agents-ai-specialists](skills/agency-agents-ai-specialists/) | [install](https://skills.sh/aradotso/trending-skills/agency-agents-ai-specialists) | [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) | 2026-03-17 |
+| [vinext-vite-nextjs](skills/vinext-vite-nextjs/) | [install](https://skills.sh/aradotso/trending-skills/vinext-vite-nextjs) | [cloudflare/vinext](https://github.com/cloudflare/vinext) | 2026-03-17 |
 <!-- SKILL_INDEX -->
 
 ## How it works
