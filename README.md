@@ -41,6 +41,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [crucix-intelligence-dashboard](skills/crucix-intelligence-dashboard/) | [install](https://skills.sh/aradotso/trending-skills/crucix-intelligence-dashboard) | [calesthio/Crucix](https://github.com/calesthio/Crucix) | 2026-03-16 |
 | [opensquirrel-agent-control-plane](skills/opensquirrel-agent-control-plane/) | [install](https://skills.sh/aradotso/trending-skills/opensquirrel-agent-control-plane) | [Infatoshi/OpenSquirrel](https://github.com/Infatoshi/OpenSquirrel) | 2026-03-16 |
 | [cmux-terminal-multiplexer](skills/cmux-terminal-multiplexer/) | [install](https://skills.sh/aradotso/trending-skills/cmux-terminal-multiplexer) | — | 2026-03-16 |
+| [nanobot-ai-assistant](skills/nanobot-ai-assistant/) | [install](https://skills.sh/aradotso/trending-skills/nanobot-ai-assistant) | [HKUDS/nanobot](https://github.com/HKUDS/nanobot) | 2026-03-17 |
 <!-- SKILL_INDEX -->
 
 ## How it works
