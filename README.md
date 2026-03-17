@@ -53,6 +53,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [llmfit-hardware-model-matcher](skills/llmfit-hardware-model-matcher/) | [install](https://skills.sh/aradotso/trending-skills/llmfit-hardware-model-matcher) | [AlexsJones/llmfit](https://github.com/AlexsJones/llmfit) | 2026-03-17 |
 | [obra-superpowers-agentic-workflow](skills/obra-superpowers-agentic-workflow/) | [install](https://skills.sh/aradotso/trending-skills/obra-superpowers-agentic-workflow) | [obra/superpowers](https://github.com/obra/superpowers) | 2026-03-17 |
 | [openmaic-classroom](skills/openmaic-classroom/) | [install](https://skills.sh/aradotso/trending-skills/openmaic-classroom) | [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) | 2026-03-17 |
+| [nanoclaw-ai-assistant](skills/nanoclaw-ai-assistant/) | [install](https://skills.sh/aradotso/trending-skills/nanoclaw-ai-assistant) | [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw) | 2026-03-17 |
 <!-- SKILL_INDEX -->
 
 ## How it works
