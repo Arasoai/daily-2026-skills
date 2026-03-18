@@ -79,6 +79,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [awesome-ai-research-writing](skills/awesome-ai-research-writing/) | [install](https://skills.sh/aradotso/trending-skills/awesome-ai-research-writing) | [Leey21/awesome-ai-research-writing](https://github.com/Leey21/awesome-ai-research-writing) | 2026-03-17 |
 | [voicebox-voice-synthesis](skills/voicebox-voice-synthesis/) | [install](https://skills.sh/aradotso/trending-skills/voicebox-voice-synthesis) | [jamiepine/voicebox](https://github.com/jamiepine/voicebox) | 2026-03-18 |
 | [star-office-ui-pixel-dashboard](skills/star-office-ui-pixel-dashboard/) | [install](https://skills.sh/aradotso/trending-skills/star-office-ui-pixel-dashboard) | [ringhyacinth/Star-Office-UI](https://github.com/ringhyacinth/Star-Office-UI) | 2026-03-18 |
+| [open-autoglm-phone-agent](skills/open-autoglm-phone-agent/) | [install](https://skills.sh/aradotso/trending-skills/open-autoglm-phone-agent) | [zai-org/Open-AutoGLM](https://github.com/zai-org/Open-AutoGLM) | 2026-03-18 |
 <!-- SKILL_INDEX -->
 
 ## How it works
