@@ -1,35 +1,33 @@
 ```markdown
 ---
 name: agent-skills-context-engineering
-description: Comprehensive collection of Agent Skills for context engineering, multi-agent architectures, memory systems, and production agent systems using Claude Code, Cursor, or any agent platform.
+description: Comprehensive collection of Agent Skills for context engineering, multi-agent architectures, memory systems, and production agent systems using Claude Code, Cursor, and other AI platforms.
 triggers:
   - "context engineering for agents"
   - "build multi-agent system"
-  - "manage agent context window"
   - "install agent skills claude code"
-  - "optimize token usage in agents"
-  - "design memory system for agent"
-  - "LLM context degradation lost in middle"
-  - "evaluate agent performance with LLM judge"
+  - "context window management"
+  - "agent memory architecture"
+  - "optimize agent context"
+  - "implement BDI mental states"
+  - "design agent evaluation framework"
 ---
 
 # Agent Skills for Context Engineering
 
 > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection.
 
-A comprehensive, open collection of Agent Skills focused on context engineering principles for building production-grade AI agent systems. Teaches the art and science of curating context to maximize agent effectiveness across Claude Code, Cursor, Codex, and any agent platform.
+A comprehensive, open collection of Agent Skills focused on context engineering — the discipline of curating what enters an LLM's context window to maximize agent effectiveness. Covers foundational context mechanics, multi-agent architectures, memory systems, tool design, evaluation, and cognitive modeling.
 
 ## What This Project Does
 
-Context engineering is the discipline of managing a language model's context window holistically — system prompts, tool definitions, retrieved documents, message history, and tool outputs. As context grows, models exhibit predictable degradation (lost-in-the-middle, U-shaped attention, attention scarcity). This repository provides structured skills to address all of these problems.
+Context engineering is about managing the **holistic set of tokens** that enter a model's attention budget: system prompts, tool definitions, retrieved documents, message history, and tool outputs. This repository provides structured, installable skills that teach AI coding agents these principles across any platform.
 
-Skills are organized into four categories:
-- **Foundational** — context fundamentals, degradation patterns, compression
-- **Architectural** — multi-agent patterns, memory systems, tool design, filesystem context, hosted agents
-- **Operational** — context optimization, evaluation, advanced LLM-as-judge evaluation
-- **Development Methodology** — project development, BDI cognitive architectures
-
----
+Key problems addressed:
+- **Lost-in-the-middle**: Models degrade when relevant content is buried in long contexts
+- **Context poisoning/distraction**: Irrelevant tokens degrade reasoning quality
+- **Attention scarcity**: More tokens ≠ better outcomes; fewer high-signal tokens do
+- **Multi-agent coordination**: How agents hand off context without loss
 
 ## Installation
 
@@ -49,21 +47,19 @@ Skills are organized into four categories:
 
 ### Cursor
 
-Listed on [Cursor Plugin Directory](https://cursor.directory/plugins/context-engineering). The `.plugin/plugin.json` manifest follows the Open Plugins standard — works with Codex, GitHub Copilot, and any conformant agent tool.
+Listed on [Cursor Plugin Directory](https://cursor.directory/plugins/context-engineering). Install via the Cursor plugin panel or reference `.plugin/plugin.json` directly.
 
 ### Manual / Custom Agent
 
-Clone the repo and reference skill files directly:
+Clone and reference skill files directly:
 
 ```bash
 git clone https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering.git
 ```
 
-Load a skill's `SKILL.md` (or equivalent) into your agent's system prompt or context as needed.
+Load skill content from `skills/<skill-name>/SKILL.md` into your agent's system prompt or context.
 
----
-
-## Plugin Bundles → Skills Mapping
+## Plugin Bundles
 
 | Plugin | Skills Included |
 |--------|-----------------|
@@ -73,30 +69,6 @@ Load a skill's `SKILL.md` (or equivalent) into your agent's system prompt or con
 | `agent-development` | project-development |
 | `cognitive-architecture` | bdi-mental-states |
 
----
-
-## Skill Trigger Reference
-
-Use these phrases to activate specific skills automatically:
-
-| Skill | Activation Phrases |
-|-------|--------------------|
-| `context-fundamentals` | "understand context", "explain context windows", "design agent architecture" |
-| `context-degradation` | "diagnose context problems", "fix lost-in-middle", "debug agent failures" |
-| `context-compression` | "compress context", "summarize conversation", "reduce token usage" |
-| `context-optimization` | "optimize context", "reduce token costs", "implement KV-cache" |
-| `multi-agent-patterns` | "design multi-agent system", "implement supervisor pattern" |
-| `memory-systems` | "implement agent memory", "build knowledge graph", "track entities" |
-| `tool-design` | "design agent tools", "reduce tool complexity", "implement MCP tools" |
-| `filesystem-context` | "offload context to files", "dynamic context discovery", "agent scratch pad" |
-| `hosted-agents` | "build background agent", "sandboxed execution", "multiplayer agent", "Modal sandboxes" |
-| `evaluation` | "evaluate agent performance", "build test framework", "measure quality" |
-| `advanced-evaluation` | "implement LLM-as-judge", "compare model outputs", "mitigate bias" |
-| `project-development` | "start LLM project", "design batch pipeline", "evaluate task-model fit" |
-| `bdi-mental-states` | "model agent mental states", "implement BDI architecture", "transform RDF to beliefs" |
-
----
-
 ## Repository Structure
 
 ```
@@ -104,524 +76,638 @@ Agent-Skills-for-Context-Engineering/
 ├── .plugin/
 │   └── plugin.json              # Open Plugins manifest
 ├── skills/
-│   ├── context-fundamentals/
-│   ├── context-degradation/
-│   ├── context-compression/
-│   ├── context-optimization/
-│   ├── multi-agent-patterns/
-│   ├── memory-systems/
-│   ├── tool-design/
-│   ├── filesystem-context/
-│   ├── hosted-agents/
-│   ├── evaluation/
-│   ├── advanced-evaluation/
-│   ├── project-development/
-│   └── bdi-mental-states/
+│   ├── context-fundamentals/    # Context anatomy, token budgets
+│   ├── context-degradation/     # Failure modes and diagnostics
+│   ├── context-compression/     # Compression and summarization
+│   ├── context-optimization/    # Caching, masking, compaction
+│   ├── multi-agent-patterns/    # Orchestrator, peer, hierarchical
+│   ├── memory-systems/          # Short/long-term, graph memory
+│   ├── tool-design/             # Effective tool construction
+│   ├── filesystem-context/      # File-based context offloading
+│   ├── hosted-agents/           # Sandboxed background agents
+│   ├── evaluation/              # Agent evaluation frameworks
+│   ├── advanced-evaluation/     # LLM-as-a-Judge techniques
+│   ├── project-development/     # LLM project methodology
+│   └── bdi-mental-states/       # BDI cognitive architecture
 └── examples/
-    ├── digital-brain-skill/
-    ├── x-to-book-system/
-    ├── llm-as-judge-skills/
-    └── book-sft-pipeline/
+    ├── digital-brain-skill/     # Personal OS for founders
+    ├── x-to-book-system/        # Multi-agent X→book pipeline
+    ├── llm-as-judge-skills/     # TypeScript evaluation tools
+    └── book-sft-pipeline/       # Style transfer fine-tuning
 ```
 
----
+## Core Concepts
 
-## Core Concepts with Code Examples
-
-### 1. Context Compression (Python)
+### Context Window Anatomy
 
 ```python
-# Pattern: Compress long conversation history before appending new turns
-from anthropic import Anthropic
-
-client = Anthropic()
-
-def compress_history(messages: list[dict], max_tokens: int = 2000) -> list[dict]:
-    """
-    Summarize older messages when approaching context limits.
-    Preserves the last N turns verbatim; summarizes everything older.
-    """
-    if len(messages) <= 4:
-        return messages
-
-    # Keep the last 4 messages verbatim
-    recent = messages[-4:]
-    older = messages[:-4]
-
-    # Build a summary of older context
-    summary_prompt = (
-        "Summarize the following conversation history concisely, "
-        "preserving all key decisions, facts, and intent:\n\n"
-        + "\n".join(f"{m['role']}: {m['content']}" for m in older)
-    )
-
-    response = client.messages.create(
-        model="claude-opus-4-5",
-        max_tokens=max_tokens,
-        messages=[{"role": "user", "content": summary_prompt}],
-    )
-    summary_text = response.content[0].text
-
-    compressed = [
-        {"role": "user", "content": f"[Conversation summary]: {summary_text}"},
-        {"role": "assistant", "content": "Understood. Continuing from the summary."},
-    ]
-    return compressed + recent
-```
-
----
-
-### 2. Multi-Agent Orchestrator Pattern (Python)
-
-```python
-# Pattern: Orchestrator dispatches subtasks to specialist agents
-import anthropic
-from dataclasses import dataclass
-
-client = anthropic.Anthropic()
-
-@dataclass
-class AgentTask:
-    task_id: str
-    description: str
-    specialist: str  # "researcher" | "writer" | "critic"
-
-def specialist_agent(task: AgentTask, context: str) -> str:
-    """A specialist agent that receives only relevant context."""
-    system_prompts = {
-        "researcher": "You are a research specialist. Find facts, cite sources, be precise.",
-        "writer": "You are a writing specialist. Produce clear, structured prose.",
-        "critic": "You are a critic. Identify flaws, gaps, and improvements.",
-    }
-    response = client.messages.create(
-        model="claude-opus-4-5",
-        max_tokens=1024,
-        system=system_prompts[task.specialist],
-        messages=[
-            {"role": "user", "content": f"Context:\n{context}\n\nTask: {task.description}"}
-        ],
-    )
-    return response.content[0].text
-
-def orchestrator(goal: str, tasks: list[AgentTask]) -> dict[str, str]:
-    """
-    Orchestrator: assigns tasks, collects outputs, never passes full shared
-    context to every agent — only what each specialist needs.
-    """
-    results = {}
-    shared_context = f"Overall goal: {goal}"
-
-    for task in tasks:
-        # Progressive context: each agent only sees prior results relevant to it
-        relevant_context = shared_context
-        if task.specialist == "writer" and "researcher" in results:
-            relevant_context += f"\n\nResearch findings:\n{results['researcher']}"
-        elif task.specialist == "critic" and "writer" in results:
-            relevant_context += f"\n\nDraft:\n{results['writer']}"
-
-        results[task.specialist] = specialist_agent(task, relevant_context)
-        shared_context += f"\n\n[{task.specialist} output]: {results[task.specialist][:200]}..."
-
-    return results
-
-# Usage
-goal = "Write a technical blog post about transformer attention mechanisms"
-tasks = [
-    AgentTask("t1", "Research key papers on transformer attention", "researcher"),
-    AgentTask("t2", "Write a 500-word blog post based on the research", "writer"),
-    AgentTask("t3", "Review the draft for technical accuracy", "critic"),
-]
-outputs = orchestrator(goal, tasks)
-```
-
----
-
-### 3. Memory System: Append-Only JSONL (Python)
-
-```python
-# Pattern: Append-only memory with schema-first line for agent-friendly parsing
-import json
-from pathlib import Path
-from datetime import datetime, timezone
-
-MEMORY_FILE = Path("agent_memory.jsonl")
-
-# Schema definition (first line of file — written once)
-SCHEMA = {
-    "_schema": True,
-    "fields": ["timestamp", "type", "content", "tags"],
-    "version": "1.0"
+# The five components competing for attention budget
+context = {
+    "system_prompt": "...",          # Role, instructions, constraints
+    "tool_definitions": [...],       # Available tools and schemas
+    "retrieved_documents": [...],    # RAG results, memory lookups
+    "message_history": [...],        # Conversation turns
+    "tool_outputs": [...],           # Results from tool calls
 }
 
-def init_memory():
-    if not MEMORY_FILE.exists():
-        with open(MEMORY_FILE, "w") as f:
-            f.write(json.dumps(SCHEMA) + "\n")
-
-def remember(entry_type: str, content: str, tags: list[str] = None):
-    """Append a memory entry."""
-    init_memory()
-    entry = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "type": entry_type,  # "fact" | "decision" | "entity" | "preference"
-        "content": content,
-        "tags": tags or [],
-    }
-    with open(MEMORY_FILE, "a") as f:
-        f.write(json.dumps(entry) + "\n")
-
-def recall(entry_type: str = None, tags: list[str] = None, limit: int = 50) -> list[dict]:
-    """Read memory, optionally filtered. Skips schema line."""
-    if not MEMORY_FILE.exists():
-        return []
-    entries = []
-    with open(MEMORY_FILE) as f:
-        for line in f:
-            entry = json.loads(line)
-            if entry.get("_schema"):
-                continue
-            if entry_type and entry["type"] != entry_type:
-                continue
-            if tags and not any(t in entry["tags"] for t in tags):
-                continue
-            entries.append(entry)
-    return entries[-limit:]
-
-# Usage
-remember("decision", "Use JSONL for memory — append-only, agent-parseable", ["architecture"])
-remember("fact", "Context windows degrade with lost-in-middle pattern", ["context", "research"])
-
-decisions = recall(entry_type="decision")
-context_facts = recall(tags=["context"])
+# Token budget allocation example
+TOTAL_BUDGET = 128_000  # tokens
+budget = {
+    "system_prompt":      2_000,   # 1.6%  — keep tight
+    "tool_definitions":   5_000,   # 3.9%  — prune unused tools
+    "retrieved_documents":40_000,  # 31%   — highest ROI
+    "message_history":   70_000,   # 55%   — compress aggressively
+    "tool_outputs":      11_000,   # 8.5%  — offload to filesystem
+}
 ```
 
----
-
-### 4. Tool Design: Minimal Surface Area (Python)
+### Context Degradation Patterns
 
 ```python
-# Pattern: Tools should have narrow, predictable outputs to avoid context bloat
-import anthropic
-import json
+# Pattern 1: Lost-in-the-middle
+# Critical information placed in the center of a long context
+# degrades recall significantly. Always place key info at edges.
 
-client = anthropic.Anthropic()
+def order_context_for_attention(documents: list[str], query: str) -> list[str]:
+    """Place most relevant documents first and last."""
+    scored = rank_by_relevance(documents, query)
+    n = len(scored)
+    ordered = [None] * n
+    # High relevance → positions 0 and -1
+    for i, doc in enumerate(scored):
+        if i % 2 == 0:
+            ordered[i // 2] = doc          # fill from front
+        else:
+            ordered[n - 1 - i // 2] = doc  # fill from back
+    return ordered
 
-# BAD: Tool returns full raw data (bloats context)
-def search_bad(query: str) -> str:
-    results = _do_search(query)
-    return json.dumps(results)  # Could be thousands of tokens
-
-# GOOD: Tool returns minimal, structured summary
-def search_good(query: str, top_k: int = 3) -> str:
-    results = _do_search(query)
-    summaries = [
-        {"title": r["title"], "snippet": r["snippet"][:150], "url": r["url"]}
-        for r in results[:top_k]
-    ]
-    return json.dumps(summaries)  # Controlled, bounded output
-
-tools = [
-    {
-        "name": "web_search",
-        "description": (
-            "Search the web. Returns top 3 results with title, 150-char snippet, and URL. "
-            "Use for factual lookups only. Do not use for code or math questions."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string", "description": "The search query"},
-                "top_k": {"type": "integer", "default": 3, "description": "Number of results (max 5)"},
-            },
-            "required": ["query"],
-        },
-    }
-]
-
-def run_agent_with_tools(user_message: str) -> str:
-    messages = [{"role": "user", "content": user_message}]
-
-    while True:
-        response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=1024,
-            tools=tools,
-            messages=messages,
-        )
-
-        if response.stop_reason == "end_turn":
-            return response.content[0].text
-
-        if response.stop_reason == "tool_use":
-            tool_use = next(b for b in response.content if b.type == "tool_use")
-            tool_result = search_good(**tool_use.input)
-
-            messages.append({"role": "assistant", "content": response.content})
-            messages.append({
-                "role": "user",
-                "content": [{"type": "tool_result", "tool_use_id": tool_use.id, "content": tool_result}],
-            })
-
-def _do_search(query: str) -> list[dict]:
-    # Placeholder — replace with real search integration
-    return [{"title": f"Result for {query}", "snippet": "...", "url": "https://example.com"}]
+# Pattern 2: Context poisoning
+# Contradictory or stale information causes unpredictable behavior
+def validate_context_consistency(facts: list[dict]) -> list[dict]:
+    """Remove contradicting or outdated facts before injection."""
+    seen_keys = {}
+    clean = []
+    for fact in sorted(facts, key=lambda f: f["timestamp"], reverse=True):
+        key = fact["subject"] + fact["predicate"]
+        if key not in seen_keys:
+            seen_keys[key] = True
+            clean.append(fact)
+    return clean
 ```
 
----
-
-### 5. LLM-as-Judge Evaluation (Python)
+### Context Compression
 
 ```python
-# Pattern: Direct scoring with rubric to evaluate agent outputs
 import anthropic
-import json
 
-client = anthropic.Anthropic()
+client = anthropic.Anthropic()  # uses ANTHROPIC_API_KEY env var
 
-JUDGE_SYSTEM = """You are an impartial evaluator. Score responses on the provided rubric.
-Return ONLY valid JSON: {"score": <0-10>, "reasoning": "<one sentence>", "pass": <true|false>}"""
-
-def evaluate_response(
-    question: str,
-    response: str,
-    rubric: str,
-    pass_threshold: float = 7.0,
-) -> dict:
+def compress_conversation(
+    messages: list[dict],
+    keep_last_n: int = 10,
+    model: str = "claude-opus-4-5",
+) -> list[dict]:
     """
-    Direct scoring evaluation.
-    Rubric example: "Score on factual accuracy (0-10). Deduct 2pts per factual error."
+    Compress long conversation history into a summary + recent tail.
+    Preserves decisions, outcomes, and key entities.
     """
-    prompt = f"""Question: {question}
+    if len(messages) <= keep_last_n:
+        return messages
 
-Response to evaluate:
-{response}
+    to_compress = messages[:-keep_last_n]
+    recent = messages[-keep_last_n:]
 
-Rubric: {rubric}
+    summary_prompt = f"""Summarize this conversation segment.
+Preserve: decisions made, key entities, open questions, errors encountered.
+Discard: pleasantries, repetition, superseded plans.
 
-Evaluate and return JSON."""
+Conversation:
+{format_messages(to_compress)}
+"""
 
-    result = client.messages.create(
-        model="claude-opus-4-5",
-        max_tokens=256,
-        system=JUDGE_SYSTEM,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    evaluation = json.loads(result.content[0].text)
-    evaluation["pass"] = evaluation["score"] >= pass_threshold
-    return evaluation
-
-def pairwise_compare(question: str, response_a: str, response_b: str) -> dict:
-    """
-    Pairwise comparison with position bias mitigation (run both orderings).
-    """
-    def _compare(first: str, second: str) -> str:
-        prompt = f"""Question: {question}
-
-Response A: {first}
-
-Response B: {second}
-
-Which response is better? Return JSON: {{"winner": "A" or "B" or "tie", "reason": "..."}}"""
-        result = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=128,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return json.loads(result.content[0].text)
-
-    # Run both orderings to cancel position bias
-    forward = _compare(response_a, response_b)
-    backward = _compare(response_b, response_a)
-
-    # Normalize backward result (A/B labels are swapped)
-    backward_normalized = "A" if backward["winner"] == "B" else (
-        "B" if backward["winner"] == "A" else "tie"
+    response = client.messages.create(
+        model=model,
+        max_tokens=1024,
+        messages=[{"role": "user", "content": summary_prompt}],
     )
 
-    if forward["winner"] == backward_normalized:
-        return {"winner": forward["winner"], "confidence": "high", "reason": forward["reason"]}
-    return {"winner": "tie", "confidence": "low", "reason": "Position bias detected — inconclusive"}
+    summary_message = {
+        "role": "assistant",
+        "content": f"[COMPRESSED HISTORY]\n{response.content[0].text}",
+    }
 
-# Usage
-score = evaluate_response(
-    question="What causes the lost-in-the-middle problem?",
-    response="Models pay less attention to content in the middle of long contexts due to attention mechanics.",
-    rubric="Score on factual accuracy and completeness (0-10). 10=fully correct and complete.",
-)
-print(score)  # {"score": 8, "reasoning": "Correct but omits U-shaped curve detail.", "pass": true}
+    return [summary_message] + recent
+
+
+def format_messages(messages: list[dict]) -> str:
+    return "\n".join(
+        f"{m['role'].upper()}: {m['content']}" for m in messages
+    )
 ```
 
----
-
-### 6. Filesystem Context Offloading (Python)
+### Multi-Agent Patterns
 
 ```python
-# Pattern: Offload large tool outputs to files; pass only file references in context
-import tempfile
+# Orchestrator pattern — one agent routes, subagents execute
+class OrchestratorAgent:
+    def __init__(self, subagents: dict[str, "SubAgent"]):
+        self.subagents = subagents
+        self.client = anthropic.Anthropic()
+
+    def route(self, task: str) -> str:
+        """Determine which subagent handles this task."""
+        routing_prompt = f"""Given this task, which specialist should handle it?
+Specialists: {list(self.subagents.keys())}
+Task: {task}
+Reply with only the specialist name."""
+
+        response = self.client.messages.create(
+            model="claude-opus-4-5",
+            max_tokens=50,
+            system="You are a routing agent. Reply with only the specialist name.",
+            messages=[{"role": "user", "content": routing_prompt}],
+        )
+        return response.content[0].text.strip()
+
+    def execute(self, task: str) -> str:
+        specialist = self.route(task)
+        if specialist not in self.subagents:
+            raise ValueError(f"Unknown specialist: {specialist}")
+        # Pass minimal context — only what the subagent needs
+        return self.subagents[specialist].run(task)
+
+
+# Context handoff — pass structured summaries, not raw history
+def create_handoff_context(completed_work: dict) -> str:
+    """Minimal handoff context between agents."""
+    return f"""AGENT HANDOFF
+Task: {completed_work['task']}
+Status: {completed_work['status']}
+Key Outputs: {completed_work['outputs']}
+Open Questions: {completed_work.get('open_questions', 'None')}
+Next Agent Should: {completed_work['next_steps']}
+"""
+```
+
+### Memory Systems
+
+```python
 import json
 from pathlib import Path
+from datetime import datetime
 
-SCRATCH_DIR = Path(tempfile.gettempdir()) / "agent_scratch"
-SCRATCH_DIR.mkdir(exist_ok=True)
+# Append-only JSONL memory — agent-friendly, auditable
+class AgentMemory:
+    def __init__(self, path: str = "agent_memory.jsonl"):
+        self.path = Path(path)
+        # Schema declaration as first line
+        if not self.path.exists():
+            self.path.write_text(
+                json.dumps({"_schema": "v1", "fields": ["ts", "type", "key", "value"]}) + "\n"
+            )
 
-def offload_to_file(data: dict | list | str, label: str) -> str:
-    """
-    Write large data to a scratch file. Return a compact context reference.
-    Prevents tool outputs from filling the context window.
-    """
-    file_path = SCRATCH_DIR / f"{label}.json"
-    content = json.dumps(data, indent=2) if not isinstance(data, str) else data
-    file_path.write_text(content)
-    token_estimate = len(content.split()) * 1.3
-    return f"[FILE:{file_path}] ({int(token_estimate)} est. tokens — load only if needed)"
+    def remember(self, memory_type: str, key: str, value: str) -> None:
+        entry = {
+            "ts": datetime.utcnow().isoformat(),
+            "type": memory_type,   # "fact" | "decision" | "entity" | "error"
+            "key": key,
+            "value": value,
+        }
+        with self.path.open("a") as f:
+            f.write(json.dumps(entry) + "\n")
 
-def load_from_file(file_ref: str) -> str:
-    """Parse a file reference and load content."""
-    path_str = file_ref.split("[FILE:")[1].split("]")[0]
-    return Path(path_str).read_text()
+    def recall(self, memory_type: str | None = None, limit: int = 50) -> list[dict]:
+        entries = []
+        with self.path.open() as f:
+            for line in f:
+                entry = json.loads(line)
+                if "_schema" in entry:
+                    continue
+                if memory_type is None or entry["type"] == memory_type:
+                    entries.append(entry)
+        return entries[-limit:]  # most recent N
 
-def dynamic_context_discovery(agent_workspace: Path) -> str:
-    """
-    Scan workspace for agent-relevant files. Return a compact manifest.
-    Agents load this manifest instead of all file contents upfront.
-    """
-    manifest = []
-    for f in agent_workspace.rglob("*"):
-        if f.is_file() and f.suffix in {".md", ".json", ".jsonl", ".py", ".txt"}:
-            size = f.stat().st_size
-            manifest.append({
-                "path": str(f.relative_to(agent_workspace)),
-                "size_bytes": size,
-                "load_hint": "on-demand" if size > 5000 else "safe-to-inline",
-            })
-    return json.dumps({"workspace_manifest": manifest}, indent=2)
+    def recall_as_context(self, memory_type: str | None = None) -> str:
+        entries = self.recall(memory_type)
+        if not entries:
+            return "No relevant memories."
+        lines = [f"[{e['ts']}] {e['type']}/{e['key']}: {e['value']}" for e in entries]
+        return "\n".join(lines)
+
 
 # Usage
-large_api_result = {"items": list(range(1000))}  # Would be ~3000 tokens inline
-ref = offload_to_file(large_api_result, "api_result_page1")
-# Pass `ref` to agent context — agent requests load only when needed
-print(ref)  # [FILE:/tmp/agent_scratch/api_result_page1.json] (1300 est. tokens — load only if needed)
+memory = AgentMemory()
+memory.remember("decision", "database_choice", "PostgreSQL — chosen for JSONB support")
+memory.remember("entity", "user_id_format", "UUID v4, stored as TEXT")
+
+# Inject into agent context
+context = f"""AGENT MEMORY
+{memory.recall_as_context()}
+---
+"""
 ```
 
----
+### Tool Design Principles
+
+```python
+# Good tool: single responsibility, structured output, error info included
+def search_codebase(
+    query: str,
+    file_pattern: str = "**/*.py",
+    max_results: int = 10,
+) -> dict:
+    """
+    Search codebase for relevant code.
+
+    Returns structured results an agent can parse without hallucination.
+    Always include metadata — agents need to know WHERE results came from.
+    """
+    import glob, re
+
+    results = []
+    for filepath in glob.glob(file_pattern, recursive=True):
+        try:
+            content = Path(filepath).read_text()
+            if query.lower() in content.lower():
+                # Find line numbers for precise context
+                lines = content.splitlines()
+                matches = [
+                    {"line": i + 1, "text": line}
+                    for i, line in enumerate(lines)
+                    if query.lower() in line.lower()
+                ]
+                results.append({
+                    "file": filepath,
+                    "match_count": len(matches),
+                    "matches": matches[:3],  # Top 3 per file
+                })
+        except (UnicodeDecodeError, PermissionError):
+            pass
+
+    return {
+        "query": query,
+        "total_files_matched": len(results),
+        "results": results[:max_results],
+        "truncated": len(results) > max_results,
+    }
+
+
+# Tool output offloading — don't bloat context with large outputs
+def run_with_file_output(tool_fn, args: dict, output_path: str) -> str:
+    """
+    Run a tool and write output to file instead of returning to context.
+    Returns a file reference the agent can selectively read.
+    """
+    result = tool_fn(**args)
+    Path(output_path).write_text(json.dumps(result, indent=2))
+    return f"[OUTPUT SAVED: {output_path}] — {len(str(result))} chars. Read with read_file('{output_path}')."
+```
+
+### LLM-as-Judge Evaluation
+
+```python
+import anthropic
+from enum import Enum
+
+client = anthropic.Anthropic()  # uses ANTHROPIC_API_KEY
+
+class JudgeVerdict(Enum):
+    A_BETTER = "A"
+    B_BETTER = "B"
+    TIE = "TIE"
+
+def pairwise_judge(
+    prompt: str,
+    response_a: str,
+    response_b: str,
+    criteria: list[str],
+    model: str = "claude-opus-4-5",
+) -> dict:
+    """
+    Compare two responses with position bias mitigation.
+    Runs A/B and B/A then averages to cancel order effects.
+    """
+
+    def single_comparison(first: str, second: str) -> str:
+        criteria_text = "\n".join(f"- {c}" for c in criteria)
+        judge_prompt = f"""Compare these two responses to the prompt below.
+
+Prompt: {prompt}
+
+Response 1:
+{first}
+
+Response 2:
+{second}
+
+Criteria:
+{criteria_text}
+
+Which response better satisfies the criteria?
+Reply with exactly one of: RESPONSE_1, RESPONSE_2, TIE
+Then on a new line explain in 1-2 sentences."""
+
+        resp = client.messages.create(
+            model=model,
+            max_tokens=256,
+            system="You are an impartial evaluator. Be concise and consistent.",
+            messages=[{"role": "user", "content": judge_prompt}],
+        )
+        return resp.content[0].text.strip()
+
+    # Run both orderings to mitigate position bias
+    ab_result = single_comparison(response_a, response_b)
+    ba_result = single_comparison(response_b, response_a)
+
+    # Normalize: in ba_result, "RESPONSE_1" means B won
+    def normalize(result: str, flipped: bool) -> JudgeVerdict:
+        first_line = result.splitlines()[0]
+        if "TIE" in first_line:
+            return JudgeVerdict.TIE
+        if "RESPONSE_1" in first_line:
+            return JudgeVerdict.B_BETTER if flipped else JudgeVerdict.A_BETTER
+        return JudgeVerdict.A_BETTER if flipped else JudgeVerdict.B_BETTER
+
+    ab_verdict = normalize(ab_result, flipped=False)
+    ba_verdict = normalize(ba_result, flipped=True)
+
+    if ab_verdict == ba_verdict:
+        final = ab_verdict
+        confidence = "high"
+    else:
+        final = JudgeVerdict.TIE  # Disagreement → tie
+        confidence = "low"
+
+    return {
+        "verdict": final.value,
+        "confidence": confidence,
+        "ab_result": ab_result,
+        "ba_result": ba_result,
+    }
+```
+
+### BDI Mental States
+
+```python
+from dataclasses import dataclass, field
+from typing import Any
+
+@dataclass
+class Belief:
+    subject: str
+    predicate: str
+    object_: Any
+    confidence: float = 1.0
+    source: str = "observation"
+
+@dataclass
+class Desire:
+    goal: str
+    priority: float  # 0.0 - 1.0
+    conditions: list[str] = field(default_factory=list)
+
+@dataclass
+class Intention:
+    action_plan: list[str]
+    committed_to: str  # which desire this serves
+    status: str = "pending"  # pending | active | complete | abandoned
+
+class BDIAgent:
+    def __init__(self):
+        self.beliefs: list[Belief] = []
+        self.desires: list[Desire] = []
+        self.intentions: list[Intention] = []
+
+    def perceive(self, rdf_triples: list[tuple]) -> None:
+        """Convert RDF context into beliefs."""
+        for subject, predicate, obj in rdf_triples:
+            self.beliefs.append(Belief(
+                subject=subject,
+                predicate=predicate,
+                object_=obj,
+            ))
+
+    def deliberate(self) -> Desire | None:
+        """Select highest-priority achievable desire."""
+        achievable = [
+            d for d in self.desires
+            if self._conditions_met(d.conditions)
+        ]
+        if not achievable:
+            return None
+        return max(achievable, key=lambda d: d.priority)
+
+    def plan(self, desire: Desire) -> Intention:
+        """Generate action plan for a desire."""
+        # In production: call LLM to generate plan
+        steps = [f"Execute step for: {desire.goal}"]
+        intention = Intention(
+            action_plan=steps,
+            committed_to=desire.goal,
+        )
+        self.intentions.append(intention)
+        return intention
+
+    def _conditions_met(self, conditions: list[str]) -> bool:
+        belief_strings = {
+            f"{b.subject}:{b.predicate}:{b.object_}" for b in self.beliefs
+        }
+        return all(c in belief_strings for c in conditions)
+
+    def as_context_block(self) -> str:
+        """Serialize mental state for injection into LLM context."""
+        beliefs_text = "\n".join(
+            f"  - {b.subject} {b.predicate} {b.object_} (conf={b.confidence})"
+            for b in self.beliefs[-10:]
+        )
+        desires_text = "\n".join(
+            f"  - [{b.priority:.1f}] {b.goal}" for b in self.desires
+        )
+        intentions_text = "\n".join(
+            f"  - {i.committed_to}: {i.status}" for i in self.intentions
+        )
+        return f"""BDI MENTAL STATE
+Beliefs (recent):
+{beliefs_text}
+Desires:
+{desires_text}
+Intentions:
+{intentions_text}
+"""
+```
+
+### Filesystem Context Pattern
+
+```python
+from pathlib import Path
+import json
+
+# Use filesystem as infinite context extension
+class FilesystemContext:
+    def __init__(self, workspace: str = ".agent_workspace"):
+        self.workspace = Path(workspace)
+        self.workspace.mkdir(exist_ok=True)
+
+    def offload(self, key: str, data: Any) -> str:
+        """Write large data to file, return reference string for context."""
+        path = self.workspace / f"{key}.json"
+        path.write_text(json.dumps(data, indent=2))
+        size = len(json.dumps(data))
+        return f"[FILE_REF:{key}] ({size} bytes) → {path}"
+
+    def load(self, key: str) -> Any:
+        """Load previously offloaded data."""
+        path = self.workspace / f"{key}.json"
+        return json.loads(path.read_text())
+
+    def list_available(self) -> str:
+        """Let agent discover what context is available."""
+        files = list(self.workspace.glob("*.json"))
+        if not files:
+            return "No context files available."
+        lines = []
+        for f in files:
+            size = f.stat().st_size
+            lines.append(f"  - {f.stem}: {size} bytes")
+        return "AVAILABLE CONTEXT FILES:\n" + "\n".join(lines)
+
+    def write_plan(self, plan: list[str]) -> str:
+        """Persist agent plan so it survives context resets."""
+        return self.offload("current_plan", {"steps": plan, "current": 0})
+
+    def tick_plan(self) -> str | None:
+        """Advance to next step, return current step or None if done."""
+        data = self.load("current_plan")
+        idx = data["current"]
+        if idx >= len(data["steps"]):
+            return None
+        data["current"] += 1
+        self.offload("current_plan", data)
+        return data["steps"][idx]
+```
+
+## Skill Trigger Reference
+
+| Skill | Activate When User Says |
+|-------|-------------------------|
+| `context-fundamentals` | "explain context windows", "design agent architecture" |
+| `context-degradation` | "diagnose context problems", "fix lost-in-middle", "debug agent failures" |
+| `context-compression` | "compress context", "summarize conversation", "reduce token usage" |
+| `context-optimization` | "optimize context", "reduce token costs", "implement KV-cache" |
+| `multi-agent-patterns` | "design multi-agent system", "implement supervisor pattern" |
+| `memory-systems` | "implement agent memory", "build knowledge graph", "track entities" |
+| `tool-design` | "design agent tools", "reduce tool complexity", "implement MCP tools" |
+| `filesystem-context` | "offload context to files", "agent scratch pad", "file-based context" |
+| `hosted-agents` | "build background agent", "sandboxed execution", "multiplayer agent" |
+| `evaluation` | "evaluate agent performance", "build test framework", "measure quality" |
+| `advanced-evaluation` | "implement LLM-as-judge", "compare model outputs", "mitigate bias" |
+| `project-development` | "start LLM project", "design batch pipeline", "evaluate task-model fit" |
+| `bdi-mental-states` | "model agent mental states", "implement BDI architecture", "transform RDF to beliefs" |
 
 ## Common Patterns
 
-### Progressive Disclosure (3-Level Loading)
-
-```
-Level 1 (always loaded): Skill name + one-line description (~50 tokens)
-Level 2 (on activation): Module overview and key APIs (~500 tokens)
-Level 3 (on demand): Full implementation details, examples (~5000 tokens)
-```
-
-Implement this in your agent by structuring SKILL.md files with collapsible sections or by using separate files per level.
-
-### KV-Cache Optimization
+### Progressive Context Loading
 
 ```python
-# Place static, rarely-changing content at the TOP of system prompt
-# to maximize KV-cache hits across turns.
-system_prompt = """
-[STATIC - cache-friendly]
-You are an expert context engineering assistant.
-Rules: ...
-Tool definitions: ...
+# Only load full skill content when triggered — saves tokens on every request
+class SkillLoader:
+    def __init__(self, skills_dir: str = "skills"):
+        self.skills_dir = Path(skills_dir)
+        self._index = None
 
-[DYNAMIC - append below]
-Current task context: {task_context}
-Recent observations: {observations}
-"""
+    def get_index(self) -> str:
+        """Load lightweight index (names + one-line descriptions only)."""
+        if self._index:
+            return self._index
+        skills = []
+        for skill_dir in self.skills_dir.iterdir():
+            readme = skill_dir / "README.md"
+            if readme.exists():
+                first_line = readme.read_text().splitlines()[0]
+                skills.append(f"- {skill_dir.name}: {first_line}")
+        self._index = "\n".join(skills)
+        return self._index
+
+    def load_skill(self, skill_name: str) -> str:
+        """Load full skill content only when needed."""
+        skill_file = self.skills_dir / skill_name / "SKILL.md"
+        if not skill_file.exists():
+            raise FileNotFoundError(f"Skill not found: {skill_name}")
+        return skill_file.read_text()
 ```
 
-### Attention Budget Allocation
+### Token Budget Enforcement
 
-```
-Context Window Budget (example: 200k tokens)
-├── System prompt + tools:   ~5%   (10k)  — keep minimal
-├── Retrieved documents:    ~30%   (60k)  — ranked by relevance
-├── Conversation history:   ~20%   (40k)  — compressed older turns
-├── Tool outputs:           ~15%   (30k)  — offload large outputs to files
-└── Working space (output): ~30%   (60k)  — reserve for generation
-```
+```python
+import tiktoken
 
----
+def enforce_budget(
+    content: str,
+    max_tokens: int,
+    model: str = "gpt-4o",
+    strategy: str = "truncate_middle",
+) -> str:
+    """
+    Ensure content fits within token budget.
+    Strategies: truncate_end | truncate_middle | summarize
+    """
+    enc = tiktoken.encoding_for_model(model)
+    tokens = enc.encode(content)
+
+    if len(tokens) <= max_tokens:
+        return content
+
+    if strategy == "truncate_end":
+        return enc.decode(tokens[:max_tokens])
+
+    if strategy == "truncate_middle":
+        keep = max_tokens // 2
+        start = enc.decode(tokens[:keep])
+        end = enc.decode(tokens[-keep:])
+        return f"{start}\n\n[... {len(tokens) - max_tokens} tokens truncated ...]\n\n{end}"
+
+    raise ValueError(f"Unknown strategy: {strategy}")
+```
 
 ## Troubleshooting
 
-### Agent "forgets" earlier instructions
+### Agent loses track of earlier decisions
+**Cause**: Message history too long, decisions buried in the middle.
+**Fix**: Use `AgentMemory` to extract decisions into persistent JSONL; inject only the decision log at context start.
 
-**Cause**: Lost-in-the-middle — instructions buried in context center.
-**Fix**: Move critical instructions to the beginning AND end of system prompt. Compress middle history.
+### Tool calls return too much data
+**Cause**: Tool output floods the context window.
+**Fix**: Use `FilesystemContext.offload()` and return file references; agent reads only what it needs.
 
-```python
-system = f"""
-CRITICAL RULES (always follow):
-{critical_rules}
+### Multi-agent handoffs lose context
+**Cause**: Raw message history passed between agents.
+**Fix**: Use `create_handoff_context()` — structured summaries only, never raw history.
 
-[Background context — may be deprioritized by attention]
-{background_info}
+### LLM-as-Judge gives inconsistent verdicts
+**Cause**: Position bias (model prefers whichever response appears first).
+**Fix**: Use `pairwise_judge()` which runs A/B and B/A, resolves disagreements as ties.
 
-REMINDER — CRITICAL RULES STILL APPLY:
-{critical_rules_short_repeat}
-"""
+### Agent ignores early instructions
+**Cause**: Instructions in the middle of a long system prompt.
+**Fix**: Place critical constraints at the **top** and **bottom** of the system prompt; use U-shaped placement.
+
+### Context grows unbounded in long sessions
+**Cause**: No compression strategy; messages accumulate.
+**Fix**: Run `compress_conversation()` every N turns; keep the last 10 messages verbatim, summarize the rest.
+
+## Environment Variables
+
+```bash
+ANTHROPIC_API_KEY=          # Required for Claude API calls
+OPENAI_API_KEY=             # Optional, for OpenAI-based evaluation
+AGENT_WORKSPACE_DIR=        # Optional, filesystem context directory (default: .agent_workspace)
+AGENT_MEMORY_PATH=          # Optional, JSONL memory file path (default: agent_memory.jsonl)
 ```
 
-### Context growing unbounded in long sessions
+## References
 
-**Cause**: Appending all turns without compression.
-**Fix**: Apply rolling compression after every N turns.
-
-```python
-MAX_TURNS_BEFORE_COMPRESS = 10
-
-def maybe_compress(messages: list[dict]) -> list[dict]:
-    if len(messages) > MAX_TURNS_BEFORE_COMPRESS:
-        return compress_history(messages)  # See compression example above
-    return messages
-```
-
-### Tool outputs consuming too many tokens
-
-**Cause**: Tools returning raw, unfiltered data.
-**Fix**: Enforce output size limits in tool wrappers; offload large results to files.
-
-```python
-def bounded_tool_output(raw_output: str, max_chars: int = 2000) -> str:
-    if len(raw_output) <= max_chars:
-        return raw_output
-    truncated = raw_output[:max_chars]
-    ref = offload_to_file(raw_output, "overflow_output")
-    return f"{truncated}\n...[truncated] Full output at: {ref}"
-```
-
-### Multi-agent system producing inconsistent results
-
-**Cause**: Agents sharing full context, causing context clash or contradictory states.
-**Fix**: Use the orchestrator pattern — each agent receives only the context slice relevant to its role.
-
-### LLM judge scores seem biased
-
-**Cause**: Position bias in pairwise comparisons (first response rated higher).
-**Fix**: Always run both orderings and compare results (see `pairwise_compare` above). Use rubric-based direct scoring as an alternative.
-
----
-
-## Examples in the Repo
-
-| Example | What It Demonstrates |
-|---------|----------------------|
-| `examples/digital-brain-skill/` | 6-module personal OS skill, progressive disclosure, append-only JSONL memory |
-| `examples/x-to-book-system/` | Full multi-agent pipeline: monitor → synthesize → publish |
-| `examples/llm-as-judge-skills/` | TypeScript LLM evaluation tools with 19 passing tests |
-| `examples/book-sft-pipeline/` | LoRA fine-tuning pipeline, $2 total cost, style transfer validation |
-
----
-
-## Key References
-
-- [Context Engineering Fundamentals](skills/context-fundamentals/) — start here
-- [Meta Context Engineering via Agentic Skill Evolution](https://arxiv.org/pdf/2601.21557) — academic citation of this repo
+- [Repository](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering)
 - [Cursor Plugin Directory](https://cursor.directory/plugins/context-engineering)
+- [Cited in: Meta Context Engineering via Agentic Skill Evolution](https://arxiv.org/pdf/2601.21557) — Peking University (2026)
 - [Open Plugins Standard](https://open-plugins.com)
 ```
