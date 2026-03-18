@@ -99,6 +99,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [trump-code-market-signals](skills/trump-code-market-signals/) | [install](https://skills.sh/aradotso/trending-skills/trump-code-market-signals) | [sstklen/trump-code](https://github.com/sstklen/trump-code) | 2026-03-18 |
 | [openclaw-rl-training](skills/openclaw-rl-training/) | [install](https://skills.sh/aradotso/trending-skills/openclaw-rl-training) | [Gen-Verse/OpenClaw-RL](https://github.com/Gen-Verse/OpenClaw-RL) | 2026-03-18 |
 | [zeroboot-vm-sandbox](skills/zeroboot-vm-sandbox/) | [install](https://skills.sh/aradotso/trending-skills/zeroboot-vm-sandbox) | [adammiribyan/zeroboot](https://github.com/adammiribyan/zeroboot) | 2026-03-18 |
+| [anthropic-cybersecurity-skills-agent-library](skills/anthropic-cybersecurity-skills-agent-library/) | [install](https://skills.sh/aradotso/trending-skills/anthropic-cybersecurity-skills-agent-library) | [mukul975/Anthropic-Cybersecurity-Skills](https://github.com/mukul975/Anthropic-Cybersecurity-Skills) | 2026-03-18 |
 <!-- SKILL_INDEX -->
 
 ## How it works
