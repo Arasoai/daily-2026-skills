@@ -82,6 +82,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [open-autoglm-phone-agent](skills/open-autoglm-phone-agent/) | [install](https://skills.sh/aradotso/trending-skills/open-autoglm-phone-agent) | [zai-org/Open-AutoGLM](https://github.com/zai-org/Open-AutoGLM) | 2026-03-18 |
 | [opencli-social-platforms](skills/opencli-social-platforms/) | [install](https://skills.sh/aradotso/trending-skills/opencli-social-platforms) | [joeseesun/opencli-skill](https://github.com/joeseesun/opencli-skill) | 2026-03-18 |
 | [clui-cc-claude-overlay](skills/clui-cc-claude-overlay/) | [install](https://skills.sh/aradotso/trending-skills/clui-cc-claude-overlay) | [lcoutodemos/clui-cc](https://github.com/lcoutodemos/clui-cc) | 2026-03-18 |
+| [clawteam-agent-swarm](skills/clawteam-agent-swarm/) | [install](https://skills.sh/aradotso/trending-skills/clawteam-agent-swarm) | [HKUDS/ClawTeam](https://github.com/HKUDS/ClawTeam) | 2026-03-18 |
 <!-- SKILL_INDEX -->
 
 ## How it works
