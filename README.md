@@ -103,6 +103,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [mirofish-offline-simulation](skills/mirofish-offline-simulation/) | [install](https://skills.sh/aradotso/trending-skills/mirofish-offline-simulation) | [nikmcfly/MiroFish-Offline](https://github.com/nikmcfly/MiroFish-Offline) | 2026-03-18 |
 | [agent-skills-context-engineering](skills/agent-skills-context-engineering/) | [install](https://skills.sh/aradotso/trending-skills/agent-skills-context-engineering) | [muratcankoylan/Agent-Skills-for-Context-Engineering](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering) | 2026-03-18 |
 | [witr-process-inspector](skills/witr-process-inspector/) | [install](https://skills.sh/aradotso/trending-skills/witr-process-inspector) | [pranshuparmar/witr](https://github.com/pranshuparmar/witr) | 2026-03-18 |
+| [git-city-3d-github-visualization](skills/git-city-3d-github-visualization/) | [install](https://skills.sh/aradotso/trending-skills/git-city-3d-github-visualization) | [srizzon/git-city](https://github.com/srizzon/git-city) | 2026-03-18 |
 <!-- SKILL_INDEX -->
 
 ## How it works
