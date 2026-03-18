@@ -87,6 +87,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [mole-mac-cleaner](skills/mole-mac-cleaner/) | [install](https://skills.sh/aradotso/trending-skills/mole-mac-cleaner) | [tw93/Mole](https://github.com/tw93/Mole) | 2026-03-18 |
 | [marketingskills-ai-agents](skills/marketingskills-ai-agents/) | [install](https://skills.sh/aradotso/trending-skills/marketingskills-ai-agents) | [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) | 2026-03-18 |
 | [vercel-agent-skills](skills/vercel-agent-skills/) | [install](https://skills.sh/aradotso/trending-skills/vercel-agent-skills) | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | 2026-03-18 |
+| [context-mode-mcp](skills/context-mode-mcp/) | [install](https://skills.sh/aradotso/trending-skills/context-mode-mcp) | [mksglu/context-mode](https://github.com/mksglu/context-mode) | 2026-03-18 |
 <!-- SKILL_INDEX -->
 
 ## How it works
