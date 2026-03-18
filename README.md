@@ -98,6 +98,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [ralph-autonomous-agent-loop](skills/ralph-autonomous-agent-loop/) | [install](https://skills.sh/aradotso/trending-skills/ralph-autonomous-agent-loop) | [snarktank/ralph](https://github.com/snarktank/ralph) | 2026-03-18 |
 | [trump-code-market-signals](skills/trump-code-market-signals/) | [install](https://skills.sh/aradotso/trending-skills/trump-code-market-signals) | [sstklen/trump-code](https://github.com/sstklen/trump-code) | 2026-03-18 |
 | [openclaw-rl-training](skills/openclaw-rl-training/) | [install](https://skills.sh/aradotso/trending-skills/openclaw-rl-training) | [Gen-Verse/OpenClaw-RL](https://github.com/Gen-Verse/OpenClaw-RL) | 2026-03-18 |
+| [zeroboot-vm-sandbox](skills/zeroboot-vm-sandbox/) | [install](https://skills.sh/aradotso/trending-skills/zeroboot-vm-sandbox) | [adammiribyan/zeroboot](https://github.com/adammiribyan/zeroboot) | 2026-03-18 |
 <!-- SKILL_INDEX -->
 
 ## How it works
