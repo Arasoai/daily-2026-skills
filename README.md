@@ -107,6 +107,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [grimmory-self-hosted-library](skills/grimmory-self-hosted-library/) | [install](https://skills.sh/aradotso/trending-skills/grimmory-self-hosted-library) | [grimmory-tools/grimmory](https://github.com/grimmory-tools/grimmory) | 2026-03-18 |
 | [toon-format](skills/toon-format/) | [install](https://skills.sh/aradotso/trending-skills/toon-format) | [toon-format/toon](https://github.com/toon-format/toon) | 2026-03-18 |
 | [taiwan-md-knowledge-base](skills/taiwan-md-knowledge-base/) | [install](https://skills.sh/aradotso/trending-skills/taiwan-md-knowledge-base) | [frank890417/taiwan-md](https://github.com/frank890417/taiwan-md) | 2026-03-19 |
+| [taste-skill-frontend-design](skills/taste-skill-frontend-design/) | [install](https://skills.sh/aradotso/trending-skills/taste-skill-frontend-design) | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | 2026-03-19 |
 <!-- SKILL_INDEX -->
 
 ## How it works
