@@ -109,6 +109,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [taiwan-md-knowledge-base](skills/taiwan-md-knowledge-base/) | [install](https://skills.sh/aradotso/trending-skills/taiwan-md-knowledge-base) | [frank890417/taiwan-md](https://github.com/frank890417/taiwan-md) | 2026-03-19 |
 | [taste-skill-frontend-design](skills/taste-skill-frontend-design/) | [install](https://skills.sh/aradotso/trending-skills/taste-skill-frontend-design) | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | 2026-03-19 |
 | [kimodo-motion-diffusion](skills/kimodo-motion-diffusion/) | [install](https://skills.sh/aradotso/trending-skills/kimodo-motion-diffusion) | [nv-tlabs/kimodo](https://github.com/nv-tlabs/kimodo) | 2026-03-19 |
+| [nightingale-karaoke](skills/nightingale-karaoke/) | [install](https://skills.sh/aradotso/trending-skills/nightingale-karaoke) | [rzru/nightingale](https://github.com/rzru/nightingale) | 2026-03-19 |
 <!-- SKILL_INDEX -->
 
 ## How it works
