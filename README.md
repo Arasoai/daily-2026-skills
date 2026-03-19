@@ -115,6 +115,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [keyid-agent-kit-mcp](skills/keyid-agent-kit-mcp/) | [install](https://skills.sh/aradotso/trending-skills/keyid-agent-kit-mcp) | [KeyID-AI/agent-kit](https://github.com/KeyID-AI/agent-kit) | 2026-03-19 |
 | [openbrand-asset-extraction](skills/openbrand-asset-extraction/) | [install](https://skills.sh/aradotso/trending-skills/openbrand-asset-extraction) | [ethanjyx/OpenBrand](https://github.com/ethanjyx/OpenBrand) | 2026-03-19 |
 | [boss-cli-job-search](skills/boss-cli-job-search/) | [install](https://skills.sh/aradotso/trending-skills/boss-cli-job-search) | [jackwener/boss-cli](https://github.com/jackwener/boss-cli) | 2026-03-19 |
+| [fabro-workflow-factory](skills/fabro-workflow-factory/) | [install](https://skills.sh/aradotso/trending-skills/fabro-workflow-factory) | [fabro-sh/fabro](https://github.com/fabro-sh/fabro) | 2026-03-19 |
 <!-- SKILL_INDEX -->
 
 ## How it works
