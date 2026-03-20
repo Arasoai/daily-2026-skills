@@ -122,6 +122,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [translate-book-parallel](skills/translate-book-parallel/) | [install](https://skills.sh/aradotso/trending-skills/translate-book-parallel) | [deusyu/translate-book](https://github.com/deusyu/translate-book) | 2026-03-20 |
 | [openhanako-personal-ai-agent](skills/openhanako-personal-ai-agent/) | [install](https://skills.sh/aradotso/trending-skills/openhanako-personal-ai-agent) | [liliMozi/openhanako](https://github.com/liliMozi/openhanako) | 2026-03-20 |
 | [posterskill-academic-posters](skills/posterskill-academic-posters/) | [install](https://skills.sh/aradotso/trending-skills/posterskill-academic-posters) | [ethanweber/posterskill](https://github.com/ethanweber/posterskill) | 2026-03-20 |
+| [nopua-ai-agent-skill](skills/nopua-ai-agent-skill/) | [install](https://skills.sh/aradotso/trending-skills/nopua-ai-agent-skill) | [wuji-labs/nopua](https://github.com/wuji-labs/nopua) | 2026-03-20 |
 <!-- SKILL_INDEX -->
 
 ## How it works
