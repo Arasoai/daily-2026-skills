@@ -133,6 +133,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [app-store-preflight-skills](skills/app-store-preflight-skills/) | [install](https://skills.sh/aradotso/trending-skills/app-store-preflight-skills) | [truongduy2611/app-store-preflight-skills](https://github.com/truongduy2611/app-store-preflight-skills) | 2026-03-21 |
 | [ghostling-libghostty-terminal](skills/ghostling-libghostty-terminal/) | [install](https://skills.sh/aradotso/trending-skills/ghostling-libghostty-terminal) | [ghostty-org/ghostling](https://github.com/ghostty-org/ghostling) | 2026-03-21 |
 | [dontbesilent-business-diagnostics](skills/dontbesilent-business-diagnostics/) | [install](https://skills.sh/aradotso/trending-skills/dontbesilent-business-diagnostics) | [dontbesilent2025/dbskill](https://github.com/dontbesilent2025/dbskill) | 2026-03-21 |
+| [dontbesilent-business-diagnosis](skills/dontbesilent-business-diagnosis/) | [install](https://skills.sh/aradotso/trending-skills/dontbesilent-business-diagnosis) | [dontbesilent2025/dbskill](https://github.com/dontbesilent2025/dbskill) | 2026-03-21 |
 <!-- SKILL_INDEX -->
 
 ## How it works
