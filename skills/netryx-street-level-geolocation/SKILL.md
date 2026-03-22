@@ -1,23 +1,23 @@
 ```markdown
 ---
 name: netryx-street-level-geolocation
-description: Expert skill for using Netryx, a local-first open-source street-level geolocation engine that identifies GPS coordinates from street photos using CosPlace, ALIKED/DISK, and LightGlue.
+description: Expert skill for using Netryx, the open-source local-first street-level geolocation engine that identifies GPS coordinates from street photos using CosPlace, ALIKED/DISK, and LightGlue.
 triggers:
   - geolocate a street photo
-  - find GPS coordinates from an image
+  - find GPS coordinates from image
   - street level geolocation
-  - use Netryx to locate an image
-  - index street view panoramas
-  - run netryx geolocation search
-  - visual place recognition pipeline
-  - identify location from street photo
+  - build a geolocation index
+  - run netryx search
+  - identify location from street view photo
+  - osint geolocation with computer vision
+  - netryx pipeline setup
 ---
 
 # Netryx Street-Level Geolocation
 
 > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection.
 
-Netryx is a locally-hosted geolocation engine that identifies the exact GPS coordinates of any street-level photograph. It crawls and indexes street-view panoramas, then uses a three-stage computer vision pipeline (CosPlace global retrieval → ALIKED/DISK+LightGlue geometric verification → refinement) to match a query image against the physical world — not the internet.
+Netryx is a locally-hosted geolocation engine that identifies precise GPS coordinates from any street-level photograph. It crawls street-view panoramas, indexes them as 512-dim visual fingerprints (CosPlace), then matches query images via local feature extraction (ALIKED/DISK) and deep feature matching (LightGlue). Sub-50m accuracy. Runs entirely on your hardware — no SaaS, no cloud API required for searching.
 
 ---
 
@@ -31,37 +31,24 @@ python3 -m venv venv
 source venv/bin/activate          # Windows: venv\Scripts\activate
 
 pip install -r requirements.txt
-pip install git+https://github.com/cvg/LightGlue.git   # required
-pip install kornia                                        # optional: Ultra Mode (LoFTR)
+
+# Required: LightGlue (must install from GitHub)
+pip install git+https://github.com/cvg/LightGlue.git
+
+# Optional: LoFTR for Ultra Mode (difficult/blurry images)
+pip install kornia
 ```
 
-### Optional: Gemini AI Coarse Mode
+### Platform Notes
+- **NVIDIA GPU**: Uses ALIKED (1024 keypoints) — fastest, most accurate
+- **Mac M1/M2/M3/M4**: Uses DISK via MPS (768 keypoints) — good performance
+- **CPU only**: Works but significantly slower; not recommended for large indexes
 
+### Optional: Gemini API for AI Coarse Mode
 ```bash
-export GEMINI_API_KEY="your_key_here"   # from https://aistudio.google.com
+export GEMINI_API_KEY="your_key_here"   # From https://aistudio.google.com
 ```
-
-### macOS tkinter fix (blank GUI)
-
-```bash
-brew install python-tk@3.11   # match your Python version
-```
-
----
-
-## Requirements
-
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| Python | 3.9+ | 3.10+ |
-| GPU VRAM | 4 GB | 8 GB+ |
-| RAM | 8 GB | 16 GB+ |
-| Storage | 10 GB | 50 GB+ |
-
-**GPU backends:**
-- NVIDIA → CUDA (uses ALIKED, 1024 keypoints)
-- Apple Silicon → MPS (uses DISK, 768 keypoints)
-- No GPU → CPU (works, significantly slower)
+AI Coarse mode uses Gemini to guess a region from visual cues (signs, architecture) when you have no prior location knowledge. Manual mode with known coordinates is generally more reliable.
 
 ---
 
@@ -71,7 +58,392 @@ brew install python-tk@3.11   # match your Python version
 python test_super.py
 ```
 
-The GUI has two modes: **Create** (build an index) and **Search** (geolocate a photo).
+> **macOS blank GUI fix**: `brew install python-tk@3.11` (match your Python version)
+
+---
+
+## Core Workflow
+
+### Step 1 — Create an Index
+
+Index an area before searching. This crawls street-view panoramas, extracts CosPlace fingerprints, and saves them locally.
+
+**In the GUI:**
+1. Select **Create** mode
+2. Enter center lat/lon of the area
+3. Set radius (km) and grid resolution (default 300 — don't change)
+4. Click **Create Index**
+
+**Index size reference:**
+
+| Radius | ~Panoramas | Time (M2 Max) | Disk |
+|--------|-----------|---------------|------|
+| 0.5 km | ~500      | 30 min        | ~60 MB |
+| 1 km   | ~2,000    | 1–2 hr        | ~250 MB |
+| 5 km   | ~30,000   | 8–12 hr       | ~3 GB |
+| 10 km  | ~100,000  | 24–48 hr      | ~7 GB |
+
+Indexing is **resumable** — if interrupted, re-run and it picks up where it left off.
+
+For large areas, use the standalone high-performance builder:
+```bash
+python build_index.py
+```
+
+### Step 2 — Search
+
+**In the GUI:**
+1. Select **Search** mode
+2. Upload a street-level photo
+3. Choose method:
+   - **Manual**: Provide approximate center lat/lon + radius (preferred)
+   - **AI Coarse**: Gemini analyzes the image to guess the region (requires `GEMINI_API_KEY`)
+4. Click **Run Search** → **Start Full Search**
+5. Result: GPS coordinates + confidence score displayed on map
+
+---
+
+## Index Architecture
+
+All city indexes live in one unified index. Radius filtering at search time scopes results automatically — no per-city selection needed.
+
+```
+cosplace_parts/          # Raw embedding chunks (.npz), written during indexing
+index/
+  cosplace_descriptors.npy    # All 512-dim CosPlace descriptors (matrix)
+  metadata.npz                # lat, lon, heading, panorama IDs
+```
+
+**You can index multiple cities into the same index:**
+```
+Index Paris (48.85, 2.35, radius=5km)
+Index London (51.50, -0.12, radius=5km)
+Index NYC    (40.71, -74.00, radius=5km)
+
+Search: center=Paris coords, radius=5km → only Paris results returned
+Search: center=London coords, radius=5km → only London results returned
+```
+
+---
+
+## Pipeline Deep-Dive
+
+### Stage 1: Global Retrieval (CosPlace)
+- Extracts 512-dim descriptor from query image + horizontally flipped version
+- Cosine similarity against all indexed descriptors (single matrix multiply — <1 sec)
+- Haversine radius filter narrows to specified area
+- Returns top 500–1000 candidates
+
+### Stage 2: Geometric Verification (ALIKED/DISK + LightGlue)
+- Downloads each candidate panorama (8 tiles, stitched)
+- Crops at indexed heading, 3 FOVs: 70°, 90°, 110° (handles zoom mismatch)
+- ALIKED (CUDA) or DISK (MPS/CPU) extracts keypoints + descriptors
+- LightGlue matches query keypoints vs. candidate keypoints
+- RANSAC filters to geometrically consistent inliers
+- Best match = highest verified inlier count
+- Runtime: 2–5 minutes for 300–500 candidates
+
+### Stage 3: Refinement
+- **Heading refinement**: Tests ±45° at 15° steps × 3 FOVs for top 15 candidates
+- **Spatial consensus**: Clusters matches into 50m cells; prefers cluster over isolated outlier
+- **Confidence scoring**: Geographic clustering of top matches + uniqueness ratio (best vs. runner-up)
+
+### Ultra Mode (Difficult Images)
+Enable for night shots, blur, low-texture scenes:
+- **LoFTR**: Detector-free dense matching — works without reliable keypoints
+- **Descriptor hopping**: Re-searches index using the matched panorama's clean descriptor
+- **Neighborhood expansion**: Searches all panoramas within 100m of best match
+
+---
+
+## Code Examples
+
+### Extract a CosPlace Descriptor Programmatically
+
+```python
+from cosplace_utils import load_cosplace_model, get_descriptor
+from PIL import Image
+import torch
+
+# Load model (auto-detects CUDA/MPS/CPU)
+model, device = load_cosplace_model()
+
+# Extract descriptor from an image file
+img = Image.open("query.jpg").convert("RGB")
+descriptor = get_descriptor(model, img, device)  # shape: (512,)
+
+print(f"Descriptor shape: {descriptor.shape}")
+print(f"Device used: {device}")
+```
+
+### Search the Index Programmatically
+
+```python
+import numpy as np
+from math import radians, cos, sin, asin, sqrt
+
+def haversine(lat1, lon1, lat2, lon2):
+    """Distance in km between two lat/lon points."""
+    R = 6371
+    dlat = radians(lat2 - lat1)
+    dlon = radians(lon2 - lon1)
+    a = sin(dlat/2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon/2)**2
+    return 2 * R * asin(sqrt(a))
+
+def search_index(query_descriptor, center_lat, center_lon, radius_km, top_k=500):
+    """
+    Search the Netryx index for candidates near a given location.
+    
+    Args:
+        query_descriptor: np.ndarray shape (512,) — CosPlace descriptor of query image
+        center_lat, center_lon: float — center of search area
+        radius_km: float — search radius in kilometers
+        top_k: int — number of candidates to return
+    
+    Returns:
+        list of dicts with keys: lat, lon, heading, panoid, similarity
+    """
+    # Load index
+    descriptors = np.load("index/cosplace_descriptors.npy")  # (N, 512)
+    meta = np.load("index/metadata.npz", allow_pickle=True)
+    lats = meta["lats"]
+    lons = meta["lons"]
+    headings = meta["headings"]
+    panoids = meta["panoids"]
+
+    # Radius filter
+    in_radius = np.array([
+        haversine(center_lat, center_lon, lat, lon) <= radius_km
+        for lat, lon in zip(lats, lons)
+    ])
+    
+    filtered_desc = descriptors[in_radius]
+    filtered_idx = np.where(in_radius)[0]
+
+    if len(filtered_desc) == 0:
+        return []
+
+    # Cosine similarity (descriptors assumed L2-normalized)
+    query_norm = query_descriptor / (np.linalg.norm(query_descriptor) + 1e-8)
+    sims = filtered_desc @ query_norm  # shape: (N_filtered,)
+
+    # Top-k
+    top_k = min(top_k, len(sims))
+    top_local_idx = np.argpartition(sims, -top_k)[-top_k:]
+    top_local_idx = top_local_idx[np.argsort(sims[top_local_idx])[::-1]]
+
+    results = []
+    for local_i in top_local_idx:
+        global_i = filtered_idx[local_i]
+        results.append({
+            "lat": float(lats[global_i]),
+            "lon": float(lons[global_i]),
+            "heading": float(headings[global_i]),
+            "panoid": str(panoids[global_i]),
+            "similarity": float(sims[local_i]),
+        })
+
+    return results
+
+
+# Usage
+from cosplace_utils import load_cosplace_model, get_descriptor
+from PIL import Image
+
+model, device = load_cosplace_model()
+img = Image.open("mystery_street.jpg").convert("RGB")
+descriptor = get_descriptor(model, img, device)
+
+candidates = search_index(
+    query_descriptor=descriptor,
+    center_lat=48.8566,
+    center_lon=2.3522,
+    radius_km=5.0,
+    top_k=500
+)
+
+print(f"Top candidate: {candidates[0]}")
+```
+
+### Build Index from Custom Panorama List
+
+```python
+import numpy as np
+from cosplace_utils import load_cosplace_model, get_descriptor
+from PIL import Image
+import os
+
+def build_custom_index(panorama_records, output_dir="index"):
+    """
+    Build a Netryx index from your own panorama images.
+    
+    Args:
+        panorama_records: list of dicts with keys:
+            - image_path: str
+            - lat: float
+            - lon: float
+            - heading: float
+            - panoid: str
+    """
+    os.makedirs(output_dir, exist_ok=True)
+    model, device = load_cosplace_model()
+
+    descriptors = []
+    lats, lons, headings, panoids = [], [], [], []
+
+    for i, record in enumerate(panorama_records):
+        try:
+            img = Image.open(record["image_path"]).convert("RGB")
+            desc = get_descriptor(model, img, device)
+            # L2 normalize for cosine similarity via dot product
+            desc = desc / (np.linalg.norm(desc) + 1e-8)
+            descriptors.append(desc)
+            lats.append(record["lat"])
+            lons.append(record["lon"])
+            headings.append(record["heading"])
+            panoids.append(record["panoid"])
+            
+            if (i + 1) % 100 == 0:
+                print(f"Indexed {i+1}/{len(panorama_records)}")
+        except Exception as e:
+            print(f"Skipping {record['image_path']}: {e}")
+
+    # Save
+    np.save(f"{output_dir}/cosplace_descriptors.npy", np.array(descriptors))
+    np.savez(
+        f"{output_dir}/metadata.npz",
+        lats=np.array(lats),
+        lons=np.array(lons),
+        headings=np.array(headings),
+        panoids=np.array(panoids, dtype=object),
+    )
+    print(f"Index built: {len(descriptors)} panoramas → {output_dir}/")
+```
+
+### Batch Geolocate Multiple Images
+
+```python
+from cosplace_utils import load_cosplace_model, get_descriptor
+from PIL import Image
+import numpy as np
+
+def batch_geolocate(image_paths, center_lat, center_lon, radius_km):
+    """
+    Geolocate multiple images using Stage 1 retrieval only (fast approximation).
+    For full pipeline accuracy, use the GUI or integrate Stage 2 matching.
+    """
+    model, device = load_cosplace_model()
+    
+    results = []
+    for path in image_paths:
+        img = Image.open(path).convert("RGB")
+        desc = get_descriptor(model, img, device)
+        candidates = search_index(desc, center_lat, center_lon, radius_km, top_k=1)
+        
+        if candidates:
+            best = candidates[0]
+            results.append({
+                "image": path,
+                "lat": best["lat"],
+                "lon": best["lon"],
+                "confidence_proxy": best["similarity"],
+            })
+        else:
+            results.append({"image": path, "lat": None, "lon": None})
+    
+    return results
+
+# Usage
+images = ["photo1.jpg", "photo2.jpg", "photo3.jpg"]
+hits = batch_geolocate(images, center_lat=48.8566, center_lon=2.3522, radius_km=3.0)
+for h in hits:
+    print(f"{h['image']}: ({h['lat']:.5f}, {h['lon']:.5f}) sim={h.get('confidence_proxy', 0):.3f}")
+```
+
+---
+
+## Common Patterns
+
+### Pattern: OSINT — Unknown City, Use AI Coarse Mode
+1. Set `GEMINI_API_KEY` env var
+2. In GUI, choose **AI Coarse** — upload photo, Gemini infers country/region from visual cues
+3. System auto-sets center coordinates; proceed with full search
+4. If result confidence is low, manually refine center coordinates and re-run
+
+### Pattern: Conflict/Event Monitoring
+1. Index the full city/region in advance (larger radius, done once)
+2. For each new image, use **Manual** mode with known general area, radius ~2–5km
+3. Enable **Ultra Mode** for night/smoke/degraded footage
+4. Result confidence score: >0.8 = high confidence, 0.5–0.8 = probable, <0.5 = verify manually
+
+### Pattern: Multi-City Index
+```python
+# Index once, search anywhere — radius handles scoping
+# Paris
+python test_super.py  # Create, center=48.8566,2.3522, radius=5
+
+# London  
+python test_super.py  # Create, center=51.5074,-0.1278, radius=5
+
+# All go into the same index/cosplace_descriptors.npy
+# Search Paris: center=48.8566,2.3522, radius=5 → only Paris results
+# Search London: center=51.5074,-0.1278, radius=5 → only London results
+```
+
+### Pattern: Large-Scale Indexing
+Use `build_index.py` instead of the GUI for areas >5km radius:
+```bash
+python build_index.py
+# Optimized for parallel panorama fetching and bulk descriptor extraction
+# Saves incrementally to cosplace_parts/ — safe to interrupt and resume
+```
+
+---
+
+## Troubleshooting
+
+### GUI appears blank on macOS
+```bash
+brew install python-tk@3.11   # Match your exact Python version
+```
+
+### CUDA out of memory
+- Reduce the number of candidates (lower `top_k` in Stage 1)
+- Use DISK instead of ALIKED (fewer keypoints): DISK is auto-selected on MPS; on CUDA you can modify `test_super.py` to force DISK
+- Close other GPU processes
+
+### Low match confidence / wrong location
+1. Ensure the indexed area actually covers the query location
+2. Try **Ultra Mode** (enables LoFTR + descriptor hopping + neighborhood expansion)
+3. Increase the search radius
+4. For AI Coarse mode failures, switch to Manual with a known approximate location
+5. Check that the query image is street-level (not aerial, not indoor)
+
+### IndexError / empty index
+The index hasn't been compiled yet from parts:
+```bash
+# The GUI auto-builds the index after Create Mode finishes.
+# If parts exist but index/ is missing, re-run Create Mode 
+# or run build_index.py to compile cosplace_parts/ → index/
+python build_index.py
+```
+
+### LightGlue ImportError
+```bash
+# Must install from GitHub, not PyPI
+pip uninstall lightglue -y
+pip install git+https://github.com/cvg/LightGlue.git
+```
+
+### Slow indexing on CPU
+- Indexing on CPU can take 3–5x longer than on GPU
+- Use `build_index.py` for better CPU utilization
+- Consider indexing smaller radius areas in batches
+
+### Panorama download failures during search
+- Network timeouts are normal; the pipeline retries automatically
+- Check internet connection; Street View tile downloads require broadband
+- Behind a proxy: set `HTTP_PROXY` / `HTTPS_PROXY` env vars before running
 
 ---
 
@@ -79,326 +451,23 @@ The GUI has two modes: **Create** (build an index) and **Search** (geolocate a p
 
 ```
 netryx/
-├── test_super.py          # Main entry point — GUI, indexing, search
+├── test_super.py          # Main GUI app — indexing + search + visualization
 ├── cosplace_utils.py      # CosPlace model loading + descriptor extraction
 ├── build_index.py         # High-performance standalone index builder
-├── requirements.txt
-├── cosplace_parts/        # Raw embedding chunks (auto-created during indexing)
+├── requirements.txt       # Python dependencies
+├── cosplace_parts/        # Raw .npz chunks written during indexing
 └── index/
-    ├── cosplace_descriptors.npy   # All 512-dim global descriptors
-    └── metadata.npz               # Coordinates, headings, panorama IDs
+    ├── cosplace_descriptors.npy   # Compiled descriptor matrix (N × 512)
+    └── metadata.npz               # lats, lons, headings, panoids
 ```
 
----
-
-## Workflow
-
-### Step 1: Create an Index
-
-Index a geographic area before searching. This crawls street-view panoramas and stores CosPlace fingerprints.
-
-**Via GUI:**
-1. Select **Create** mode
-2. Enter center lat/lon of target area
-3. Set radius (km) and grid resolution (default: 300)
-4. Click **Create Index**
-
-**Indexing time estimates:**
-
-| Radius | ~Panoramas | Time (M2 Max) | Index Size |
-|--------|------------|---------------|------------|
-| 0.5 km | ~500 | 30 min | ~60 MB |
-| 1 km | ~2,000 | 1–2 hours | ~250 MB |
-| 5 km | ~30,000 | 8–12 hours | ~3 GB |
-| 10 km | ~100,000 | 24–48 hours | ~7 GB |
-
-Indexing is **incremental** — safe to interrupt and resume.
-
-Multiple cities can coexist in the same index. The radius filter at search time isolates the correct region automatically.
-
-### Step 2: Search
-
-**Via GUI:**
-1. Select **Search** mode
-2. Upload a street-level photo
-3. Choose search method:
-   - **Manual**: Provide approximate center coordinates + radius
-   - **AI Coarse**: Gemini infers region from visual cues (requires `GEMINI_API_KEY`)
-4. Click **Run Search** → **Start Full Search**
-5. Result: GPS coordinates + confidence score on a map
-
----
-
-## The Three-Stage Pipeline
-
-### Stage 1 — Global Retrieval (CosPlace)
-
-```
-Query image → 512-dim CosPlace descriptor
-             + flipped image descriptor
-             → cosine similarity against full index
-             → haversine radius filter
-             → top 500–1000 candidates
-```
-
-Runs in under 1 second (single matrix multiply).
-
-### Stage 2 — Geometric Verification (ALIKED/DISK + LightGlue)
-
-```
-For each candidate:
-  Download panorama (8 tiles, stitched)
-  → rectilinear crop at indexed heading
-  → 3 FOV crops (70°, 90°, 110°)
-  → ALIKED (CUDA) or DISK (MPS/CPU) keypoints
-  → LightGlue matching vs query keypoints
-  → RANSAC inlier filtering
-  → ranked by verified inlier count
-```
-
-Processes 300–500 candidates in 2–5 minutes depending on hardware.
-
-### Stage 3 — Refinement
-
-- **Heading refinement**: ±45° at 15° steps, 3 FOVs, top 15 candidates
-- **Spatial consensus**: 50 m grid clustering; clusters beat single high-inlier outliers
-- **Confidence scoring**: clustering quality + uniqueness ratio vs. runner-up
-
-### Ultra Mode (difficult images)
-
-Enable the **Ultra Mode** checkbox for night shots, blurry images, or low-texture scenes.
-
-Adds:
-- **LoFTR**: detector-free dense matching (handles blur/low contrast)
-- **Descriptor hopping**: re-searches index using the matched panorama's clean descriptor
-- **Neighborhood expansion**: searches all panoramas within 100 m of the best match
-
-Requires `kornia`: `pip install kornia`
-
----
-
-## Code Examples
-
-### Extract a CosPlace descriptor programmatically
-
-```python
-from cosplace_utils import get_cosplace_model, get_descriptor
-from PIL import Image
-import torch
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = get_cosplace_model(device)
-
-img = Image.open("query.jpg").convert("RGB")
-descriptor = get_descriptor(model, img, device)
-# descriptor.shape → (512,)
-print("Descriptor shape:", descriptor.shape)
-```
-
-### Search the index against a query descriptor
-
-```python
-import numpy as np
-
-# Load the prebuilt index
-descriptors = np.load("index/cosplace_descriptors.npy")   # (N, 512)
-meta = np.load("index/metadata.npz", allow_pickle=True)
-lats = meta["lats"]    # (N,)
-lons = meta["lons"]    # (N,)
-headings = meta["headings"]
-panoids = meta["panoids"]
-
-# Cosine similarity search
-query = descriptor / np.linalg.norm(descriptor)
-index_norm = descriptors / np.linalg.norm(descriptors, axis=1, keepdims=True)
-scores = index_norm @ query   # (N,)
-
-# Radius filter (haversine) — restrict to 5 km around Paris
-from math import radians, sin, cos, sqrt, atan2
-
-def haversine(lat1, lon1, lat2, lon2):
-    R = 6371000
-    dlat = radians(lat2 - lat1)
-    dlon = radians(lon2 - lon1)
-    a = sin(dlat/2)**2 + cos(radians(lat1))*cos(radians(lat2))*sin(dlon/2)**2
-    return R * 2 * atan2(sqrt(a), sqrt(1 - a))
-
-center_lat, center_lon = 48.8566, 2.3522
-radius_m = 5000
-
-mask = np.array([
-    haversine(center_lat, center_lon, lats[i], lons[i]) <= radius_m
-    for i in range(len(lats))
-])
-
-filtered_scores = np.where(mask, scores, -1)
-top_indices = np.argsort(filtered_scores)[::-1][:500]
-
-print("Top match:", lats[top_indices[0]], lons[top_indices[0]])
-print("Score:", filtered_scores[top_indices[0]])
-```
-
-### Build index from the command line (large datasets)
-
-```bash
-python build_index.py \
-  --lat 48.8566 \
-  --lon 2.3522 \
-  --radius 2.0 \
-  --resolution 300
-```
-
-### Use flipped descriptor for both orientations
-
-```python
-import torchvision.transforms.functional as TF
-
-img_pil = Image.open("query.jpg").convert("RGB")
-img_flipped = TF.hflip(img_pil)
-
-desc_orig = get_descriptor(model, img_pil, device)
-desc_flip = get_descriptor(model, img_flipped, device)
-
-# Average or max-pool for a combined signal
-desc_combined = (desc_orig + desc_flip) / 2
-desc_combined /= np.linalg.norm(desc_combined)
-```
-
-### Run LightGlue matching between two images
-
-```python
-import torch
-from lightglue import LightGlue, ALIKED
-from lightglue.utils import load_image, rbd
-
-device = torch.device("cuda")
-
-extractor = ALIKED(max_num_keypoints=1024).eval().to(device)
-matcher = LightGlue(features="aliked").eval().to(device)
-
-img0 = load_image("query.jpg").to(device)
-img1 = load_image("candidate_crop.jpg").to(device)
-
-feats0 = extractor.extract(img0)
-feats1 = extractor.extract(img1)
-
-matches01 = matcher({"image0": feats0, "image1": feats1})
-feats0, feats1, matches01 = [rbd(x) for x in [feats0, feats1, matches01]]
-
-matched_kps0 = feats0["keypoints"][matches01["matches"][..., 0]]
-matched_kps1 = feats1["keypoints"][matches01["matches"][..., 1]]
-print(f"Matched keypoints: {len(matched_kps0)}")
-```
-
-### RANSAC geometric verification on matches
-
-```python
-import cv2
-import numpy as np
-
-# matched_kps0, matched_kps1 are (N, 2) numpy arrays
-pts0 = matched_kps0.cpu().numpy()
-pts1 = matched_kps1.cpu().numpy()
-
-if len(pts0) >= 4:
-    _, inlier_mask = cv2.findHomography(pts0, pts1, cv2.RANSAC, 5.0)
-    inlier_count = int(inlier_mask.sum()) if inlier_mask is not None else 0
-    print(f"RANSAC inliers: {inlier_count}")
-else:
-    inlier_count = 0
-```
-
----
-
-## Configuration Reference
-
-| Parameter | Where | Default | Notes |
-|-----------|-------|---------|-------|
-| Grid resolution | GUI / CLI | 300 | Higher = denser panorama coverage |
-| Search radius | GUI / CLI | 1.0 km | Haversine filter at search time |
-| Top candidates | Code | 500–1000 | CosPlace retrieval pool size |
-| Heading refinement range | Code | ±45° @ 15° steps | Applied to top 15 candidates |
-| Spatial cluster cell | Code | 50 m | Consensus grid size |
-| FOV crops | Code | 70°, 90°, 110° | Three crops per heading |
-| Ultra neighborhood | Code | 100 m | Expansion radius in Ultra Mode |
-
----
-
-## Common Patterns
-
-### Geolocating OSINT/conflict images
-1. Index the suspected region (city or district level, 2–5 km radius)
-2. Upload the image in Search mode with Manual coordinates + radius
-3. If confidence is low, enable Ultra Mode
-4. Cross-reference the returned coordinates with satellite imagery
-
-### Multi-city index
-Index each city separately (they share the same `index/` files). At search time, specify the correct center+radius — only matching panoramas are returned.
-
-```
-# Index Paris
-python build_index.py --lat 48.8566 --lon 2.3522 --radius 5.0
-
-# Index London (appends to same index)
-python build_index.py --lat 51.5074 --lon -0.1278 --radius 5.0
-
-# Search only in Paris
-# GUI: center=48.8566,2.3522 radius=6km
-```
-
-### Handling degraded images (night/blur)
-- Always try standard pipeline first (faster)
-- Enable **Ultra Mode** for night photography, motion blur, heavy compression
-- Ensure `kornia` is installed: `pip install kornia`
-
----
-
-## Troubleshooting
-
-| Problem | Cause | Fix |
-|---------|-------|-----|
-| GUI appears blank | macOS bundled tkinter bug | `brew install python-tk@3.11` |
-| `ImportError: lightglue` | LightGlue not installed from GitHub | `pip install git+https://github.com/cvg/LightGlue.git` |
-| `ImportError: kornia` | kornia not installed | `pip install kornia` (Ultra Mode only) |
-| CUDA out of memory | Not enough VRAM | Reduce `max_num_keypoints` in ALIKED init; use DISK instead |
-| Low confidence score (<0.3) | Query area not indexed, or degraded image | Re-index with denser grid; enable Ultra Mode |
-| Index search returns 0 results | Radius too small or wrong center coords | Increase radius; verify lat/lon are correct |
-| Indexing stalled | Network timeout | Safe to restart — resumes from last checkpoint |
-| Wrong city matched | Index too broad + wrong search center | Narrow radius; set center near the expected city |
-| MPS device errors | Metal not supported for all ops | Set `PYTORCH_ENABLE_MPS_FALLBACK=1` |
-
-```bash
-# MPS fallback for unsupported ops
-export PYTORCH_ENABLE_MPS_FALLBACK=1
-python test_super.py
-```
-
----
-
-## Key Dependencies
-
-```
-torch / torchvision       # Deep learning backend
-lightglue                 # Feature matching (install from GitHub)
-kornia                    # LoFTR dense matching (Ultra Mode)
-numpy / scipy             # Array ops, clustering
-Pillow                    # Image loading
-opencv-python             # RANSAC, image stitching
-requests                  # Street View tile downloads
-tkinter                   # GUI (stdlib, may need brew upgrade on macOS)
-```
-
----
-
-## How the Index Files Work
-
-```
-cosplace_parts/*.npz          # Incremental chunks written during indexing
-       ↓  (auto-build step)
-index/cosplace_descriptors.npy    # Merged (N × 512) float32 matrix
-index/metadata.npz                # lats, lons, headings, panoids arrays
-```
-
-All arrays are aligned by row index `i`:
-- `descriptors[i]` ↔ `lats[i], lons[i]` ↔ `headings[i]` ↔ `panoids[i]`
+## Models Reference
+
+| Model | Role | Hardware |
+|-------|------|----------|
+| CosPlace (512-dim) | Global visual fingerprint | All |
+| ALIKED (1024 kp) | Local keypoint extraction | CUDA only |
+| DISK (768 kp) | Local keypoint extraction | MPS / CPU |
+| LightGlue | Deep feature matching | All |
+| LoFTR | Dense matching (Ultra Mode) | All (needs `kornia`) |
 ```
