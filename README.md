@@ -148,6 +148,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [filmkit-fujifilm-camera](skills/filmkit-fujifilm-camera/) | [install](https://skills.sh/aradotso/trending-skills/filmkit-fujifilm-camera) | [eggricesoy/filmkit](https://github.com/eggricesoy/filmkit) | 2026-03-23 |
 | [web-access-claude-skill](skills/web-access-claude-skill/) | [install](https://skills.sh/aradotso/trending-skills/web-access-claude-skill) | [eze-is/web-access](https://github.com/eze-is/web-access) | 2026-03-23 |
 | [creationix-rx-data-store](skills/creationix-rx-data-store/) | [install](https://skills.sh/aradotso/trending-skills/creationix-rx-data-store) | [creationix/rx](https://github.com/creationix/rx) | 2026-03-23 |
+| [tiktok-views-likes-followers-shares-bot-2026](skills/tiktok-views-likes-followers-shares-bot-2026/) | [install](https://skills.sh/aradotso/trending-skills/tiktok-views-likes-followers-shares-bot-2026) | [deathlessburton88/tiktok-views-likes-followers-shares-bot-2026](https://github.com/deathlessburton88/tiktok-views-likes-followers-shares-bot-2026) | 2026-03-23 |
 <!-- SKILL_INDEX -->
 
 ## How it works
