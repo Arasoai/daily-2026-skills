@@ -141,6 +141,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [724-office-ai-agent](skills/724-office-ai-agent/) | [install](https://skills.sh/aradotso/trending-skills/724-office-ai-agent) | [wangziqi06/724-office](https://github.com/wangziqi06/724-office) | 2026-03-22 |
 | [my-brain-is-full-crew](skills/my-brain-is-full-crew/) | [install](https://skills.sh/aradotso/trending-skills/my-brain-is-full-crew) | [gnekt/My-Brain-Is-Full-Crew](https://github.com/gnekt/My-Brain-Is-Full-Crew) | 2026-03-22 |
 | [claude-peers-mcp](skills/claude-peers-mcp/) | [install](https://skills.sh/aradotso/trending-skills/claude-peers-mcp) | [louislva/claude-peers-mcp](https://github.com/louislva/claude-peers-mcp) | 2026-03-22 |
+| [microwarp-cloudflare-proxy](skills/microwarp-cloudflare-proxy/) | [install](https://skills.sh/aradotso/trending-skills/microwarp-cloudflare-proxy) | [ccbkkb/MicroWARP](https://github.com/ccbkkb/MicroWARP) | 2026-03-23 |
 <!-- SKILL_INDEX -->
 
 ## How it works
