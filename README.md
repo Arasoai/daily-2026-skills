@@ -154,6 +154,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [codebase-to-course](skills/codebase-to-course/) | [install](https://skills.sh/aradotso/trending-skills/codebase-to-course) | [zarazhangrui/codebase-to-course](https://github.com/zarazhangrui/codebase-to-course) | 2026-03-24 |
 | [awesome-autoresearch](skills/awesome-autoresearch/) | [install](https://skills.sh/aradotso/trending-skills/awesome-autoresearch) | [alvinunreal/awesome-autoresearch](https://github.com/alvinunreal/awesome-autoresearch) | 2026-03-24 |
 | [k-dense-byok-ai-scientist](skills/k-dense-byok-ai-scientist/) | [install](https://skills.sh/aradotso/trending-skills/k-dense-byok-ai-scientist) | [K-Dense-AI/k-dense-byok](https://github.com/K-Dense-AI/k-dense-byok) | 2026-03-24 |
+| [darksword-kexploit](skills/darksword-kexploit/) | [install](https://skills.sh/aradotso/trending-skills/darksword-kexploit) | [opa334/darksword-kexploit](https://github.com/opa334/darksword-kexploit) | 2026-03-24 |
 <!-- SKILL_INDEX -->
 
 ## How it works
