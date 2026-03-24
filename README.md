@@ -155,6 +155,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [awesome-autoresearch](skills/awesome-autoresearch/) | [install](https://skills.sh/aradotso/trending-skills/awesome-autoresearch) | [alvinunreal/awesome-autoresearch](https://github.com/alvinunreal/awesome-autoresearch) | 2026-03-24 |
 | [k-dense-byok-ai-scientist](skills/k-dense-byok-ai-scientist/) | [install](https://skills.sh/aradotso/trending-skills/k-dense-byok-ai-scientist) | [K-Dense-AI/k-dense-byok](https://github.com/K-Dense-AI/k-dense-byok) | 2026-03-24 |
 | [darksword-kexploit](skills/darksword-kexploit/) | [install](https://skills.sh/aradotso/trending-skills/darksword-kexploit) | [opa334/darksword-kexploit](https://github.com/opa334/darksword-kexploit) | 2026-03-24 |
+| [weixin-agent-sdk](skills/weixin-agent-sdk/) | [install](https://skills.sh/aradotso/trending-skills/weixin-agent-sdk) | [wong2/weixin-agent-sdk](https://github.com/wong2/weixin-agent-sdk) | 2026-03-24 |
 <!-- SKILL_INDEX -->
 
 ## How it works
