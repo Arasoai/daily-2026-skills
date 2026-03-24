@@ -158,6 +158,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [weixin-agent-sdk](skills/weixin-agent-sdk/) | [install](https://skills.sh/aradotso/trending-skills/weixin-agent-sdk) | [wong2/weixin-agent-sdk](https://github.com/wong2/weixin-agent-sdk) | 2026-03-24 |
 | [aris-autonomous-research](skills/aris-autonomous-research/) | [install](https://skills.sh/aradotso/trending-skills/aris-autonomous-research) | [wanshuiyin/Auto-claude-code-research-in-sleep](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep) | 2026-03-24 |
 | [awesome-phd-cv](skills/awesome-phd-cv/) | [install](https://skills.sh/aradotso/trending-skills/awesome-phd-cv) | [LimHyungTae/Awesome-PhD-CV](https://github.com/LimHyungTae/Awesome-PhD-CV) | 2026-03-24 |
+| [hyperagents-self-improving](skills/hyperagents-self-improving/) | [install](https://skills.sh/aradotso/trending-skills/hyperagents-self-improving) | [facebookresearch/HyperAgents](https://github.com/facebookresearch/HyperAgents) | 2026-03-24 |
 <!-- SKILL_INDEX -->
 
 ## How it works
