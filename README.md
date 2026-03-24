@@ -151,6 +151,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [tiktok-views-likes-followers-shares-bot-2026](skills/tiktok-views-likes-followers-shares-bot-2026/) | [install](https://skills.sh/aradotso/trending-skills/tiktok-views-likes-followers-shares-bot-2026) | [deathlessburton88/tiktok-views-likes-followers-shares-bot-2026](https://github.com/deathlessburton88/tiktok-views-likes-followers-shares-bot-2026) | 2026-03-23 |
 | [vercel-labs-emulate](skills/vercel-labs-emulate/) | [install](https://skills.sh/aradotso/trending-skills/vercel-labs-emulate) | [vercel-labs/emulate](https://github.com/vercel-labs/emulate) | 2026-03-23 |
 | [weclaw-wechat-ai-bridge](skills/weclaw-wechat-ai-bridge/) | [install](https://skills.sh/aradotso/trending-skills/weclaw-wechat-ai-bridge) | [fastclaw-ai/weclaw](https://github.com/fastclaw-ai/weclaw) | 2026-03-23 |
+| [codebase-to-course](skills/codebase-to-course/) | [install](https://skills.sh/aradotso/trending-skills/codebase-to-course) | [zarazhangrui/codebase-to-course](https://github.com/zarazhangrui/codebase-to-course) | 2026-03-24 |
 <!-- SKILL_INDEX -->
 
 ## How it works
