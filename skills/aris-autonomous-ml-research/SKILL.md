@@ -1,75 +1,77 @@
 ```markdown
 ---
 name: aris-autonomous-ml-research
-description: ARIS (Auto-Research-In-Sleep) — Markdown-only skill workflows for autonomous ML research: cross-model review loops, idea discovery, experiment automation, paper writing, and rebuttal generation using Claude Code, Codex, or any LLM agent.
+description: ARIS (Auto-Research-In-Sleep) — Markdown-only autonomous ML research workflows using cross-model review loops, idea discovery, experiment automation, and paper writing with Claude Code or any LLM agent.
 triggers:
-  - "set up ARIS for autonomous research"
-  - "run research pipeline while I sleep"
-  - "automate ML paper writing with Claude Code"
-  - "cross-model review loop for my paper"
-  - "generate research ideas automatically"
-  - "run experiment bridge with ARIS"
-  - "write rebuttal for my paper reviews"
-  - "install ARIS skills in Claude Code"
+  - set up ARIS for autonomous research
+  - run research pipeline while I sleep
+  - use ARIS to review my paper
+  - automate ML experiments with Claude Code
+  - cross-model paper review loop
+  - generate research ideas with ARIS
+  - write paper rebuttal automatically
+  - install ARIS skills for Claude Code
 ---
 
-# ARIS — Autonomous ML Research In Sleep
+# ARIS — Autonomous ML Research in Sleep
 
 > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection.
 
-ARIS is a **zero-dependency, Markdown-only** autonomous ML research system. It orchestrates cross-model workflows where one LLM executes research and another acts as adversarial reviewer — breaking the self-play blind spot. The entire system is plain `.md` files: no framework, no database, no daemon, no lock-in.
+ARIS (Auto-Research-In-Sleep) is a **zero-dependency, Markdown-only** autonomous ML research system. There is no framework, no daemon, no database — every skill is a plain `SKILL.md` file that any LLM agent can read and execute. ARIS orchestrates cross-model collaboration: one model (Claude Code, Codex, etc.) executes research while a second model acts as critical reviewer, breaking self-play blind spots.
+
+**Core capabilities:**
+- Autonomous idea discovery and literature gap analysis
+- Cross-model adversarial review loops (Claude ↔ GPT / Kimi / GLM / DeepSeek)
+- Automated experiment planning and execution
+- Full paper writing (LaTeX) with venue templates
+- Post-submission rebuttal drafting with safety gates
+- Conference slides, posters, and grant proposals
 
 ---
 
 ## Installation
 
-### 1. Clone the Repository
+### Prerequisites
+
+```bash
+# Claude Code CLI (primary supported agent)
+npm install -g @anthropic-ai/claude-code
+
+# Optional: Codex CLI (for OpenAI-side reviewer)
+npm install -g @openai/codex
+```
+
+### Clone ARIS
 
 ```bash
 git clone https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep.git
 cd Auto-claude-code-research-in-sleep
 ```
 
-### 2. Install Skills into Claude Code
+### Install Skills into Claude Code
 
-Copy skill files into your Claude Code custom commands directory:
-
-```bash
-# For Claude Code (default location)
-mkdir -p ~/.claude/commands
-cp -r skills/research-pipeline/SKILL.md ~/.claude/commands/research-pipeline.md
-cp -r skills/experiment-bridge/SKILL.md ~/.claude/commands/experiment-bridge.md
-cp -r skills/paper-polish/SKILL.md ~/.claude/commands/paper-polish.md
-cp -r skills/auto-review/SKILL.md ~/.claude/commands/auto-review.md
-cp -r skills/rebuttal/SKILL.md ~/.claude/commands/rebuttal.md
-cp -r skills/idea-discovery/SKILL.md ~/.claude/commands/idea-discovery.md
-cp -r skills/paper-slides/SKILL.md ~/.claude/commands/paper-slides.md
-cp -r skills/paper-poster/SKILL.md ~/.claude/commands/paper-poster.md
-
-# Or install ALL skills at once
-for dir in skills/*/; do
-  name=$(basename "$dir")
-  cp "$dir/SKILL.md" ~/.claude/commands/"$name".md
-done
-```
-
-### 3. Configure the Cross-Model Reviewer (Codex MCP)
-
-ARIS uses a second model as adversarial reviewer. The default setup is **Claude Code (executor) + Codex/GPT-5.4 (reviewer)** via MCP.
+Copy skills to Claude Code's custom skills directory:
 
 ```bash
-# Install Codex MCP server
-npm install -g @openai/codex-mcp
+# Install all skills at once
+cp -r skills/*/SKILL.md ~/.claude/skills/
 
-# Add to your Claude Code MCP config (~/.claude/mcp_config.json)
+# Or install specific skills
+cp skills/research-pipeline/SKILL.md ~/.claude/skills/research-pipeline.md
+cp skills/rebuttal/SKILL.md ~/.claude/skills/rebuttal.md
+cp skills/experiment-bridge/SKILL.md ~/.claude/skills/experiment-bridge.md
 ```
+
+### Configure Cross-Model Reviewer (MCP)
+
+ARIS uses a Codex MCP server so Claude Code can call GPT as reviewer. Add to your `~/.claude/mcp_config.json`:
 
 ```json
 {
   "mcpServers": {
     "codex": {
-      "command": "codex-mcp",
-      "args": ["--model", "gpt-5.4-xhigh"],
+      "command": "codex",
+      "args": ["mcp"],
       "env": {
         "OPENAI_API_KEY": "$OPENAI_API_KEY"
       }
@@ -78,14 +80,7 @@ npm install -g @openai/codex-mcp
 }
 ```
 
-### 4. (Optional) Custom LLM Reviewer via llm-chat MCP
-
-Use any OpenAI-compatible API as reviewer — no Claude or OpenAI required:
-
-```bash
-cd mcp-servers/llm-chat
-pip install -r requirements.txt
-```
+For the **alternative `llm-chat` MCP** (Kimi, GLM, MiniMax, DeepSeek — no OpenAI needed):
 
 ```json
 {
@@ -94,485 +89,466 @@ pip install -r requirements.txt
       "command": "python",
       "args": ["mcp-servers/llm-chat/server.py"],
       "env": {
-        "LLM_API_KEY": "$LLM_API_KEY",
-        "LLM_BASE_URL": "https://api.deepseek.com/v1",
-        "LLM_MODEL": "deepseek-chat"
+        "LLM_API_KEY": "$YOUR_PROVIDER_API_KEY",
+        "LLM_BASE_URL": "https://api.moonshot.cn/v1",
+        "LLM_MODEL": "moonshot-v1-128k"
       }
     }
   }
 }
 ```
 
-Tested reviewer models: `GLM-5`, `MiniMax-M2.7`, `Kimi-K2.5`, `LongCat`, `DeepSeek`, `Gemini`.
-
-### 5. Free Tier via ModelScope
+### Environment Variables
 
 ```bash
-# Zero cost, zero lock-in
-export MODELSCOPE_API_KEY=$MODELSCOPE_API_KEY
-# See docs/MODELSCOPE_GUIDE.md for full setup
+# Primary executor model (Claude Code reads these automatically)
+export ANTHROPIC_API_KEY=...
+
+# Reviewer model — choose ONE of:
+export OPENAI_API_KEY=...           # GPT via Codex MCP
+export MOONSHOT_API_KEY=...         # Kimi
+export ZHIPUAI_API_KEY=...          # GLM-5
+export MINIMAX_API_KEY=...          # MiniMax
+export DEEPSEEK_API_KEY=...         # DeepSeek
 ```
 
 ---
 
-## Core Concepts
+## Quick Start Commands
 
-| Concept | What it means |
-|---|---|
-| **Skill** | A single `SKILL.md` file that tells any LLM agent how to perform a research workflow |
-| **Executor** | The primary agent (Claude Code, Codex CLI, Cursor, Trae, etc.) that does the work |
-| **Reviewer** | A *different* LLM called via MCP that adversarially critiques the executor's output |
-| **Cross-model loop** | Executor → output → Reviewer critique → Executor revision → repeat until score threshold |
-| **Zero lock-in** | Swap any model at any time — the Markdown skills work regardless of which agent reads them |
+All commands are invoked inside Claude Code chat.
 
----
-
-## Workflows
-
-### Workflow 0 — Full Autonomous Pipeline
-
-Give ARIS a research direction. It handles ideation → experiments → writing → review → polish.
+### Full Autonomous Pipeline (idea → paper)
 
 ```
-# In Claude Code chat:
 /research-pipeline "factorized gap in discrete diffusion LMs"
+```
 
-# With a reference paper and base codebase:
+With a reference paper and base codebase:
+
+```
 /research-pipeline "improve method X" — ref paper: https://arxiv.org/abs/2406.04329, base repo: https://github.com/org/project
 ```
 
-**Parameters:**
-
-| Parameter | Default | Description |
-|---|---|---|
-| `ref paper` | — | arXiv URL to read, find weaknesses, and fix |
-| `base repo` | — | GitHub repo to clone as starting codebase |
-| `venue` | `ICML` | Target conference (ICML/NeurIPS/ICLR/CVPR/ACL/AAAI) |
-| `max review rounds` | `3` | How many cross-model review iterations to run |
-| `compact` | `false` | Generate lean summary files for short-context models |
-
----
-
-### Workflow 1 — Idea Discovery
+### Individual Workflow Shortcuts
 
 ```
-/idea-discovery "sparse mixture of experts efficiency"
-```
+# Workflow 0 — Literature survey only
+/literature-review "topic"
 
-Generates a scored list of research ideas with novelty, feasibility, and impact ratings. Each idea includes: problem statement, proposed method, baseline comparisons, expected results.
+# Workflow 1 — Idea discovery
+/idea-discovery "research direction"
 
----
+# Workflow 1.5 — Experiment bridge (run GPU experiments)
+/experiment-bridge "experiments/" — code review: true
 
-### Workflow 1.5 — Experiment Bridge
+# Workflow 2 — Paper writing
+/paper-write "results/"
 
-Run experiments with cross-model code review before GPU deployment:
+# Workflow 3 — Paper review loop
+/paper-review "paper/"
 
-```
-/experiment-bridge "train.py with config experiments/ablation_v2.yaml"
-
-# Disable pre-deployment code review (not recommended):
-/experiment-bridge "train.py" — code review: false
-
-# With W&B tracking:
-/experiment-bridge "train.py" — wandb project: my-research, wandb entity: myteam
-```
-
-The bridge:
-1. Claude Code reads your experiment config
-2. GPT-5.4 xhigh reviews the code for bugs, numerical instability, and logic errors
-3. You approve/reject the code review findings
-4. Experiment runs; results are parsed into structured claims
-
-```python
-# Example: ARIS-compatible experiment script structure
-# experiments/train.py
-
-import wandb
-import argparse
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, required=True)
-    parser.add_argument("--exp_name", type=str, default="aris_exp")
-    args = parser.parse_args()
-
-    # ARIS reads this run config
-    wandb.init(
-        project=os.environ.get("WANDB_PROJECT", "aris-research"),
-        name=args.exp_name,
-        config=load_yaml(args.config)
-    )
-
-    # ... training loop ...
-
-    # ARIS parses these metrics automatically
-    wandb.log({
-        "val_loss": val_loss,
-        "val_acc": val_acc,
-        "epoch": epoch
-    })
-
-    # ARIS uses this as final claim evidence
-    wandb.summary["best_val_acc"] = best_acc
-    wandb.finish()
-```
-
----
-
-### Workflow 2 — Paper Writing
-
-```
-/paper-polish "paper/" — venue: NeurIPS
-```
-
-Reads your paper directory, runs cross-model review, and iteratively improves:
-- Clarity and narrative flow
-- Related work with verified citations (DBLP → CrossRef → `[VERIFY]` fallback — never hallucinated)
-- Abstract, intro, conclusion alignment
-- Section-by-section polish with reviewer feedback
-
----
-
-### Workflow 3 — Auto Review Loop
-
-```
-/auto-review "paper/draft_v3.pdf" — target score: 7, max rounds: 5
-```
-
-Produces the score progression curve (like `docs/auto_review_score_curve.png`). Each round:
-1. Claude Code reads current draft
-2. Codex reviews and scores (1–10) with specific weaknesses
-3. Claude Code revises based on critique
-4. Repeat until target score or max rounds
-
----
-
-### Workflow 4 — Rebuttal Generation
-
-```
+# Workflow 4 — Post-submission rebuttal
 /rebuttal "paper/ + reviews" — venue: ICML, character limit: 5000
+
+# Presentation outputs
+/paper-slides "paper/"
+/paper-poster "paper/"
 ```
 
-**Parameters:**
+---
+
+## Workflows in Detail
+
+### Workflow 0: Literature Review
+
+```
+/literature-review "masked language models discrete diffusion"
+```
+
+Outputs:
+- `literature/survey.md` — structured gap analysis
+- `literature/references.bib` — verified BibTeX (DBLP → CrossRef → [VERIFY])
+- `literature/gap_matrix.md` — opportunity map
+
+Anti-hallucination: all citations go through DBLP → CrossRef → manual `[VERIFY]` tag if unconfirmed.
+
+---
+
+### Workflow 1: Idea Discovery + Research Refinement
+
+```
+/idea-discovery "what's missing in current RLHF approaches"
+```
+
+Internally chains:
+1. `/literature-review` — find gaps
+2. `/research-refine` — turn vague gaps into problem-anchored proposals
+3. `/experiment-plan` — claim-driven experiment roadmap
+4. GPT reviewer scores each idea (1–10) and requests clarifications
+
+Output files:
+
+```
+ideas/
+  idea_001.md        # Full proposal + claims
+  idea_001_score.md  # GPT review + score
+  experiment_plan.md # Prioritized experiment list
+```
+
+---
+
+### Workflow 1.5: Experiment Bridge
+
+Runs experiments on GPU, with cross-model code review before deployment:
+
+```
+/experiment-bridge "experiments/plan.md" — code review: true, gpu: A100
+```
+
+Parameters:
 
 | Parameter | Default | Description |
-|---|---|---|
-| `venue` | `ICML` | ICML/NeurIPS/ICLR/CVPR/ACL/AAAI/ACM |
-| `character limit` | required | Hard char limit for rebuttal text |
-| `quick mode` | `false` | Stop after Phase 0–3 (parse + strategy only) |
-| `auto experiment` | `false` | Auto-run supplementary experiments when reviewers request new evidence |
-| `max stress test rounds` | `1` | GPT-5.4 stress-test iterations |
-| `max followup rounds` | `3` | Per-reviewer follow-up round limit |
+|-----------|---------|-------------|
+| `code review` | `true` | GPT reviews training code before launch |
+| `gpu` | auto | GPU type hint for SLURM/local dispatch |
+| `compact` | `false` | Generate lean summary for short-context models |
+| `max retries` | `3` | Auto-retry failed runs |
 
-**Three safety gates** — rebuttal will NOT finalize if any fails:
-- 🔒 **No fabrication** — every claim maps to paper/review/user-confirmed result
-- 🔒 **No overpromise** — every promise is user-approved  
-- 🔒 **Full coverage** — every reviewer concern is tracked
+Built-in helpers integrated into this workflow:
+- `/training-check` — validates training loop sanity (loss, gradients, LR)
+- `/result-to-claim` — converts raw numbers to paper-ready claims
+- `/ablation-planner` — suggests ablation study design
 
-**Outputs:**
-- `PASTE_READY.txt` — exact char count, paste directly to venue system
-- `REBUTTAL_DRAFT_rich.md` — extended version for manual editing
+---
+
+### Workflow 2: Paper Writing
 
 ```
-# Quick mode — understand what reviewers want before writing
-/rebuttal "paper/ + reviews" — venue: NeurIPS, character limit: 5000, quick mode: true
+/paper-write "results/" — venue: NeurIPS, template: neurips2025
+```
 
-# With auto supplementary experiments
-/rebuttal "paper/ + reviews" — venue: ICML, character limit: 5000, auto experiment: true
+Available venue templates:
+
+```bash
+templates/
+  neurips2025.tex
+  icml2025.tex
+  iclr2025.tex
+  cvpr2025.tex
+  acl2025.tex
+  aaai2026.tex
+  acmmm2025.tex
+```
+
+Workflow writes sections in order: Abstract → Introduction → Related Work → Method → Experiments → Conclusion, with GPT reviewing each section and Claude revising.
+
+---
+
+### Workflow 3: Paper Review Loop
+
+```
+/paper-review "paper/" — rounds: 3, target score: 7
+```
+
+Each round:
+1. GPT reads full PDF/LaTeX → scores (1–10) + itemized weaknesses
+2. Claude revises paper to address weaknesses
+3. Score delta logged to `review/score_history.md`
+
+The `docs/auto_review_score_curve.png` in the repo shows a typical trajectory from 4→8 over 5 rounds.
+
+Parameters:
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `rounds` | `5` | Max review-revise iterations |
+| `target score` | `7` | Stop early if score reached |
+| `reviewer model` | Codex MCP | Override via `— reviewer: llm-chat` |
+| `compact` | `false` | Compact session summaries |
+
+---
+
+### Workflow 4: Rebuttal
+
+```
+/rebuttal "paper/ + reviews/" — venue: ICML, character limit: 5000
+```
+
+Phase breakdown:
+- **Phase 0** — Parse all reviews, extract concerns
+- **Phase 1** — Atomize concerns (one claim per atom)
+- **Phase 2** — Map atoms to paper evidence
+- **Phase 3** — Rebuttal strategy (which to concede, which to counter)
+- **Phase 4** — Draft rebuttal
+- **Phase 5** — GPT stress-test the draft
+- **Phase 6** — Finalize with 3 safety gates
+
+Three mandatory safety gates (rebuttal will NOT finalize if any fails):
+
+```
+🔒 No fabrication   — every claim maps to paper/review/confirmed result
+🔒 No overpromise   — every promise is user-approved before inclusion
+🔒 Full coverage    — every reviewer concern has a response
+```
+
+Output files:
+
+```
+rebuttal/
+  PASTE_READY.txt           # Exact char count, ready to paste to venue
+  REBUTTAL_DRAFT_rich.md    # Extended version for manual editing
+  concern_map.md            # Atom → evidence mapping
+  strategy.md               # Response strategy per reviewer
+```
+
+Additional parameters:
+
+```
+— quick mode: true          # Stop after Phase 3 (analysis only, no draft)
+— auto experiment: true     # Run /experiment-bridge for missing evidence
+— max stress test rounds: 2 # How many GPT stress-test passes
+— max followup rounds: 3    # Per-reviewer follow-up limit
 ```
 
 ---
 
-### Workflow 5 — Presentation Generation
+### Presentation Outputs
 
 ```
-# Conference slides (Beamer PDF + PPTX + speaker notes + Q&A prep)
-/paper-slides "paper/"
+# Conference slides
+/paper-slides "paper/" — format: beamer, include: speaker-notes, qa-prep
 
-# Conference poster (A0/A1 PDF + PPTX + SVG, venue colors)
-/paper-poster "paper/" — venue: NeurIPS, size: A0
+# Conference poster
+/paper-poster "paper/" — size: A0, venue: NeurIPS
 ```
 
----
-
-## Standalone Utility Skills
-
-```
-# Formula derivation and verification
-/formula-derivation "derive the ELBO for hierarchical VAE with discrete latents"
-
-# Grant proposal writing
-/grant-proposal "paper/" — funder: NSF, program: IIS
-
-# Paper illustration with Gemini
-/paper-illustration "figure 3 showing attention flow in transformer"
-
-# Ablation planning
-/ablation-planner "experiments/results.json"
-
-# Training health check
-/training-check "logs/train_log.txt"
-
-# Result-to-claim conversion
-/result-to-claim "experiments/results.json"
-```
+Slides output: Beamer PDF + PPTX + `speaker_notes.md` + `qa_prep.md`
+Poster output: `tcbposter` → A0/A1 PDF + PPTX + SVG (venue color scheme applied)
 
 ---
 
 ## Alternative Model Combinations
 
-No Claude or OpenAI API required. Configure any pair:
+ARIS works without any Claude or OpenAI API. Configure `llm-chat` MCP to mix any two OpenAI-compatible providers:
+
+```python
+# mcp-servers/llm-chat/config.py — example configurations
+
+CONFIGS = {
+    # MiniMax executes, GLM reviews
+    "minimax_glm": {
+        "executor": {
+            "base_url": "https://api.minimax.chat/v1",
+            "model": "MiniMax-M2.7",
+            "api_key_env": "MINIMAX_API_KEY",
+        },
+        "reviewer": {
+            "base_url": "https://open.bigmodel.cn/api/paas/v4",
+            "model": "glm-5",
+            "api_key_env": "ZHIPUAI_API_KEY",
+        }
+    },
+    # Kimi executes, DeepSeek reviews
+    "kimi_deepseek": {
+        "executor": {
+            "base_url": "https://api.moonshot.cn/v1",
+            "model": "moonshot-v1-128k",
+            "api_key_env": "MOONSHOT_API_KEY",
+        },
+        "reviewer": {
+            "base_url": "https://api.deepseek.com/v1",
+            "model": "deepseek-chat",
+            "api_key_env": "DEEPSEEK_API_KEY",
+        }
+    }
+}
+```
+
+See `docs/MiniMax-GLM-Configuration.md` for full setup walkthrough.
+
+---
+
+## Free Tier: ModelScope
+
+Run ARIS at zero cost via ModelScope's free API tier:
 
 ```bash
-# MiniMax-M2.7 executor + GLM-5 reviewer
-export EXECUTOR_API_KEY=$MINIMAX_API_KEY
-export EXECUTOR_BASE_URL="https://api.minimax.chat/v1"
-export EXECUTOR_MODEL="MiniMax-M2.7"
-
-export REVIEWER_API_KEY=$GLM_API_KEY
-export REVIEWER_BASE_URL="https://open.bigmodel.cn/api/paas/v4"
-export REVIEWER_MODEL="glm-5"
-
-# See docs/MiniMax-GLM-Configuration.md for full setup
+# Set ModelScope endpoint in llm-chat config
+export LLM_BASE_URL="https://api-inference.modelscope.cn/v1"
+export LLM_MODEL="Qwen/Qwen2.5-72B-Instruct"
+export LLM_API_KEY="$MODELSCOPE_API_KEY"
 ```
+
+See `docs/MODELSCOPE_GUIDE.md` for model availability and rate limits.
+
+---
+
+## IDE Adaptations
+
+| IDE | Guide |
+|-----|-------|
+| Claude Code | Native (this skill) |
+| Codex CLI | `skills/skills-codex/` |
+| Cursor | `docs/CURSOR_ADAPTATION.md` |
+| Trae (ByteDance) | `docs/TRAE_ARIS_RUNBOOK_EN.md` |
+| Antigravity (Google) | `docs/ANTIGRAVITY_ADAPTATION.md` |
+| Windsurf | Drop `SKILL.md` files into rules directory |
+
+---
+
+## Templates
+
+Input templates for every workflow live in `templates/`:
 
 ```bash
-# Kimi-K2.5 + DeepSeek
-export EXECUTOR_MODEL="kimi-k2.5"
-export REVIEWER_MODEL="deepseek-chat"
-
-# Codex executor + Gemini reviewer
-# See docs/CODEX_GEMINI_REVIEW_GUIDE.md
+templates/
+  research-pipeline.md     # Full pipeline input template
+  idea-discovery.md
+  experiment-bridge.md
+  paper-write.md
+  paper-review.md
+  rebuttal.md
+  paper-slides.md
+  paper-poster.md
 ```
 
----
-
-## Alternative Agent Adapters
-
-| Agent | Guide |
-|---|---|
-| **Codex CLI** | `skills/skills-codex/` — full skill set |
-| **Cursor** | `docs/CURSOR_ADAPTATION.md` |
-| **Trae** (ByteDance) | `docs/TRAE_ARIS_RUNBOOK_EN.md` |
-| **Antigravity** (Google) | `docs/ANTIGRAVITY_ADAPTATION.md` |
-| **Windsurf** | Native SKILL.md support |
-
----
-
-## Project Structure
-
-```
-Auto-claude-code-research-in-sleep/
-├── skills/
-│   ├── research-pipeline/SKILL.md   # Full pipeline
-│   ├── idea-discovery/SKILL.md      # Workflow 1
-│   ├── experiment-bridge/SKILL.md   # Workflow 1.5
-│   ├── paper-polish/SKILL.md        # Workflow 2
-│   ├── auto-review/SKILL.md         # Workflow 3
-│   ├── rebuttal/SKILL.md            # Workflow 4
-│   ├── paper-slides/SKILL.md        # Workflow 5a
-│   ├── paper-poster/SKILL.md        # Workflow 5b
-│   ├── formula-derivation/SKILL.md
-│   ├── grant-proposal/SKILL.md
-│   ├── ablation-planner/SKILL.md
-│   ├── training-check/SKILL.md
-│   ├── result-to-claim/SKILL.md
-│   ├── research-refine/SKILL.md
-│   ├── experiment-plan/SKILL.md
-│   └── skills-codex/                # Codex CLI native versions
-├── mcp-servers/
-│   └── llm-chat/                    # Any OpenAI-compatible reviewer
-│       └── server.py
-├── templates/                       # Input templates for every workflow
-│   ├── research-pipeline.md
-│   ├── rebuttal.md
-│   └── ...
-├── docs/
-│   ├── CURSOR_ADAPTATION.md
-│   ├── TRAE_ARIS_RUNBOOK_EN.md
-│   ├── ANTIGRAVITY_ADAPTATION.md
-│   ├── CODEX_GEMINI_REVIEW_GUIDE.md
-│   ├── MiniMax-GLM-Configuration.md
-│   ├── MODELSCOPE_GUIDE.md
-│   └── ALI_CODING_PLAN_GUIDE.md
-└── README.md
-```
-
----
-
-## Using Input Templates
-
-Templates prevent missed parameters:
+Use them to avoid forgetting parameters:
 
 ```bash
-# Copy the template for your workflow
-cp templates/research-pipeline.md my_research_run.md
-
-# Edit with your specifics
-cat my_research_run.md
-```
-
-```markdown
-# Research Pipeline Input
-
-direction: "factorized gap in discrete diffusion LMs"
-ref paper: https://arxiv.org/abs/2406.04329
-base repo: https://github.com/org/discrete-diffusion
-venue: NeurIPS
-max review rounds: 4
-compact: false
-```
-
-```
-# Then invoke with the filled template
-/research-pipeline @my_research_run.md
+# Copy template, fill it in, then paste into Claude Code
+cat templates/rebuttal.md
 ```
 
 ---
 
-## Compact Mode (Short-Context Models)
+## Session Recovery and Compact Mode
 
-When using models with limited context windows or resuming interrupted sessions:
+For long pipelines that hit context limits:
 
 ```
-/research-pipeline "my topic" — compact: true
+/research-pipeline "topic" — compact: true
 ```
 
-Compact mode generates lean `*_summary.md` files at each phase checkpoint instead of full verbose outputs. Use for:
-- Models with < 32k context
-- Resuming after session interruption (checkpoint auto-resume)
-- Reducing API cost on long pipelines
+This generates lean `*_compact.md` summary files at each phase boundary. On interruption:
+
+```
+/research-pipeline resume — from: experiment-bridge
+```
+
+ARIS reads the compact summaries and continues without re-running completed phases. The `research-refine` workflow also has auto-checkpoint: it writes `checkpoint.json` after each idea refinement round.
+
+---
+
+## Standalone Utility Skills
+
+These can be called independently or are auto-invoked by core workflows:
+
+```
+/training-check "experiments/"          # Validate training loop health
+/result-to-claim "results/metrics.json" # Convert numbers to paper claims
+/ablation-planner "method/"             # Design ablation study
+/formula-derivation "method/idea.md"    # Develop + verify math derivations
+/literature-review "topic"              # Standalone survey
+/research-refine "idea.md"              # Sharpen a vague idea
+/experiment-plan "proposal.md"          # Generate experiment roadmap
+/grant-proposal "idea.md"               # Draft grant proposal
+/paper-illustration "paper/"            # Generate figures (Gemini)
+```
+
+---
+
+## File Structure After Full Pipeline Run
+
+```
+project/
+  literature/
+    survey.md
+    references.bib
+    gap_matrix.md
+  ideas/
+    idea_001.md
+    idea_001_score.md
+    experiment_plan.md
+  experiments/
+    plan.md
+    run_001/
+      train.py
+      results.json
+      training_check.md
+  paper/
+    main.tex
+    main.pdf
+    figures/
+  review/
+    round_1_review.md
+    round_1_revised.tex
+    score_history.md
+  rebuttal/
+    PASTE_READY.txt
+    REBUTTAL_DRAFT_rich.md
+  slides/
+    slides.pdf
+    slides.pptx
+    speaker_notes.md
+```
 
 ---
 
 ## Troubleshooting
 
-### Skill not found in Claude Code
-
+**MCP server not found**
 ```bash
-# Verify installation path
-ls ~/.claude/commands/
-# Should list your .md files
+# Verify Codex MCP is running
+codex mcp --test
 
-# Check Claude Code version supports custom commands
-claude --version
+# Check Claude Code sees it
+claude mcp list
 ```
 
-### MCP reviewer not connecting
-
+**Skill not recognized**
 ```bash
-# Test Codex MCP directly
-codex-mcp --test
+# Confirm skill files are in place
+ls ~/.claude/skills/
 
-# Check MCP config syntax
-cat ~/.claude/mcp_config.json | python -m json.tool
-
-# Verify API key is set
-echo $OPENAI_API_KEY | cut -c1-8  # Should show first 8 chars
+# Reload Claude Code session after adding new skills
+# (start a new conversation)
 ```
 
-### Cross-model review loop not triggering
+**Cross-model reviewer silent / no score returned**
+- Check `OPENAI_API_KEY` or alternative provider key is exported
+- Verify `mcp_config.json` syntax with `python -m json.tool ~/.claude/mcp_config.json`
+- For `llm-chat` MCP: confirm `LLM_BASE_URL` ends without trailing slash
 
-The reviewer is only called when Claude Code has MCP access. Ensure:
-1. MCP server is listed in `~/.claude/mcp_config.json`
-2. The MCP server process can start (run `codex-mcp` standalone to test)
-3. You're running Claude Code in a project directory (not a bare terminal)
-
-### Citation hallucination in paper writing
-
-ARIS Workflow 2 enforces `DBLP → CrossRef → [VERIFY]` — if a citation cannot be confirmed it is marked `[VERIFY]` rather than hallucinated. If you see raw `[VERIFY]` tags in output:
-
+**LaTeX compilation fails in paper-write**
 ```bash
-# Manually verify and fill in:
-grep -n "\[VERIFY\]" paper/related_work.tex
-# Then look up each on https://dblp.org or https://crossref.org
+# ARIS requires texlive — install if missing
+sudo apt-get install texlive-full   # Linux
+brew install --cask mactex          # macOS
 ```
 
-### Rebuttal exceeds character limit
+**Compact mode not resuming correctly**
+- Ensure `checkpoint.json` was written (check `experiments/` dir)
+- Specify exact phase: `/research-pipeline resume — from: paper-write`
 
-```
-# Check exact count before finalizing
-wc -c PASTE_READY.txt
-
-# If over limit, add tighter constraint:
-/rebuttal "paper/ + reviews" — venue: ICML, character limit: 4800
-# Use 4800 instead of 5000 as safety margin
-```
-
-### W&B integration in experiment-bridge
-
-```bash
-# Ensure wandb is authenticated
-wandb login  # Uses $WANDB_API_KEY or interactive login
-
-# ARIS uses real wandb.Api() calls — verify API access
-python -c "import wandb; api = wandb.Api(); print('W&B OK')"
-```
-
-### Session interrupted mid-pipeline
-
-```
-# research-refine has auto-checkpoint — just re-run the same command
-# ARIS detects the checkpoint and resumes from last completed phase
-/research-pipeline "my topic"  # Will resume automatically
-```
+**Citation hallucination**
+- All `[VERIFY]`-tagged citations in `references.bib` need manual confirmation
+- Run `/literature-review` with `— strict: true` to block unverified citations entirely
 
 ---
 
-## Environment Variables Reference
+## Community and Citation
 
-```bash
-# OpenAI / Codex reviewer
-export OPENAI_API_KEY="..."
+- 💬 Community: see `README.md` for Discord/WeChat links
+- 🏆 Papers accepted with ARIS: see `README.md#community-showcase`
+- 📖 BibTeX citation: see `README.md#citation`
 
-# Custom LLM reviewer (llm-chat MCP)
-export LLM_API_KEY="..."
-export LLM_BASE_URL="https://api.deepseek.com/v1"
-export LLM_MODEL="deepseek-chat"
-
-# ModelScope (free tier)
-export MODELSCOPE_API_KEY="..."
-
-# Weights & Biases
-export WANDB_API_KEY="..."
-export WANDB_PROJECT="aris-research"
-export WANDB_ENTITY="myteam"
-
-# MiniMax
-export MINIMAX_API_KEY="..."
-
-# Zhipu GLM
-export GLM_API_KEY="..."
-
-# Kimi
-export KIMI_API_KEY="..."
-```
-
----
-
-## Quick Reference Card
-
-```
-# Full pipeline (everything)
-/research-pipeline "topic"
-
-# Just ideas
-/idea-discovery "topic"
-
-# Run experiments with code review
-/experiment-bridge "script.py"
-
-# Polish existing paper
-/paper-polish "paper/" — venue: ICML
-
-# Automated review loop
-/auto-review "paper/draft.pdf" — target score: 7
-
-# Rebuttal from reviews
-/rebuttal "paper/ + reviews" — venue: ICML, character limit: 5000
-
-# Slides + poster
-/paper-slides "paper/"
-/paper-poster "paper/"
+```bibtex
+@software{aris2026,
+  title  = {ARIS: Auto-Research-In-Sleep},
+  author = {wanshuiyin},
+  year   = {2026},
+  url    = {https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep}
+}
 ```
 ```
