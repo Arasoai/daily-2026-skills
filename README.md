@@ -160,6 +160,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [awesome-phd-cv](skills/awesome-phd-cv/) | [install](https://skills.sh/aradotso/trending-skills/awesome-phd-cv) | [LimHyungTae/Awesome-PhD-CV](https://github.com/LimHyungTae/Awesome-PhD-CV) | 2026-03-24 |
 | [hyperagents-self-improving](skills/hyperagents-self-improving/) | [install](https://skills.sh/aradotso/trending-skills/hyperagents-self-improving) | [facebookresearch/HyperAgents](https://github.com/facebookresearch/HyperAgents) | 2026-03-24 |
 | [typeno-voice-input](skills/typeno-voice-input/) | [install](https://skills.sh/aradotso/trending-skills/typeno-voice-input) | [marswaveai/TypeNo](https://github.com/marswaveai/TypeNo) | 2026-03-25 |
+| [jkvideo-bilibili-react-native](skills/jkvideo-bilibili-react-native/) | [install](https://skills.sh/aradotso/trending-skills/jkvideo-bilibili-react-native) | [tiajinsha/JKVideo](https://github.com/tiajinsha/JKVideo) | 2026-03-25 |
 <!-- SKILL_INDEX -->
 
 ## How it works
