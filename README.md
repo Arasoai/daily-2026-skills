@@ -161,6 +161,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [hyperagents-self-improving](skills/hyperagents-self-improving/) | [install](https://skills.sh/aradotso/trending-skills/hyperagents-self-improving) | [facebookresearch/HyperAgents](https://github.com/facebookresearch/HyperAgents) | 2026-03-24 |
 | [typeno-voice-input](skills/typeno-voice-input/) | [install](https://skills.sh/aradotso/trending-skills/typeno-voice-input) | [marswaveai/TypeNo](https://github.com/marswaveai/TypeNo) | 2026-03-25 |
 | [jkvideo-bilibili-react-native](skills/jkvideo-bilibili-react-native/) | [install](https://skills.sh/aradotso/trending-skills/jkvideo-bilibili-react-native) | [tiajinsha/JKVideo](https://github.com/tiajinsha/JKVideo) | 2026-03-25 |
+| [polymarket-arbitrage-trading-bot](skills/polymarket-arbitrage-trading-bot/) | [install](https://skills.sh/aradotso/trending-skills/polymarket-arbitrage-trading-bot) | [apechurch/polymarket-arbitrage-trading-bot](https://github.com/apechurch/polymarket-arbitrage-trading-bot) | 2026-03-25 |
 <!-- SKILL_INDEX -->
 
 ## How it works
