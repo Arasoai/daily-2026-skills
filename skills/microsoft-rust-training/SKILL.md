@@ -1,36 +1,36 @@
 ---
 name: microsoft-rust-training
-description: Comprehensive Rust training curriculum from Microsoft covering beginner to expert levels across seven specialized books
+description: Comprehensive Rust training curriculum from Microsoft covering beginner to expert levels across 7 books with exercises, diagrams, and playgrounds.
 triggers:
-  - learn Rust from scratch
-  - Rust training material
-  - how to use microsoft rust training
-  - serve rust training books locally
-  - rust for c++ programmers
-  - rust async book examples
-  - type driven correctness rust
-  - advanced rust patterns tutorial
+  - "rust training material"
+  - "learn rust from scratch"
+  - "rust for python programmers"
+  - "rust for c++ programmers"
+  - "rust async book"
+  - "rust type driven correctness"
+  - "rust engineering practices book"
+  - "microsoft rust curriculum"
 ---
 
-# Microsoft RustTraining
+# Microsoft Rust Training
 
 > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection.
 
-Seven mdBook-based Rust training courses covering beginner through expert levels, with Mermaid diagrams, interactive playgrounds, and exercises. Books range from language-bridge guides (C/C++, C#, Python) to deep dives on async, advanced patterns, type-driven correctness, and engineering practices.
+A collection of seven structured Rust training books maintained by Microsoft, covering Rust from multiple entry points (C/C++, C#/Java, Python backgrounds) through deep dives on async, advanced patterns, type-level correctness, and engineering practices. Each book contains 15–16 chapters with Mermaid diagrams, editable Rust playgrounds, and exercises.
 
 ---
 
-## What This Project Provides
+## Book Catalog
 
 | Book | Level | Focus |
 |------|-------|-------|
-| `c-cpp-book` | 🟢 Bridge | RAII, FFI, no_std, embedded |
-| `csharp-book` | 🟢 Bridge | Ownership from OOP perspective |
-| `python-book` | 🟢 Bridge | Dynamic → static typing, concurrency |
+| `c-cpp-book` | 🟢 Bridge | Move semantics, RAII, FFI, embedded, no_std |
+| `csharp-book` | 🟢 Bridge | C#/Java/Swift → ownership & type system |
+| `python-book` | 🟢 Bridge | Dynamic → static typing, GIL-free concurrency |
 | `async-book` | 🔵 Deep Dive | Tokio, streams, cancellation safety |
-| `rust-patterns-book` | 🟡 Advanced | Pin, allocators, lock-free, unsafe |
-| `type-driven-correctness-book` | 🟣 Expert | Type-state, phantom types, capabilities |
-| `engineering-book` | 🟤 Practices | CI/CD, cross-compilation, Miri, build scripts |
+| `rust-patterns-book` | 🟡 Advanced | Pin, allocators, lock-free structures, unsafe |
+| `type-driven-correctness-book` | 🟣 Expert | Type-state, phantom types, capability tokens |
+| `engineering-book` | 🟤 Practices | Build scripts, cross-compilation, CI/CD, Miri |
 
 ---
 
@@ -42,59 +42,36 @@ Seven mdBook-based Rust training courses covering beginner through expert levels
 # Install Rust via rustup
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# Install mdbook and the Mermaid preprocessor
+# Install mdBook and Mermaid preprocessor
 cargo install mdbook mdbook-mermaid
 ```
 
-### Clone the Repo
+### Clone and Build
 
 ```bash
 git clone https://github.com/microsoft/RustTraining.git
 cd RustTraining
-```
 
----
-
-## Key Commands
-
-### xtask (Build All Books)
-
-The project uses a Cargo xtask pattern for orchestrating all books at once:
-
-```bash
-# Build all books into site/ for local preview
+# Build all books into site/
 cargo xtask build
 
-# Build and serve all books at http://localhost:3000
+# Serve all books locally at http://localhost:3000
 cargo xtask serve
 
-# Build into docs/ for GitHub Pages deployment
+# Build for GitHub Pages deployment (outputs to docs/)
 cargo xtask deploy
 
-# Remove site/ and docs/ directories
+# Clean build artifacts
 cargo xtask clean
 ```
 
-### Single Book (mdbook directly)
+### Serve a Single Book
 
 ```bash
-# Serve a specific book with live-reload
-cd async-book && mdbook serve --open         # http://localhost:3000
-cd rust-patterns-book && mdbook serve --open
-cd type-driven-correctness-book && mdbook serve --open
-
-# Build a single book without serving
-cd c-cpp-book && mdbook build
-# Output goes to c-cpp-book/book/
+cd c-cpp-book && mdbook serve --open     # http://localhost:3000
+cd python-book && mdbook serve --open
+cd async-book && mdbook serve --open
 ```
-
-### Reading on GitHub
-
-Each book's table of contents is at `<book-dir>/src/SUMMARY.md`:
-- `c-cpp-book/src/SUMMARY.md`
-- `async-book/src/SUMMARY.md`
-- `engineering-book/src/SUMMARY.md`
-- etc.
 
 ---
 
@@ -102,25 +79,30 @@ Each book's table of contents is at `<book-dir>/src/SUMMARY.md`:
 
 ```
 RustTraining/
-├── xtask/                        # Build orchestration (cargo xtask)
-│   └── src/main.rs
 ├── c-cpp-book/
-│   ├── book.toml                 # mdBook config
+│   ├── book.toml
 │   └── src/
-│       ├── SUMMARY.md            # Table of contents
-│       └── *.md                  # Chapter files
+│       ├── SUMMARY.md          # Table of contents
+│       └── *.md                # Chapter files
 ├── csharp-book/
 ├── python-book/
 ├── async-book/
 ├── rust-patterns-book/
 ├── type-driven-correctness-book/
 ├── engineering-book/
-├── site/                         # Local preview output (gitignored)
-├── docs/                         # GitHub Pages output
-└── Cargo.toml                    # Workspace root
+├── xtask/                      # Build automation (cargo xtask)
+│   └── src/main.rs
+├── docs/                       # GitHub Pages output
+├── site/                       # Local preview output
+└── .github/workflows/
+    └── pages.yml               # Auto-deploy on push to master
 ```
 
-### book.toml Structure (per book)
+---
+
+## mdBook Configuration (`book.toml`)
+
+Each book contains a `book.toml`. Example configuration pattern:
 
 ```toml
 [book]
@@ -129,209 +111,258 @@ authors = ["Microsoft"]
 language = "en"
 src = "src"
 
+[build]
+build-dir = "../site/async-book"
+
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
 
 [output.html]
-additional-css = ["custom.css"]
+default-theme = "navy"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/microsoft/RustTraining"
+edit-url-template = "https://github.com/microsoft/RustTraining/edit/master/{path}"
+
+[output.html.search]
+enable = true
 ```
 
 ---
 
-## Code Patterns from the Books
+## Key Rust Concepts Covered by Book
 
-### Ownership & Borrowing (Bridge Books)
+### Bridge: Rust for C/C++ Programmers
+
+**Ownership & Move Semantics**
 
 ```rust
-// Ownership transfer — key concept from c-cpp-book / csharp-book
-fn take_ownership(s: String) -> String {
-    println!("Got: {s}");
-    s  // move back to caller
-}
-
-fn borrow(s: &str) {
-    println!("Borrowed: {s}");
-}
+// C++ has copy by default; Rust moves by default
+fn take_ownership(s: String) {
+    println!("{s}");
+} // s is dropped here
 
 fn main() {
     let s = String::from("hello");
-    borrow(&s);               // s still valid
-    let s2 = take_ownership(s); // s moved, s2 owns it
+    take_ownership(s);
+    // println!("{s}"); // ERROR: s was moved
+    
+    // Use clone for explicit deep copy
+    let s2 = String::from("world");
+    let s3 = s2.clone();
+    println!("{s2} {s3}"); // Both valid
 }
 ```
 
-### Async / Tokio (async-book)
+**RAII — No Manual Memory Management**
+
+```rust
+use std::fs::File;
+use std::io::{self, Write};
+
+fn write_data(path: &str, data: &[u8]) -> io::Result<()> {
+    let mut file = File::create(path)?; // Opens file
+    file.write_all(data)?;
+    Ok(())
+} // file automatically closed here — no explicit close needed
+```
+
+**FFI Example**
+
+```rust
+// Calling C from Rust
+extern "C" {
+    fn abs(x: i32) -> i32;
+}
+
+fn main() {
+    unsafe {
+        println!("abs(-5) = {}", abs(-5));
+    }
+}
+```
+
+---
+
+### Bridge: Rust for Python Programmers
+
+**Static Typing with Type Inference**
+
+```rust
+// Python: x = [1, 2, 3]
+// Rust infers the type from usage:
+let mut numbers = Vec::new();
+numbers.push(1_i32);
+numbers.push(2);
+numbers.push(3);
+
+// Explicit when needed:
+let numbers: Vec<i32> = vec![1, 2, 3];
+```
+
+**Error Handling (no exceptions)**
+
+```rust
+use std::num::ParseIntError;
+
+fn double_number(s: &str) -> Result<i32, ParseIntError> {
+    let n = s.trim().parse::<i32>()?; // ? propagates error
+    Ok(n * 2)
+}
+
+fn main() {
+    match double_number("5") {
+        Ok(n) => println!("Doubled: {n}"),
+        Err(e) => println!("Error: {e}"),
+    }
+}
+```
+
+**GIL-Free Concurrency**
+
+```rust
+use std::thread;
+use std::sync::{Arc, Mutex};
+
+fn main() {
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap()); // 10
+}
+```
+
+---
+
+### Deep Dive: Async Rust
+
+**Basic Async with Tokio**
 
 ```rust
 use tokio::time::{sleep, Duration};
 
 #[tokio::main]
 async fn main() {
-    let result = tokio::select! {
-        val = fetch_data() => format!("data: {val}"),
-        _ = sleep(Duration::from_secs(5)) => "timeout".to_string(),
-    };
+    let result = fetch_data().await;
     println!("{result}");
 }
 
-async fn fetch_data() -> u32 {
-    sleep(Duration::from_secs(1)).await;
-    42
+async fn fetch_data() -> String {
+    sleep(Duration::from_millis(100)).await;
+    "data loaded".to_string()
 }
 ```
 
-### Cancellation-Safe Streams (async-book)
+**Concurrent Tasks**
 
 ```rust
-use tokio_stream::{StreamExt, wrappers::ReceiverStream};
-use tokio::sync::mpsc;
+use tokio::task;
 
-async fn process_stream() {
-    let (tx, rx) = mpsc::channel::<u32>(32);
-    let mut stream = ReceiverStream::new(rx);
+#[tokio::main]
+async fn main() {
+    let (a, b) = tokio::join!(
+        task::spawn(async { expensive_computation(1).await }),
+        task::spawn(async { expensive_computation(2).await }),
+    );
+    println!("{} {}", a.unwrap(), b.unwrap());
+}
 
-    tokio::spawn(async move {
-        for i in 0..10 {
-            tx.send(i).await.unwrap();
-        }
-    });
+async fn expensive_computation(n: u64) -> u64 {
+    tokio::time::sleep(std::time::Duration::from_millis(n * 100)).await;
+    n * 42
+}
+```
 
-    while let Some(item) = stream.next().await {
-        println!("item: {item}");
+**Cancellation-Safe Streams**
+
+```rust
+use tokio_stream::{self as stream, StreamExt};
+
+#[tokio::main]
+async fn main() {
+    let mut s = stream::iter(vec![1, 2, 3, 4, 5]);
+    while let Some(value) = s.next().await {
+        println!("got {value}");
     }
 }
 ```
 
-### Type-State Pattern (type-driven-correctness-book)
+---
+
+### Advanced: Rust Patterns
+
+**Type-Safe Builder Pattern**
 
 ```rust
-use std::marker::PhantomData;
-
-struct Locked;
-struct Unlocked;
-
-struct Vault<State> {
-    secret: String,
-    _state: PhantomData<State>,
+#[derive(Debug)]
+struct Config {
+    host: String,
+    port: u16,
+    max_connections: usize,
 }
 
-impl Vault<Locked> {
-    pub fn new(secret: impl Into<String>) -> Self {
-        Vault { secret: secret.into(), _state: PhantomData }
-    }
-    pub fn unlock(self, key: &str) -> Result<Vault<Unlocked>, &'static str> {
-        if key == "correct" {
-            Ok(Vault { secret: self.secret, _state: PhantomData })
-        } else {
-            Err("wrong key")
+struct ConfigBuilder {
+    host: String,
+    port: u16,
+    max_connections: usize,
+}
+
+impl ConfigBuilder {
+    fn new() -> Self {
+        Self {
+            host: "localhost".into(),
+            port: 8080,
+            max_connections: 100,
         }
     }
-}
-
-impl Vault<Unlocked> {
-    pub fn read(&self) -> &str {
-        &self.secret
-    }
-    pub fn lock(self) -> Vault<Locked> {
-        Vault { secret: self.secret, _state: PhantomData }
+    fn host(mut self, h: impl Into<String>) -> Self { self.host = h.into(); self }
+    fn port(mut self, p: u16) -> Self { self.port = p; self }
+    fn max_connections(mut self, m: usize) -> Self { self.max_connections = m; self }
+    fn build(self) -> Config {
+        Config { host: self.host, port: self.port, max_connections: self.max_connections }
     }
 }
 
 fn main() {
-    let vault = Vault::<Locked>::new("top secret");
-    // vault.read(); // compile error — cannot call read() on Locked vault
-    let open = vault.unlock("correct").unwrap();
-    println!("{}", open.read());
-    let _locked_again = open.lock();
+    let config = ConfigBuilder::new()
+        .host("0.0.0.0")
+        .port(9090)
+        .max_connections(500)
+        .build();
+    println!("{config:?}");
 }
 ```
 
-### Phantom Types for Units (type-driven-correctness-book)
-
-```rust
-use std::marker::PhantomData;
-
-struct Meters;
-struct Feet;
-
-#[derive(Debug, Clone, Copy)]
-struct Distance<Unit> {
-    value: f64,
-    _unit: PhantomData<Unit>,
-}
-
-impl Distance<Meters> {
-    pub fn meters(v: f64) -> Self { Distance { value: v, _unit: PhantomData } }
-    pub fn to_feet(self) -> Distance<Feet> {
-        Distance { value: self.value * 3.28084, _unit: PhantomData }
-    }
-}
-
-impl Distance<Feet> {
-    pub fn feet(v: f64) -> Self { Distance { value: v, _unit: PhantomData } }
-}
-
-fn main() {
-    let d = Distance::<Meters>::meters(100.0);
-    let f = d.to_feet();
-    println!("{:.2} feet", f.value);
-    // Distance::<Meters>::meters(1.0) + Distance::<Feet>::feet(1.0) // compile error
-}
-```
-
-### Pin & Self-Referential Structs (rust-patterns-book)
-
-```rust
-use std::pin::Pin;
-use std::marker::PhantomPinned;
-
-struct SelfRef {
-    value: String,
-    ptr: *const String,  // points into `value`
-    _pin: PhantomPinned,
-}
-
-impl SelfRef {
-    pub fn new(v: impl Into<String>) -> Pin<Box<Self>> {
-        let s = SelfRef {
-            value: v.into(),
-            ptr: std::ptr::null(),
-            _pin: PhantomPinned,
-        };
-        let mut boxed = Box::pin(s);
-        let ptr: *const String = &boxed.value;
-        // SAFETY: we are only setting the pointer, not moving the struct
-        unsafe { boxed.as_mut().get_unchecked_mut().ptr = ptr; }
-        boxed
-    }
-
-    pub fn get_value(self: Pin<&Self>) -> &str {
-        // SAFETY: ptr was set from value's address, struct is pinned
-        unsafe { &*self.ptr }
-    }
-}
-```
-
-### Custom Allocator (rust-patterns-book)
+**Custom Allocator**
 
 ```rust
 use std::alloc::{GlobalAlloc, Layout, System};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-struct TrackingAllocator;
 static ALLOCATED: AtomicUsize = AtomicUsize::new(0);
+
+struct TrackingAllocator;
 
 unsafe impl GlobalAlloc for TrackingAllocator {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-        let ptr = System.alloc(layout);
-        if !ptr.is_null() {
-            ALLOCATED.fetch_add(layout.size(), Ordering::Relaxed);
-        }
-        ptr
+        ALLOCATED.fetch_add(layout.size(), Ordering::Relaxed);
+        System.alloc(layout)
     }
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
-        System.dealloc(ptr, layout);
         ALLOCATED.fetch_sub(layout.size(), Ordering::Relaxed);
+        System.dealloc(ptr, layout)
     }
 }
 
@@ -340,176 +371,298 @@ static A: TrackingAllocator = TrackingAllocator;
 
 fn main() {
     let _v: Vec<u8> = vec![0u8; 1024];
-    println!("Currently allocated: {} bytes", ALLOCATED.load(Ordering::Relaxed));
+    println!("Allocated: {} bytes", ALLOCATED.load(Ordering::Relaxed));
 }
 ```
 
-### FFI Example (c-cpp-book)
+---
+
+### Expert: Type-Driven Correctness
+
+**Typestate Pattern**
 
 ```rust
-// Calling a C function from Rust
-extern "C" {
-    fn abs(x: i32) -> i32;
-    fn strlen(s: *const std::ffi::c_char) -> usize;
+use std::marker::PhantomData;
+
+struct Locked;
+struct Unlocked;
+
+struct Safe<State> {
+    contents: String,
+    _state: PhantomData<State>,
+}
+
+impl Safe<Locked> {
+    fn new(contents: impl Into<String>) -> Self {
+        Safe { contents: contents.into(), _state: PhantomData }
+    }
+    fn unlock(self, _key: &str) -> Safe<Unlocked> {
+        Safe { contents: self.contents, _state: PhantomData }
+    }
+}
+
+impl Safe<Unlocked> {
+    fn get_contents(&self) -> &str { &self.contents }
+    fn lock(self) -> Safe<Locked> {
+        Safe { contents: self.contents, _state: PhantomData }
+    }
 }
 
 fn main() {
-    let result = unsafe { abs(-42) };
-    println!("abs(-42) = {result}");
-
-    let s = std::ffi::CString::new("hello").unwrap();
-    let len = unsafe { strlen(s.as_ptr()) };
-    println!("strlen = {len}");
+    let safe = Safe::<Locked>::new("secret data");
+    // safe.get_contents(); // ERROR: method not available on Locked state
+    let open = safe.unlock("correct-key");
+    println!("{}", open.get_contents());
+    let _locked_again = open.lock();
 }
 ```
 
-### Build Script Pattern (engineering-book)
+**Phantom Types for Unit Safety**
+
+```rust
+use std::marker::PhantomData;
+
+struct Meters;
+struct Feet;
+
+struct Distance<Unit> {
+    value: f64,
+    _unit: PhantomData<Unit>,
+}
+
+impl<Unit> Distance<Unit> {
+    fn new(value: f64) -> Self {
+        Distance { value, _unit: PhantomData }
+    }
+    fn value(&self) -> f64 { self.value }
+}
+
+impl Distance<Meters> {
+    fn to_feet(self) -> Distance<Feet> {
+        Distance::new(self.value * 3.28084)
+    }
+}
+
+fn main() {
+    let d_m: Distance<Meters> = Distance::new(100.0);
+    let d_f: Distance<Feet> = d_m.to_feet();
+    println!("{:.2} feet", d_f.value());
+    // Can't mix units — type system prevents it
+}
+```
+
+---
+
+### Practices: Rust Engineering
+
+**Build Script (`build.rs`)**
 
 ```rust
 // build.rs — runs before compilation
 fn main() {
-    // Re-run if C source changes
-    println!("cargo:rerun-if-changed=src/native/helper.c");
-
-    // Link a system library
-    println!("cargo:rustc-link-lib=z");  // zlib
-
-    // Pass compile-time env var
-    let profile = std::env::var("PROFILE").unwrap_or_default();
-    println!("cargo:rustc-env=BUILD_PROFILE={profile}");
-
-    // Compile C code with cc crate
+    // Tell Cargo to rerun if C source changes
+    println!("cargo:rerun-if-changed=src/native/lib.c");
+    
+    // Compile a C library
     cc::Build::new()
-        .file("src/native/helper.c")
-        .compile("helper");
+        .file("src/native/lib.c")
+        .compile("native");
+    
+    // Emit link search path
+    println!("cargo:rustc-link-search=native=/usr/local/lib");
+    println!("cargo:rustc-link-lib=ssl");
 }
+```
+
+**Cross-Compilation**
+
+```bash
+# Add a target
+rustup target add aarch64-unknown-linux-gnu
+
+# Build for that target
+cargo build --target aarch64-unknown-linux-gnu
+
+# In .cargo/config.toml:
+# [target.aarch64-unknown-linux-gnu]
+# linker = "aarch64-linux-gnu-gcc"
+```
+
+**Running Miri for Undefined Behavior Detection**
+
+```bash
+# Install Miri
+rustup component add miri
+
+# Run tests under Miri
+cargo miri test
+
+# Run a specific binary under Miri
+cargo miri run
 ```
 
 ---
 
 ## Adding Content to a Book
 
-### New Chapter
-
-1. Create `<book-dir>/src/chapter-name.md`
-2. Register it in `<book-dir>/src/SUMMARY.md`:
+### SUMMARY.md Structure
 
 ```markdown
 # Summary
 
 - [Introduction](./introduction.md)
-- [My New Chapter](./chapter-name.md)
-  - [Subsection](./chapter-name-sub.md)
+- [Chapter 1: Ownership](./ch01-ownership.md)
+  - [Borrowing](./ch01-borrowing.md)
+  - [Lifetimes](./ch01-lifetimes.md)
+- [Chapter 2: Types](./ch02-types.md)
 ```
 
-### Mermaid Diagram in Markdown
+### Mermaid Diagrams in Chapters
 
 ````markdown
 ```mermaid
 graph TD
-    A[main] --> B[spawn task]
-    B --> C{select!}
-    C -->|data| D[process]
-    C -->|timeout| E[cancel]
+    A[Value Created] --> B{Ownership Transfer?}
+    B -->|Move| C[New Owner]
+    B -->|Borrow| D[Temporary Reference]
+    C --> E[Original Invalid]
+    D --> F[Original Still Valid]
 ```
 ````
 
-### Rust Playground Link
+### Rust Playground Links
 
 ```markdown
-You can run this example in the [Rust Playground](https://play.rust-lang.org/?code=fn+main()+%7B+println!(%22hello%22);+%7D).
+You can run this example in the [Rust Playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&code=fn+main()+%7B+println!(%22Hello%22)%3B+%7D).
+```
+
+---
+
+## xtask Automation
+
+The `xtask` pattern lets you write build scripts in Rust instead of shell:
+
+```rust
+// xtask/src/main.rs — simplified pattern
+use std::process::Command;
+
+fn main() {
+    let task = std::env::args().nth(1).unwrap_or_default();
+    match task.as_str() {
+        "build" => build_all(),
+        "serve" => serve_all(),
+        "deploy" => deploy(),
+        "clean" => clean(),
+        _ => eprintln!("Unknown task: {task}"),
+    }
+}
+
+fn build_all() {
+    for book in &["c-cpp-book", "python-book", "async-book"] {
+        let status = Command::new("mdbook")
+            .args(["build", book])
+            .status()
+            .expect("mdbook not found");
+        assert!(status.success(), "Failed to build {book}");
+    }
+}
+```
+
+Run with: `cargo xtask build` (configured in `.cargo/config.toml` as an alias).
+
+---
+
+## CI/CD — GitHub Pages Deployment
+
+```yaml
+# .github/workflows/pages.yml
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [master]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo install mdbook mdbook-mermaid
+      - run: cargo xtask deploy
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
 ```
 
 ---
 
 ## Troubleshooting
 
-### `cargo xtask serve` fails — port in use
-
+### `mdbook` command not found
 ```bash
-# Kill whatever is on 3000
-lsof -ti:3000 | xargs kill -9
-cargo xtask serve
-```
-
-### `mdbook-mermaid` not found
-
-```bash
-cargo install mdbook-mermaid
-# Ensure ~/.cargo/bin is in PATH
+cargo install mdbook mdbook-mermaid
+# Ensure ~/.cargo/bin is in your PATH
 export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-### Book renders but diagrams are blank
-
-Ensure `mdbook-mermaid` preprocessor is in `book.toml`:
-
-```toml
-[preprocessor.mermaid]
-command = "mdbook-mermaid"
-```
-
-And run `mdbook-mermaid install` inside the book directory:
-
+### Mermaid diagrams not rendering
 ```bash
-cd async-book
-mdbook-mermaid install
-mdbook serve
+# Ensure preprocessor is installed
+cargo install mdbook-mermaid
+
+# Verify book.toml has:
+# [preprocessor.mermaid]
+# command = "mdbook-mermaid"
 ```
 
-### Search not working locally
-
-Search requires the book to be served (not opened as a file). Use `mdbook serve`, not opening `book/index.html` directly.
-
-### Rust examples in book don't compile
-
-Check the code fence annotation:
-
-````markdown
-```rust
-// compiled and tested by `mdbook test`
-```
-
-```rust,ignore
-// skipped during mdbook test
-```
-
-```rust,no_run
-// compiled but not executed
-```
-````
-
-Run tests for a book:
-
+### Port already in use
 ```bash
-cd async-book && mdbook test
+# Specify a different port
+mdbook serve --port 3001
+```
+
+### Build fails on specific book
+```bash
+cd <book-name>
+mdbook build 2>&1   # See full error output
+```
+
+### Miri test failures
+```bash
+# Update Miri to latest nightly
+rustup update nightly
+rustup component add miri --toolchain nightly
+cargo +nightly miri test
+```
+
+### Cross-compilation linker errors
+```bash
+# Install cross (Docker-based cross compilation)
+cargo install cross
+cross build --target aarch64-unknown-linux-gnu
 ```
 
 ---
 
-## GitHub Pages Deployment
+## Reading Path Recommendations
 
-The repo auto-deploys via `.github/workflows/pages.yml` on push to `master`. To deploy manually:
+**New to Rust, coming from Python:**
+`python-book` → `async-book` → `rust-patterns-book`
 
-```bash
-cargo xtask deploy   # outputs to docs/
-git add docs/
-git commit -m "deploy: rebuild books"
-git push origin master
-```
+**Coming from C/C++:**
+`c-cpp-book` → `rust-patterns-book` → `type-driven-correctness-book`
 
-Ensure GitHub Pages is set to serve from the `docs/` folder in repository Settings → Pages.
+**Coming from C#/Java:**
+`csharp-book` → `async-book` → `engineering-book`
+
+**Already know Rust basics:**
+`rust-patterns-book` → `type-driven-correctness-book` → `engineering-book`
+
+**Production Rust:**
+`engineering-book` + `async-book` (cancellation safety chapters)
 
 ---
 
-## Learning Path Recommendations
+## License
 
-**Coming from C/C++:** `c-cpp-book` → `rust-patterns-book` → `async-book`
-
-**Coming from Python/JS:** `python-book` → `async-book` → `engineering-book`
-
-**Coming from C#/Java:** `csharp-book` → `type-driven-correctness-book` → `rust-patterns-book`
-
-**Systems/embedded:** `c-cpp-book` (no_std chapters) → `rust-patterns-book` (allocators, unsafe)
-
-**Production services:** `async-book` → `engineering-book` → `rust-patterns-book`
+Dual-licensed under [MIT](LICENSE) and [CC-BY-4.0](LICENSE-DOCS). Code examples are MIT; prose and diagrams are CC-BY-4.0.
