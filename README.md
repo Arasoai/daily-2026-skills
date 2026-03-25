@@ -165,6 +165,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [microsoft-rust-training](skills/microsoft-rust-training/) | [install](https://skills.sh/aradotso/trending-skills/microsoft-rust-training) | [microsoft/RustTraining](https://github.com/microsoft/RustTraining) | 2026-03-25 |
 | [awesome-free-llm-apis](skills/awesome-free-llm-apis/) | [install](https://skills.sh/aradotso/trending-skills/awesome-free-llm-apis) | [mnfst/awesome-free-llm-apis](https://github.com/mnfst/awesome-free-llm-apis) | 2026-03-25 |
 | [regplatform-multi-account-registration](skills/regplatform-multi-account-registration/) | [install](https://skills.sh/aradotso/trending-skills/regplatform-multi-account-registration) | [xiaolajiaoyyds/regplatformm](https://github.com/xiaolajiaoyyds/regplatformm) | 2026-03-25 |
+| [regplatformm-multi-platform-registration](skills/regplatformm-multi-platform-registration/) | [install](https://skills.sh/aradotso/trending-skills/regplatformm-multi-platform-registration) | [xiaolajiaoyyds/regplatformm](https://github.com/xiaolajiaoyyds/regplatformm) | 2026-03-25 |
 <!-- SKILL_INDEX -->
 
 ## How it works
