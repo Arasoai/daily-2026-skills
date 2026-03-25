@@ -159,6 +159,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [aris-autonomous-research](skills/aris-autonomous-research/) | [install](https://skills.sh/aradotso/trending-skills/aris-autonomous-research) | [wanshuiyin/Auto-claude-code-research-in-sleep](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep) | 2026-03-24 |
 | [awesome-phd-cv](skills/awesome-phd-cv/) | [install](https://skills.sh/aradotso/trending-skills/awesome-phd-cv) | [LimHyungTae/Awesome-PhD-CV](https://github.com/LimHyungTae/Awesome-PhD-CV) | 2026-03-24 |
 | [hyperagents-self-improving](skills/hyperagents-self-improving/) | [install](https://skills.sh/aradotso/trending-skills/hyperagents-self-improving) | [facebookresearch/HyperAgents](https://github.com/facebookresearch/HyperAgents) | 2026-03-24 |
+| [typeno-voice-input](skills/typeno-voice-input/) | [install](https://skills.sh/aradotso/trending-skills/typeno-voice-input) | [marswaveai/TypeNo](https://github.com/marswaveai/TypeNo) | 2026-03-25 |
 <!-- SKILL_INDEX -->
 
 ## How it works
