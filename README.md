@@ -163,6 +163,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [jkvideo-bilibili-react-native](skills/jkvideo-bilibili-react-native/) | [install](https://skills.sh/aradotso/trending-skills/jkvideo-bilibili-react-native) | [tiajinsha/JKVideo](https://github.com/tiajinsha/JKVideo) | 2026-03-25 |
 | [polymarket-arbitrage-trading-bot](skills/polymarket-arbitrage-trading-bot/) | [install](https://skills.sh/aradotso/trending-skills/polymarket-arbitrage-trading-bot) | [apechurch/polymarket-arbitrage-trading-bot](https://github.com/apechurch/polymarket-arbitrage-trading-bot) | 2026-03-25 |
 | [microsoft-rust-training](skills/microsoft-rust-training/) | [install](https://skills.sh/aradotso/trending-skills/microsoft-rust-training) | [microsoft/RustTraining](https://github.com/microsoft/RustTraining) | 2026-03-25 |
+| [awesome-free-llm-apis](skills/awesome-free-llm-apis/) | [install](https://skills.sh/aradotso/trending-skills/awesome-free-llm-apis) | [mnfst/awesome-free-llm-apis](https://github.com/mnfst/awesome-free-llm-apis) | 2026-03-25 |
 <!-- SKILL_INDEX -->
 
 ## How it works
