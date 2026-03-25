@@ -171,6 +171,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [ai-scanner-garak](skills/ai-scanner-garak/) | [install](https://skills.sh/aradotso/trending-skills/ai-scanner-garak) | [0din-ai/ai-scanner](https://github.com/0din-ai/ai-scanner) | 2026-03-25 |
 | [openspace-self-evolving-agents](skills/openspace-self-evolving-agents/) | [install](https://skills.sh/aradotso/trending-skills/openspace-self-evolving-agents) | [HKUDS/OpenSpace](https://github.com/HKUDS/OpenSpace) | 2026-03-25 |
 | [opencli-rs-web-scraper](skills/opencli-rs-web-scraper/) | [install](https://skills.sh/aradotso/trending-skills/opencli-rs-web-scraper) | [nashsu/opencli-rs](https://github.com/nashsu/opencli-rs) | 2026-03-25 |
+| [ai-engineering-interview-questions](skills/ai-engineering-interview-questions/) | [install](https://skills.sh/aradotso/trending-skills/ai-engineering-interview-questions) | [amitshekhariitbhu/ai-engineering-interview-questions](https://github.com/amitshekhariitbhu/ai-engineering-interview-questions) | 2026-03-25 |
 <!-- SKILL_INDEX -->
 
 ## How it works
