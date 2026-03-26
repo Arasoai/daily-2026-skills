@@ -179,6 +179,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [cc-skills-golang](skills/cc-skills-golang/) | [install](https://skills.sh/aradotso/trending-skills/cc-skills-golang) | [samber/cc-skills-golang](https://github.com/samber/cc-skills-golang) | 2026-03-26 |
 | [agent-flow-visualization](skills/agent-flow-visualization/) | [install](https://skills.sh/aradotso/trending-skills/agent-flow-visualization) | [patoles/agent-flow](https://github.com/patoles/agent-flow) | 2026-03-26 |
 | [deerflow-super-agent-harness](skills/deerflow-super-agent-harness/) | [install](https://skills.sh/aradotso/trending-skills/deerflow-super-agent-harness) | [bytedance-deerflow/deer-flow-installer](https://github.com/bytedance-deerflow/deer-flow-installer) | 2026-03-26 |
+| [claude-hud-statusline](skills/claude-hud-statusline/) | [install](https://skills.sh/aradotso/trending-skills/claude-hud-statusline) | [jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud) | 2026-03-26 |
 <!-- SKILL_INDEX -->
 
 ## How it works
