@@ -182,6 +182,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [claude-hud-statusline](skills/claude-hud-statusline/) | [install](https://skills.sh/aradotso/trending-skills/claude-hud-statusline) | [jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud) | 2026-03-26 |
 | [awesome-opensource-ai](skills/awesome-opensource-ai/) | [install](https://skills.sh/aradotso/trending-skills/awesome-opensource-ai) | [alvinunreal/awesome-opensource-ai](https://github.com/alvinunreal/awesome-opensource-ai) | 2026-03-26 |
 | [lil-agents-macos-dock](skills/lil-agents-macos-dock/) | [install](https://skills.sh/aradotso/trending-skills/lil-agents-macos-dock) | [ryanstephen/lil-agents](https://github.com/ryanstephen/lil-agents) | 2026-03-26 |
+| [slides-style-prompt-studio](skills/slides-style-prompt-studio/) | [install](https://skills.sh/aradotso/trending-skills/slides-style-prompt-studio) | [AAAAAAAJ/slides](https://github.com/AAAAAAAJ/slides) | 2026-03-26 |
 <!-- SKILL_INDEX -->
 
 ## How it works
