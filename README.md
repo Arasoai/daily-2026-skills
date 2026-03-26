@@ -181,6 +181,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [deerflow-super-agent-harness](skills/deerflow-super-agent-harness/) | [install](https://skills.sh/aradotso/trending-skills/deerflow-super-agent-harness) | [bytedance-deerflow/deer-flow-installer](https://github.com/bytedance-deerflow/deer-flow-installer) | 2026-03-26 |
 | [claude-hud-statusline](skills/claude-hud-statusline/) | [install](https://skills.sh/aradotso/trending-skills/claude-hud-statusline) | [jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud) | 2026-03-26 |
 | [awesome-opensource-ai](skills/awesome-opensource-ai/) | [install](https://skills.sh/aradotso/trending-skills/awesome-opensource-ai) | [alvinunreal/awesome-opensource-ai](https://github.com/alvinunreal/awesome-opensource-ai) | 2026-03-26 |
+| [lil-agents-macos-dock](skills/lil-agents-macos-dock/) | [install](https://skills.sh/aradotso/trending-skills/lil-agents-macos-dock) | [ryanstephen/lil-agents](https://github.com/ryanstephen/lil-agents) | 2026-03-26 |
 <!-- SKILL_INDEX -->
 
 ## How it works
