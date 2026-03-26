@@ -175,6 +175,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [rtk-token-optimizer](skills/rtk-token-optimizer/) | [install](https://skills.sh/aradotso/trending-skills/rtk-token-optimizer) | [rtk-ai/rtk](https://github.com/rtk-ai/rtk) | 2026-03-25 |
 | [holyclaude-ai-workstation](skills/holyclaude-ai-workstation/) | [install](https://skills.sh/aradotso/trending-skills/holyclaude-ai-workstation) | [CoderLuii/HolyClaude](https://github.com/CoderLuii/HolyClaude) | 2026-03-25 |
 | [tg-ws-proxy-telegram-socks5](skills/tg-ws-proxy-telegram-socks5/) | [install](https://skills.sh/aradotso/trending-skills/tg-ws-proxy-telegram-socks5) | [Flowseal/tg-ws-proxy](https://github.com/Flowseal/tg-ws-proxy) | 2026-03-26 |
+| [code-review-graph](skills/code-review-graph/) | [install](https://skills.sh/aradotso/trending-skills/code-review-graph) | [tirth8205/code-review-graph](https://github.com/tirth8205/code-review-graph) | 2026-03-26 |
 <!-- SKILL_INDEX -->
 
 ## How it works
