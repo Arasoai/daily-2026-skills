@@ -189,6 +189,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [mac-code-local-ai-agent](skills/mac-code-local-ai-agent/) | [install](https://skills.sh/aradotso/trending-skills/mac-code-local-ai-agent) | [walter-grace/mac-code](https://github.com/walter-grace/mac-code) | 2026-03-27 |
 | [mcp-brasil-public-apis](skills/mcp-brasil-public-apis/) | [install](https://skills.sh/aradotso/trending-skills/mcp-brasil-public-apis) | [jxnxts/mcp-brasil](https://github.com/jxnxts/mcp-brasil) | 2026-03-27 |
 | [type4me-macos-voice-input](skills/type4me-macos-voice-input/) | [install](https://skills.sh/aradotso/trending-skills/type4me-macos-voice-input) | [joewongjc/type4me](https://github.com/joewongjc/type4me) | 2026-03-27 |
+| [k-skill-korean-ai-tools](skills/k-skill-korean-ai-tools/) | [install](https://skills.sh/aradotso/trending-skills/k-skill-korean-ai-tools) | [NomaDamas/k-skill](https://github.com/NomaDamas/k-skill) | 2026-03-27 |
 <!-- SKILL_INDEX -->
 
 ## How it works
