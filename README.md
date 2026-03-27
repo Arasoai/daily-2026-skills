@@ -191,6 +191,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [type4me-macos-voice-input](skills/type4me-macos-voice-input/) | [install](https://skills.sh/aradotso/trending-skills/type4me-macos-voice-input) | [joewongjc/type4me](https://github.com/joewongjc/type4me) | 2026-03-27 |
 | [k-skill-korean-ai-tools](skills/k-skill-korean-ai-tools/) | [install](https://skills.sh/aradotso/trending-skills/k-skill-korean-ai-tools) | [NomaDamas/k-skill](https://github.com/NomaDamas/k-skill) | 2026-03-27 |
 | [wewrite-wechat-ai-publishing](skills/wewrite-wechat-ai-publishing/) | [install](https://skills.sh/aradotso/trending-skills/wewrite-wechat-ai-publishing) | [oaker-io/wewrite](https://github.com/oaker-io/wewrite) | 2026-03-27 |
+| [markit-markdown-converter](skills/markit-markdown-converter/) | [install](https://skills.sh/aradotso/trending-skills/markit-markdown-converter) | [Michaelliv/markit](https://github.com/Michaelliv/markit) | 2026-03-27 |
 <!-- SKILL_INDEX -->
 
 ## How it works
