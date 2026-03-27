@@ -192,6 +192,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [k-skill-korean-ai-tools](skills/k-skill-korean-ai-tools/) | [install](https://skills.sh/aradotso/trending-skills/k-skill-korean-ai-tools) | [NomaDamas/k-skill](https://github.com/NomaDamas/k-skill) | 2026-03-27 |
 | [wewrite-wechat-ai-publishing](skills/wewrite-wechat-ai-publishing/) | [install](https://skills.sh/aradotso/trending-skills/wewrite-wechat-ai-publishing) | [oaker-io/wewrite](https://github.com/oaker-io/wewrite) | 2026-03-27 |
 | [markit-markdown-converter](skills/markit-markdown-converter/) | [install](https://skills.sh/aradotso/trending-skills/markit-markdown-converter) | [Michaelliv/markit](https://github.com/Michaelliv/markit) | 2026-03-27 |
+| [dingtalk-workspace-cli](skills/dingtalk-workspace-cli/) | [install](https://skills.sh/aradotso/trending-skills/dingtalk-workspace-cli) | [DingTalk-Real-AI/dingtalk-workspace-cli](https://github.com/DingTalk-Real-AI/dingtalk-workspace-cli) | 2026-03-27 |
 <!-- SKILL_INDEX -->
 
 ## How it works
