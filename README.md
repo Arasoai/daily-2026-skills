@@ -186,6 +186,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [g0dm0d3-liberated-ai-chat](skills/g0dm0d3-liberated-ai-chat/) | [install](https://skills.sh/aradotso/trending-skills/g0dm0d3-liberated-ai-chat) | [elder-plinius/G0DM0D3](https://github.com/elder-plinius/G0DM0D3) | 2026-03-26 |
 | [flipoff-split-flap-display](skills/flipoff-split-flap-display/) | [install](https://skills.sh/aradotso/trending-skills/flipoff-split-flap-display) | [magnum6actual/flipoff](https://github.com/magnum6actual/flipoff) | 2026-03-26 |
 | [obliteratus-abliteration](skills/obliteratus-abliteration/) | [install](https://skills.sh/aradotso/trending-skills/obliteratus-abliteration) | [elder-plinius/OBLITERATUS](https://github.com/elder-plinius/OBLITERATUS) | 2026-03-27 |
+| [mac-code-local-ai-agent](skills/mac-code-local-ai-agent/) | [install](https://skills.sh/aradotso/trending-skills/mac-code-local-ai-agent) | [walter-grace/mac-code](https://github.com/walter-grace/mac-code) | 2026-03-27 |
 <!-- SKILL_INDEX -->
 
 ## How it works
