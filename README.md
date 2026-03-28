@@ -194,6 +194,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [markit-markdown-converter](skills/markit-markdown-converter/) | [install](https://skills.sh/aradotso/trending-skills/markit-markdown-converter) | [Michaelliv/markit](https://github.com/Michaelliv/markit) | 2026-03-27 |
 | [dingtalk-workspace-cli](skills/dingtalk-workspace-cli/) | [install](https://skills.sh/aradotso/trending-skills/dingtalk-workspace-cli) | [DingTalk-Real-AI/dingtalk-workspace-cli](https://github.com/DingTalk-Real-AI/dingtalk-workspace-cli) | 2026-03-27 |
 | [oh-my-claudecode-orchestration](skills/oh-my-claudecode-orchestration/) | [install](https://skills.sh/aradotso/trending-skills/oh-my-claudecode-orchestration) | [Yeachan-Heo/oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) | 2026-03-27 |
+| [pump-analyzer-solana](skills/pump-analyzer-solana/) | [install](https://skills.sh/aradotso/trending-skills/pump-analyzer-solana) | [happyboy4ty25/pump-analyzer](https://github.com/happyboy4ty25/pump-analyzer) | 2026-03-28 |
 <!-- SKILL_INDEX -->
 
 ## How it works
