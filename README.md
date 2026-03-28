@@ -202,6 +202,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [torchcode-pytorch-interview-practice](skills/torchcode-pytorch-interview-practice/) | [install](https://skills.sh/aradotso/trending-skills/torchcode-pytorch-interview-practice) | [duoan/TorchCode](https://github.com/duoan/TorchCode) | 2026-03-28 |
 | [tribev2-brain-encoding](skills/tribev2-brain-encoding/) | [install](https://skills.sh/aradotso/trending-skills/tribev2-brain-encoding) | [facebookresearch/tribev2](https://github.com/facebookresearch/tribev2) | 2026-03-28 |
 | [openilink-hub-wechat-bot](skills/openilink-hub-wechat-bot/) | [install](https://skills.sh/aradotso/trending-skills/openilink-hub-wechat-bot) | [openilink/openilink-hub](https://github.com/openilink/openilink-hub) | 2026-03-28 |
+| [claude-code-best-practice](skills/claude-code-best-practice/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-best-practice) | [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) | 2026-03-28 |
 <!-- SKILL_INDEX -->
 
 ## How it works
