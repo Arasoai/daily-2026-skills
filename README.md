@@ -204,6 +204,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [openilink-hub-wechat-bot](skills/openilink-hub-wechat-bot/) | [install](https://skills.sh/aradotso/trending-skills/openilink-hub-wechat-bot) | [openilink/openilink-hub](https://github.com/openilink/openilink-hub) | 2026-03-28 |
 | [claude-code-best-practice](skills/claude-code-best-practice/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-best-practice) | [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) | 2026-03-28 |
 | [pgmicro-postgres-sqlite](skills/pgmicro-postgres-sqlite/) | [install](https://skills.sh/aradotso/trending-skills/pgmicro-postgres-sqlite) | [glommer/pgmicro](https://github.com/glommer/pgmicro) | 2026-03-28 |
+| [ai-website-cloner-template](skills/ai-website-cloner-template/) | [install](https://skills.sh/aradotso/trending-skills/ai-website-cloner-template) | [JCodesMore/ai-website-cloner-template](https://github.com/JCodesMore/ai-website-cloner-template) | 2026-03-28 |
 <!-- SKILL_INDEX -->
 
 ## How it works
