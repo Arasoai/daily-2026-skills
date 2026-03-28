@@ -198,6 +198,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [app-store-screenshots-generator](skills/app-store-screenshots-generator/) | [install](https://skills.sh/aradotso/trending-skills/app-store-screenshots-generator) | [ParthJadhav/app-store-screenshots](https://github.com/ParthJadhav/app-store-screenshots) | 2026-03-28 |
 | [turboquant-pytorch](skills/turboquant-pytorch/) | [install](https://skills.sh/aradotso/trending-skills/turboquant-pytorch) | [tonbistudio/turboquant-pytorch](https://github.com/tonbistudio/turboquant-pytorch) | 2026-03-28 |
 | [cc-connect-ai-bridge](skills/cc-connect-ai-bridge/) | [install](https://skills.sh/aradotso/trending-skills/cc-connect-ai-bridge) | [chenhg5/cc-connect](https://github.com/chenhg5/cc-connect) | 2026-03-28 |
+| [open-pencil-design-editor](skills/open-pencil-design-editor/) | [install](https://skills.sh/aradotso/trending-skills/open-pencil-design-editor) | [open-pencil/open-pencil](https://github.com/open-pencil/open-pencil) | 2026-03-28 |
 <!-- SKILL_INDEX -->
 
 ## How it works
