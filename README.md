@@ -200,6 +200,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [cc-connect-ai-bridge](skills/cc-connect-ai-bridge/) | [install](https://skills.sh/aradotso/trending-skills/cc-connect-ai-bridge) | [chenhg5/cc-connect](https://github.com/chenhg5/cc-connect) | 2026-03-28 |
 | [open-pencil-design-editor](skills/open-pencil-design-editor/) | [install](https://skills.sh/aradotso/trending-skills/open-pencil-design-editor) | [open-pencil/open-pencil](https://github.com/open-pencil/open-pencil) | 2026-03-28 |
 | [torchcode-pytorch-interview-practice](skills/torchcode-pytorch-interview-practice/) | [install](https://skills.sh/aradotso/trending-skills/torchcode-pytorch-interview-practice) | [duoan/TorchCode](https://github.com/duoan/TorchCode) | 2026-03-28 |
+| [tribev2-brain-encoding](skills/tribev2-brain-encoding/) | [install](https://skills.sh/aradotso/trending-skills/tribev2-brain-encoding) | [facebookresearch/tribev2](https://github.com/facebookresearch/tribev2) | 2026-03-28 |
 <!-- SKILL_INDEX -->
 
 ## How it works
