@@ -196,6 +196,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [oh-my-claudecode-orchestration](skills/oh-my-claudecode-orchestration/) | [install](https://skills.sh/aradotso/trending-skills/oh-my-claudecode-orchestration) | [Yeachan-Heo/oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) | 2026-03-27 |
 | [pump-analyzer-solana](skills/pump-analyzer-solana/) | [install](https://skills.sh/aradotso/trending-skills/pump-analyzer-solana) | [happyboy4ty25/pump-analyzer](https://github.com/happyboy4ty25/pump-analyzer) | 2026-03-28 |
 | [app-store-screenshots-generator](skills/app-store-screenshots-generator/) | [install](https://skills.sh/aradotso/trending-skills/app-store-screenshots-generator) | [ParthJadhav/app-store-screenshots](https://github.com/ParthJadhav/app-store-screenshots) | 2026-03-28 |
+| [turboquant-pytorch](skills/turboquant-pytorch/) | [install](https://skills.sh/aradotso/trending-skills/turboquant-pytorch) | [tonbistudio/turboquant-pytorch](https://github.com/tonbistudio/turboquant-pytorch) | 2026-03-28 |
 <!-- SKILL_INDEX -->
 
 ## How it works
