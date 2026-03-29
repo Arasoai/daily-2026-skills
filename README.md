@@ -212,6 +212,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [codex-session-patcher](skills/codex-session-patcher/) | [install](https://skills.sh/aradotso/trending-skills/codex-session-patcher) | [ryfineZ/codex-session-patcher](https://github.com/ryfineZ/codex-session-patcher) | 2026-03-29 |
 | [wildworld-dataset](skills/wildworld-dataset/) | [install](https://skills.sh/aradotso/trending-skills/wildworld-dataset) | [ShandaAI/WildWorld](https://github.com/ShandaAI/WildWorld) | 2026-03-29 |
 | [taiwan-equity-research-coverage](skills/taiwan-equity-research-coverage/) | [install](https://skills.sh/aradotso/trending-skills/taiwan-equity-research-coverage) | [Timeverse/My-TW-Coverage](https://github.com/Timeverse/My-TW-Coverage) | 2026-03-29 |
+| [claude-watch-apple-watch](skills/claude-watch-apple-watch/) | [install](https://skills.sh/aradotso/trending-skills/claude-watch-apple-watch) | [shobhit99/claude-watch](https://github.com/shobhit99/claude-watch) | 2026-03-29 |
 <!-- SKILL_INDEX -->
 
 ## How it works
