@@ -1,23 +1,23 @@
 ```markdown
 ---
 name: last30days-research-skill
-description: AI agent skill for the /last30days tool that researches any topic across Reddit, X, Bluesky, YouTube, TikTok, Instagram, Hacker News, Polymarket, and the web from the last 30 days, then synthesizes a grounded summary with real citations.
+description: AI agent skill for researching any topic across Reddit, X, YouTube, HN, Polymarket, and the web to synthesize grounded, citation-backed summaries from the last 30 days
 triggers:
-  - research what people are saying about a topic lately
-  - find trending discussions on reddit and twitter about something
-  - use last30days to look up recent community sentiment
-  - search social media and web for recent posts about a topic
-  - run last30days skill on a subject
-  - find what's trending on hacker news polymarket and youtube
-  - get a grounded summary of recent discussions about something
-  - install and use the last30days research agent skill
+  - research what people are saying about
+  - find recent discussions about
+  - what's trending in the last 30 days
+  - summarize community sentiment on
+  - research across reddit and twitter about
+  - find what people are actually saying about
+  - deep research current opinions on
+  - last30days investigate topic
 ---
 
 # /last30days Research Skill
 
 > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection.
 
-`/last30days` is an AI agent skill that researches any topic across Reddit, X (Twitter), Bluesky, YouTube, TikTok, Instagram, Hacker News, Polymarket, and the web — scoped to the last 30 days — and synthesizes a grounded narrative with real citations, engagement scores, and cross-platform convergence signals. It's designed for AI coding agents (Claude Code, Cursor, Codex) but runs anywhere Python + Node.js is available.
+`/last30days` is a multi-source research skill that scans Reddit, X (Twitter), Bluesky, YouTube, TikTok, Instagram, Hacker News, Polymarket, and the web for discussions from the last 30 days, scores and deduplicates results across a composite relevance pipeline, and synthesizes a grounded narrative with real citations. One command surfaces what people who are paying attention already know.
 
 ---
 
@@ -48,7 +48,7 @@ gemini extensions install https://github.com/mvanhorn/last30days-skill.git
 # Clone into Claude Code skills directory
 git clone https://github.com/mvanhorn/last30days-skill.git ~/.claude/skills/last30days
 
-# For Codex CLI, clone here instead:
+# For Codex CLI, use the agents directory instead
 git clone https://github.com/mvanhorn/last30days-skill.git ~/.agents/skills/last30days
 ```
 
@@ -56,50 +56,66 @@ git clone https://github.com/mvanhorn/last30days-skill.git ~/.agents/skills/last
 
 ## Configuration
 
-Create the global config file at `~/.config/last30days/.env`:
+Create a global config file at `~/.config/last30days/.env`:
 
 ```bash
 mkdir -p ~/.config/last30days
 cat > ~/.config/last30days/.env << 'EOF'
 # Reddit + TikTok + Instagram — one key covers all three
-SCRAPECREATORS_API_KEY=your_scrapecreators_key   # scrapecreators.com
+SCRAPECREATORS_API_KEY=...
 
-# X (Twitter) — cookie-based auth (recommended)
-AUTH_TOKEN=your_x_auth_token     # copy from x.com browser cookies
-CT0=your_x_ct0_token             # copy from x.com browser cookies
+# X (Twitter) cookie-based auth — copy from browser dev tools while logged into x.com
+AUTH_TOKEN=...
+CT0=...
 
-# X fallback — xAI backend if you don't want cookie auth
-XAI_API_KEY=your_xai_key
+# xAI fallback if you don't want cookie-based X auth
+XAI_API_KEY=...
 
 # Bluesky (optional)
 BSKY_HANDLE=you.bsky.social
-BSKY_APP_PASSWORD=xxxx-xxxx-xxxx   # create at bsky.app/settings/app-passwords
+BSKY_APP_PASSWORD=xxxx-xxxx-xxxx
 
 # Web search backends (optional, open variant)
-PARALLEL_API_KEY=your_parallel_key      # Parallel AI (preferred)
-BRAVE_API_KEY=your_brave_key            # Brave Search (2,000 free queries/month)
-OPENROUTER_API_KEY=your_openrouter_key  # OpenRouter / Perplexity Sonar Pro
+PARALLEL_API_KEY=...
+BRAVE_API_KEY=...
+OPENROUTER_API_KEY=...
 
-# OpenAI (optional — skip if using `codex login`)
-OPENAI_API_KEY=sk-your_openai_key
+# OpenAI (optional legacy Reddit fallback)
+OPENAI_API_KEY=...
 EOF
 chmod 600 ~/.config/last30days/.env
 ```
 
-### Per-Project Override
+### Per-Project Config Override
 
-Drop a `.claude/last30days.env` file in your project root to override global keys for a specific repo:
+Drop a `.claude/last30days.env` in any project root. It overrides the global config for that project only:
 
 ```bash
 # .claude/last30days.env
-SCRAPECREATORS_API_KEY=project_specific_key
-BSKY_HANDLE=project-account.bsky.social
+SCRAPECREATORS_API_KEY=...
+AUTH_TOKEN=...
+CT0=...
 ```
 
-### Requirements
+### Setting Up X Authentication
 
-- **Python 3.10+**
-- **Node.js 22+** (for the vendored X/Twitter GraphQL client)
+1. Log into x.com in your browser
+2. Open Dev Tools → Application → Cookies → `x.com`
+3. Copy `auth_token` → save as `AUTH_TOKEN`
+4. Copy `ct0` → save as `CT0`
+5. Verify it works:
+
+```bash
+node ~/.claude/skills/last30days/scripts/lib/vendor/bird-search/bird-search.mjs --whoami
+```
+
+> **Note:** Node.js 22+ is required for the bundled Twitter GraphQL client.
+
+### Setting Up Bluesky
+
+1. Go to `bsky.app/settings/app-passwords`
+2. Create an app password
+3. Add `BSKY_HANDLE` and `BSKY_APP_PASSWORD` to your `.env`
 
 ---
 
@@ -110,389 +126,319 @@ BSKY_HANDLE=project-account.bsky.social
 ```
 /last30days [topic]
 /last30days [topic] for [tool]
-/last30days [topic A] vs [topic B]
 ```
 
-### Flags
-
-| Flag | Description |
-|------|-------------|
-| `--quick` | Faster, shallower search — fewer sources, no transcript fetch |
-| `--days=N` | Change the lookback window (default: 30) |
-| `--diagnose` | Check which sources are available with current API keys |
-
-### Examples
+### Example Queries
 
 ```bash
 # Prompt research for a specific tool
 /last30days prompting techniques for ChatGPT for legal questions
 
-# Tool trend discovery
+# Tool best practices
 /last30days remotion animations for Claude Code
 
-# Comparative mode (runs 3 parallel research passes + side-by-side verdict)
-/last30days cursor vs windsurf
-
-# Cultural / trend queries
+# Trend discovery
 /last30days what are the best rap songs lately
-/last30days dog-as-human trend on ChatGPT
 
 # Product research
 /last30days what do people think of the new M4 MacBook
 
-# Prediction market signals
-/last30days Arizona basketball NCAA tournament odds
-```
+# Comparative mode (v2.9.5+)
+/last30days cursor vs windsurf
 
----
+# Handle resolution — finds @thedorbrothers and searches their posts
+/last30days Dor Brothers
 
-## What the Skill Does (Pipeline)
+# Scoped time window
+/last30days AI video tools --days=7
 
-```
-User query
-    │
-    ├─► Query expansion + synonym normalization
-    ├─► X handle resolution (e.g. "Dor Brothers" → @thedorbrothers)
-    │
-    ├─► Parallel source fetch (up to 10 sources simultaneously):
-    │       Reddit (ScrapeCreators)
-    │       X / Twitter (cookie auth or xAI fallback)
-    │       Bluesky / AT Protocol
-    │       YouTube (with transcript extraction)
-    │       TikTok (ScrapeCreators)
-    │       Instagram Reels (ScrapeCreators)
-    │       Hacker News (stories + comments)
-    │       Polymarket (prediction markets)
-    │       Web (Parallel AI / Brave / OpenRouter)
-    │
-    ├─► Composite scoring per result:
-    │       - Bidirectional text similarity + synonym expansion
-    │       - Engagement velocity normalization
-    │       - Source authority weighting
-    │       - Cross-platform convergence (trigram-token Jaccard)
-    │       - Temporal recency decay
-    │       - Polymarket: volume (30%) + liquidity (15%) + price movement (15%)
-    │           + competitiveness (10%) + text relevance (30%)
-    │
-    ├─► Deduplication
-    ├─► Top comment elevation (10% scoring weight, 💬 display)
-    │
-    └─► Synthesis → grounded narrative with citations
-            └─► Auto-saved to ~/Documents/Last30Days/[topic].md
-```
+# Quick mode (speed over thoroughness)
+/last30days AI video tools --quick
 
----
-
-## Key Commands (Python Engine)
-
-### Diagnose Source Availability
-
-```bash
+# Diagnose which sources are configured
 python3 ~/.claude/skills/last30days/scripts/last30days.py --diagnose
 ```
 
-Sample output:
-```
-✅ Reddit       (SCRAPECREATORS_API_KEY set)
-✅ TikTok       (SCRAPECREATORS_API_KEY set)
-✅ Instagram    (SCRAPECREATORS_API_KEY set)
-✅ X            (AUTH_TOKEN + CT0 set)
-⚠️  Bluesky     (BSKY_HANDLE or BSKY_APP_PASSWORD missing)
-✅ YouTube      (no auth needed)
-✅ Hacker News  (no auth needed)
-⚠️  Polymarket  (no auth needed, but network unavailable)
-⚠️  Web search  (no PARALLEL_API_KEY, BRAVE_API_KEY, or OPENROUTER_API_KEY)
-```
+---
 
-### Verify X Authentication
+## Key Features
+
+### Multi-Source Research Pipeline
+
+Sources searched in parallel, results scored and deduplicated:
+
+| Source | Auth Required | Notes |
+|---|---|---|
+| Reddit | `SCRAPECREATORS_API_KEY` | Smart subreddit discovery, top comments scored |
+| X / Twitter | `AUTH_TOKEN` + `CT0` or `XAI_API_KEY` | Handle resolution for people/brands |
+| Bluesky | `BSKY_HANDLE` + `BSKY_APP_PASSWORD` | Full AT Protocol pipeline |
+| YouTube | None (transcripts) | Video transcripts as signal source |
+| TikTok | `SCRAPECREATORS_API_KEY` | Same key as Reddit + Instagram |
+| Instagram Reels | `SCRAPECREATORS_API_KEY` | Same key as Reddit + TikTok |
+| Hacker News | None | Stories, Show HN, comment insights |
+| Polymarket | None | Real-money prediction markets |
+| Web | Optional (`PARALLEL_API_KEY`, `BRAVE_API_KEY`, etc.) | Open variant |
+
+### Composite Relevance Scoring
+
+Every result runs through:
+- Bidirectional text similarity with synonym expansion and token overlap
+- Engagement velocity normalization
+- Source authority weighting
+- Cross-platform convergence detection (hybrid trigram-token Jaccard similarity)
+- Temporal recency decay
+
+Polymarket markets use a 5-factor weighted composite:
+- Text relevance (30%)
+- 24-hour volume (30%)
+- Liquidity depth (15%)
+- Price movement velocity (15%)
+- Outcome competitiveness (10%)
+
+### Comparative Mode
+
+Ask `X vs Y` to trigger 3 parallel research passes with a side-by-side comparison:
 
 ```bash
-node ~/.claude/skills/last30days/scripts/lib/vendor/bird-search/bird-search.mjs --whoami
+/last30days cursor vs windsurf
+# Returns: strengths, weaknesses, head-to-head table, data-driven verdict
 ```
 
-### Run a One-Off Research Query Directly
+### Auto-Save to Documents
 
-```bash
-python3 ~/.claude/skills/last30days/scripts/last30days.py "your topic here"
-python3 ~/.claude/skills/last30days/scripts/last30days.py "cursor vs windsurf" --days=14
-python3 ~/.claude/skills/last30days/scripts/last30days.py "AI video tools" --quick
-```
+Every run saves a `.md` briefing to `~/Documents/Last30Days/[topic].md` automatically — builds a personal research library over time.
 
 ---
 
-## Watchlist + Briefings (Open Variant)
+## Watchlist / Open Variant
 
-The open variant is designed for always-on bots ([Open Claw](https://github.com/openclaw/openclaw)) or cron-scheduled research pipelines.
-
-### Enable Open Variant
+For always-on bots and scheduled research (designed for [Open Claw](https://github.com/openclaw/openclaw)):
 
 ```bash
-cp ~/.claude/skills/last30days/variants/open/SKILL.md \
-   ~/.claude/skills/last30days/SKILL.md
+# Switch to open variant
+cp ~/.claude/skills/last30days/variants/open/SKILL.md ~/.claude/skills/last30days/SKILL.md
 ```
 
 ### Watchlist Commands
 
 ```bash
-# Add topics to watch
+# Add topics to watchlist
 last30 watch my biggest competitor every week
 last30 watch Peter Steinberger every 30 days
 last30 watch AI video tools monthly
-last30 watch Y Combinator hot companies end of April and end of September
 
-# Run research manually
+# Run research manually (or wire to cron)
 last30 run all my watched topics
 last30 run one "AI video tools"
 
-# Query accumulated findings
+# Query accumulated knowledge
 last30 what have you found about AI video?
-last30 briefing for this week
 ```
 
-> **Note:** The watchlist stores schedules as metadata but does **not** auto-trigger runs. Use `cron`, `launchd`, or an always-on bot to call `watchlist.py run-all` on a timer.
-
-### Cron Example
+### Cron Integration
 
 ```bash
-# Research all watched topics nightly at 2am
-0 2 * * * python3 ~/.claude/skills/last30days/scripts/watchlist.py run-all
+# Run all watched topics daily at 8am
+0 8 * * * python3 ~/.claude/skills/last30days/scripts/last30days.py watchlist run-all
 ```
 
-### Storage
-
-Accumulated findings are stored in a local SQLite database. Full-text search is supported:
-
-```bash
-# Direct DB query (advanced)
-python3 ~/.claude/skills/last30days/scripts/history.py search "AI agents"
-python3 ~/.claude/skills/last30days/scripts/history.py briefing --days=7
-```
+> **Important:** The watchlist stores schedules as metadata but does NOT trigger runs automatically. You need an external scheduler (cron, launchd, or an always-on bot) to call `watchlist.py run-all` on a timer.
 
 ---
 
-## Code Examples
-
-### Call the Python Engine Directly
+## Python Engine — Direct Usage
 
 ```python
 import subprocess
 import json
 
-def research_topic(topic: str, days: int = 30, quick: bool = False) -> str:
-    """Run a last30days research query and return the synthesized output."""
-    cmd = [
-        "python3",
-        f"{Path.home()}/.claude/skills/last30days/scripts/last30days.py",
-        topic,
-        f"--days={days}",
-    ]
-    if quick:
-        cmd.append("--quick")
+# Run a research query programmatically
+result = subprocess.run(
+    ["python3", "~/.claude/skills/last30days/scripts/last30days.py",
+     "--topic", "Claude Code AI agents",
+     "--days", "30",
+     "--format", "json"],
+    capture_output=True,
+    text=True
+)
 
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
-    if result.returncode != 0:
-        raise RuntimeError(f"last30days error: {result.stderr}")
-    return result.stdout
-
-# Example usage
-summary = research_topic("cursor vs windsurf", days=14)
-print(summary)
+data = json.loads(result.stdout)
+print(data["summary"])
+print(data["sources"])
 ```
 
-### Load a Saved Briefing
+### Diagnose Source Availability
 
 ```python
-from pathlib import Path
+import subprocess
 
-def load_briefing(topic_slug: str) -> str:
-    """Load a previously auto-saved last30days briefing."""
-    docs_dir = Path.home() / "Documents" / "Last30Days"
-    # Files are saved as sanitized topic names
-    candidates = list(docs_dir.glob(f"*{topic_slug}*.md"))
-    if not candidates:
-        raise FileNotFoundError(f"No briefing found for '{topic_slug}'")
-    # Most recently modified first
-    latest = sorted(candidates, key=lambda p: p.stat().st_mtime, reverse=True)[0]
-    return latest.read_text()
-
-briefing = load_briefing("cursor-vs-windsurf")
-print(briefing[:500])
+result = subprocess.run(
+    ["python3", "~/.claude/skills/last30days/scripts/last30days.py", "--diagnose"],
+    capture_output=True,
+    text=True
+)
+print(result.stdout)
+# Output: which sources are configured and available
 ```
 
-### Check API Key Configuration
+### Check Bluesky Auth
 
 ```python
-import os
-from pathlib import Path
-from dotenv import dotenv_values
+import subprocess
 
-def check_last30_config() -> dict[str, bool]:
-    """Check which last30days sources are configured."""
-    global_env = Path.home() / ".config" / "last30days" / ".env"
-    project_env = Path(".claude/last30days.env")
-
-    config = {}
-    if global_env.exists():
-        config.update(dotenv_values(global_env))
-    if project_env.exists():
-        config.update(dotenv_values(project_env))  # project overrides global
-
-    return {
-        "reddit_tiktok_instagram": bool(config.get("SCRAPECREATORS_API_KEY")),
-        "x_twitter_cookies":       bool(config.get("AUTH_TOKEN") and config.get("CT0")),
-        "x_twitter_xai":           bool(config.get("XAI_API_KEY")),
-        "bluesky":                 bool(config.get("BSKY_HANDLE") and config.get("BSKY_APP_PASSWORD")),
-        "web_parallel":            bool(config.get("PARALLEL_API_KEY")),
-        "web_brave":               bool(config.get("BRAVE_API_KEY")),
-        "web_openrouter":          bool(config.get("OPENROUTER_API_KEY")),
-        "youtube":                 True,   # no auth needed
-        "hackernews":              True,   # no auth needed
-        "polymarket":              True,   # no auth needed
-    }
-
-status = check_last30_config()
-for source, available in status.items():
-    icon = "✅" if available else "⚠️ "
-    print(f"{icon} {source}")
+result = subprocess.run(
+    ["python3", "~/.claude/skills/last30days/scripts/lib/bluesky.py", "--check"],
+    capture_output=True,
+    text=True
+)
+print(result.stdout)
 ```
 
 ---
 
-## Output Format
+## Common Patterns
 
-Every run produces a structured briefing:
+### Prompt Research Workflow
 
-```markdown
-## /last30days: [Topic] — Last 30 Days
-
-### 🔥 What's Trending
-Narrative synthesis of the top signals across sources...
-
-### 📊 Source Breakdown
-
-**Reddit** (r/AIAssistants, r/cursor)
-- [Post title](url) — 847 upvotes · 92 comments
-  💬 Top comment: "The autocomplete latency difference is night and day..." (312 upvotes)
-
-**X / Twitter**
-- [@handle](url): "Quote from viral tweet..." — 5,600 likes
-
-**Hacker News**
-- [Story title](url) — 234 points · 89 comments
-
-**Polymarket**
-- [Market: Will Cursor reach 1M users by Q2?](url) — Yes: 67% · Volume: $142k/24h
-
-**YouTube**
-- [Video title](url) — 48k views · Key insight from transcript: "..."
-
-### 🏆 Cross-Platform Consensus
-Topics that appeared in 3+ sources simultaneously...
-
-### 📁 Saved to
-~/Documents/Last30Days/cursor-vs-windsurf-2026-03-29.md
-```
-
----
-
-## Comparative Mode
-
-Append `vs` between two topics to trigger 3 parallel research passes and a side-by-side verdict:
+Best use case: discover what prompting techniques work for any AI tool by learning from real community discussions.
 
 ```bash
-/last30days cursor vs windsurf
-/last30days claude vs gpt-4o for coding
-/last30days react vs svelte 2026
+# Find what works for image generation
+/last30days nano banana pro prompting
+
+# Find legal AI prompting techniques
+/last30days prompting techniques for ChatGPT for legal questions
+
+# Find coding agent workflows
+/last30days Claude Code agentic workflows best practices
 ```
 
-Output includes:
-- Individual strengths and weaknesses per option
-- Head-to-head comparison table (performance, community sentiment, pricing, HN score, prediction market signals)
-- A data-driven verdict with caveats
+### Trend Discovery
+
+```bash
+# Music / culture
+/last30days best rap songs lately
+
+# Viral AI techniques
+/last30days dog as human trend ChatGPT
+
+# Tech product launches
+/last30days Seedance 2.0 access
+```
+
+### Competitive Intelligence
+
+```bash
+# Compare two products
+/last30days linear vs jira 2025
+
+# Track a competitor
+last30 watch CompetitorName weekly   # open variant
+
+# Find community sentiment on a product
+/last30days what do people think of Cursor AI
+```
+
+### Prediction Market Research
+
+```bash
+# Sports betting odds from Polymarket
+/last30days Arizona Basketball
+
+# Geopolitical markets
+/last30days Iran War
+
+# Tech market outcomes
+/last30days OpenAI GPT-5 release
+```
 
 ---
 
 ## Troubleshooting
 
-### X Search Returns No Results
+### X Search Not Working
 
 ```bash
-# Verify cookie auth is working
+# Verify your cookies are valid
 node ~/.claude/skills/last30days/scripts/lib/vendor/bird-search/bird-search.mjs --whoami
 
-# If it fails, re-copy fresh cookies from x.com browser dev tools:
-# Application → Cookies → x.com → auth_token and ct0
-# Update AUTH_TOKEN and CT0 in ~/.config/last30days/.env
+# If expired, re-copy auth_token and ct0 from browser dev tools at x.com
+# Then update ~/.config/last30days/.env
 ```
 
-### Reddit Returns No Results
+### Reddit Returning No Results
 
 ```bash
-# Confirm ScrapeCreators key is valid
-python3 -c "
-import os; from pathlib import Path; from dotenv import dotenv_values
-cfg = dotenv_values(Path.home() / '.config/last30days/.env')
-print('SCRAPECREATORS_API_KEY set:', bool(cfg.get('SCRAPECREATORS_API_KEY')))
-"
-```
-
-### Skill Takes Too Long
-
-```bash
-# Use --quick for speed over thoroughness (skips transcript fetch, fewer sources)
-/last30days your topic --quick
-
-# Or narrow the time window
-/last30days your topic --days=7
-```
-
-### Bluesky Not Searching
-
-Ensure you've created an **App Password** (not your account password):
-1. Go to `bsky.app/settings/app-passwords`
-2. Create a new app password
-3. Set `BSKY_HANDLE` and `BSKY_APP_PASSWORD` in your `.env`
-
-### Session Config Check Fails at Startup
-
-The skill validates config on `SessionStart`. Run diagnose to see exactly what's missing:
-
-```bash
+# Confirm SCRAPECREATORS_API_KEY is set
 python3 ~/.claude/skills/last30days/scripts/last30days.py --diagnose
+
+# Check key is exported
+echo $SCRAPECREATORS_API_KEY
 ```
 
-### Auto-Save Not Working
-
-Check that `~/Documents/Last30Days/` exists and is writable:
+### Bluesky Auth Failing
 
 ```bash
-mkdir -p ~/Documents/Last30Days
-ls -la ~/Documents/Last30Days/
+# Ensure you're using an App Password, NOT your account password
+# Create one at: bsky.app/settings/app-passwords
+
+# Verify format in .env:
+# BSKY_HANDLE=yourhandle.bsky.social
+# BSKY_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
+```
+
+### Node.js Version Error
+
+```bash
+# Check version — must be 22+
+node --version
+
+# Upgrade via nvm
+nvm install 22
+nvm use 22
+```
+
+### Slow Results
+
+```bash
+# Use quick mode for faster (less thorough) results
+/last30days [topic] --quick
+
+# Narrow the time window
+/last30days [topic] --days=7
+```
+
+### Config Not Loading
+
+```bash
+# Check global config exists and has correct permissions
+ls -la ~/.config/last30days/.env   # should be -rw-------
+
+# Check per-project override
+ls -la .claude/last30days.env
+
+# SessionStart config check (v2.9.5+) runs automatically when Claude Code starts
 ```
 
 ---
 
-## Source Priority & Free Tier
+## Source Summary
 
-| Source | Auth Required | Free Tier |
-|--------|--------------|-----------|
-| YouTube | None | ✅ Always available |
-| Hacker News | None | ✅ Always available |
-| Polymarket | None | ✅ Always available |
-| Reddit | `SCRAPECREATORS_API_KEY` | Paid |
-| TikTok | `SCRAPECREATORS_API_KEY` | Paid (same key as Reddit) |
-| Instagram | `SCRAPECREATORS_API_KEY` | Paid (same key as Reddit) |
-| X (Twitter) | `AUTH_TOKEN` + `CT0` or `XAI_API_KEY` | Cookies are free; xAI is paid |
-| Bluesky | `BSKY_HANDLE` + `BSKY_APP_PASSWORD` | ✅ Free |
-| Web (Brave) | `BRAVE_API_KEY` | 2,000 queries/month free |
-| Web (Parallel AI) | `PARALLEL_API_KEY` | Paid |
-| Web (OpenRouter) | `OPENROUTER_API_KEY` | Paid |
-
-**Minimum useful config:** No API keys required — YouTube, HN, and Polymarket work out of the box. Add `SCRAPECREATORS_API_KEY` + X cookies for full coverage.
+- **ScrapeCreators** (`scrapecreators.com`) — one API key covers Reddit, TikTok, Instagram
+- **Bird Search** — bundled Node.js Twitter GraphQL client for X, requires `AUTH_TOKEN` + `CT0`
+- **xAI** — alternative X backend if you don't want cookie-based auth
+- **Bluesky AT Protocol** — native search via app password
+- **Polymarket** — public API, no auth required
+- **Hacker News** — public Algolia API, no auth required
+- **YouTube** — transcript extraction, no auth required for public videos
+- **Web Search** — optional: Parallel AI, Brave Search, OpenRouter/Perplexity Sonar Pro
 
 ---
 
-## Version
+## Links
 
-Current: **v2.9.5** | Tests: 455+ | Avg runtime: 2–8 minutes (30s with `--quick`)
+- [GitHub](https://github.com/mvanhorn/last30days-skill)
+- [ClawHub listing](https://clawhub.ai/skills/last30days-official)
+- [ScrapeCreators](https://scrapecreators.com) — Reddit + TikTok + Instagram API
+- [Open Claw](https://github.com/openclaw/openclaw) — always-on bot for watchlist scheduling
 ```
