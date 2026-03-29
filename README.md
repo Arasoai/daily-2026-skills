@@ -205,6 +205,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [claude-code-best-practice](skills/claude-code-best-practice/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-best-practice) | [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) | 2026-03-28 |
 | [pgmicro-postgres-sqlite](skills/pgmicro-postgres-sqlite/) | [install](https://skills.sh/aradotso/trending-skills/pgmicro-postgres-sqlite) | [glommer/pgmicro](https://github.com/glommer/pgmicro) | 2026-03-28 |
 | [ai-website-cloner-template](skills/ai-website-cloner-template/) | [install](https://skills.sh/aradotso/trending-skills/ai-website-cloner-template) | [JCodesMore/ai-website-cloner-template](https://github.com/JCodesMore/ai-website-cloner-template) | 2026-03-28 |
+| [legalize-es-spanish-legislation](skills/legalize-es-spanish-legislation/) | [install](https://skills.sh/aradotso/trending-skills/legalize-es-spanish-legislation) | [legalize-dev/legalize-es](https://github.com/legalize-dev/legalize-es) | 2026-03-29 |
 <!-- SKILL_INDEX -->
 
 ## How it works
