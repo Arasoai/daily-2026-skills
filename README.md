@@ -214,6 +214,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [taiwan-equity-research-coverage](skills/taiwan-equity-research-coverage/) | [install](https://skills.sh/aradotso/trending-skills/taiwan-equity-research-coverage) | [Timeverse/My-TW-Coverage](https://github.com/Timeverse/My-TW-Coverage) | 2026-03-29 |
 | [claude-watch-apple-watch](skills/claude-watch-apple-watch/) | [install](https://skills.sh/aradotso/trending-skills/claude-watch-apple-watch) | [shobhit99/claude-watch](https://github.com/shobhit99/claude-watch) | 2026-03-29 |
 | [claude-better-cli](skills/claude-better-cli/) | [install](https://skills.sh/aradotso/trending-skills/claude-better-cli) | [krzyzanowskim/claude-better](https://github.com/krzyzanowskim/claude-better) | 2026-03-29 |
+| [prompt-master-skill](skills/prompt-master-skill/) | [install](https://skills.sh/aradotso/trending-skills/prompt-master-skill) | [nidhinjs/prompt-master](https://github.com/nidhinjs/prompt-master) | 2026-03-29 |
 <!-- SKILL_INDEX -->
 
 ## How it works
