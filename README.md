@@ -207,6 +207,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [ai-website-cloner-template](skills/ai-website-cloner-template/) | [install](https://skills.sh/aradotso/trending-skills/ai-website-cloner-template) | [JCodesMore/ai-website-cloner-template](https://github.com/JCodesMore/ai-website-cloner-template) | 2026-03-28 |
 | [legalize-es-spanish-legislation](skills/legalize-es-spanish-legislation/) | [install](https://skills.sh/aradotso/trending-skills/legalize-es-spanish-legislation) | [legalize-dev/legalize-es](https://github.com/legalize-dev/legalize-es) | 2026-03-29 |
 | [advertising-skills-ai-agents](skills/advertising-skills-ai-agents/) | [install](https://skills.sh/aradotso/trending-skills/advertising-skills-ai-agents) | [realkimbarrett/advertising-skills](https://github.com/realkimbarrett/advertising-skills) | 2026-03-29 |
+| [last30days-research-skill](skills/last30days-research-skill/) | [install](https://skills.sh/aradotso/trending-skills/last30days-research-skill) | [mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill) | 2026-03-29 |
 <!-- SKILL_INDEX -->
 
 ## How it works
