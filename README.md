@@ -208,6 +208,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [legalize-es-spanish-legislation](skills/legalize-es-spanish-legislation/) | [install](https://skills.sh/aradotso/trending-skills/legalize-es-spanish-legislation) | [legalize-dev/legalize-es](https://github.com/legalize-dev/legalize-es) | 2026-03-29 |
 | [advertising-skills-ai-agents](skills/advertising-skills-ai-agents/) | [install](https://skills.sh/aradotso/trending-skills/advertising-skills-ai-agents) | [realkimbarrett/advertising-skills](https://github.com/realkimbarrett/advertising-skills) | 2026-03-29 |
 | [last30days-research-skill](skills/last30days-research-skill/) | [install](https://skills.sh/aradotso/trending-skills/last30days-research-skill) | [mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill) | 2026-03-29 |
+| [learn-docker-k8s-game](skills/learn-docker-k8s-game/) | [install](https://skills.sh/aradotso/trending-skills/learn-docker-k8s-game) | [ericboy0224/learn-docker-and-k8s](https://github.com/ericboy0224/learn-docker-and-k8s) | 2026-03-29 |
 <!-- SKILL_INDEX -->
 
 ## How it works
