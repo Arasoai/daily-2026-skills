@@ -218,6 +218,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [polymarket-arbitrage-bot](skills/polymarket-arbitrage-bot/) | [install](https://skills.sh/aradotso/trending-skills/polymarket-arbitrage-bot) | [polymarket-dev/Polymarket-Arbitrage-Bot](https://github.com/polymarket-dev/Polymarket-Arbitrage-Bot) | 2026-03-29 |
 | [qclaw-openclaw-desktop](skills/qclaw-openclaw-desktop/) | [install](https://skills.sh/aradotso/trending-skills/qclaw-openclaw-desktop) | [qiuzhi2046/Qclaw](https://github.com/qiuzhi2046/Qclaw) | 2026-03-29 |
 | [ministack-aws-emulator](skills/ministack-aws-emulator/) | [install](https://skills.sh/aradotso/trending-skills/ministack-aws-emulator) | [Nahuel990/ministack](https://github.com/Nahuel990/ministack) | 2026-03-29 |
+| [awesome-hermes-agent](skills/awesome-hermes-agent/) | [install](https://skills.sh/aradotso/trending-skills/awesome-hermes-agent) | [0xNyk/awesome-hermes-agent](https://github.com/0xNyk/awesome-hermes-agent) | 2026-03-29 |
 <!-- SKILL_INDEX -->
 
 ## How it works
