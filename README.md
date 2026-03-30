@@ -225,6 +225,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [leak-check-personal-info](skills/leak-check-personal-info/) | [install](https://skills.sh/aradotso/trending-skills/leak-check-personal-info) | [garinasset/leak-check](https://github.com/garinasset/leak-check) | 2026-03-30 |
 | [openclaw-auto-dream](skills/openclaw-auto-dream/) | [install](https://skills.sh/aradotso/trending-skills/openclaw-auto-dream) | [LeoYeAI/openclaw-auto-dream](https://github.com/LeoYeAI/openclaw-auto-dream) | 2026-03-30 |
 | [colleague-skill-creator](skills/colleague-skill-creator/) | [install](https://skills.sh/aradotso/trending-skills/colleague-skill-creator) | [titanwings/colleague-skill](https://github.com/titanwings/colleague-skill) | 2026-03-30 |
+| [codex-plugin-cc](skills/codex-plugin-cc/) | [install](https://skills.sh/aradotso/trending-skills/codex-plugin-cc) | [openai/codex-plugin-cc](https://github.com/openai/codex-plugin-cc) | 2026-03-30 |
 <!-- SKILL_INDEX -->
 
 ## How it works
