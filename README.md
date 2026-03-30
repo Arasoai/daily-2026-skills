@@ -221,6 +221,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [awesome-hermes-agent](skills/awesome-hermes-agent/) | [install](https://skills.sh/aradotso/trending-skills/awesome-hermes-agent) | [0xNyk/awesome-hermes-agent](https://github.com/0xNyk/awesome-hermes-agent) | 2026-03-29 |
 | [wecom-cli-enterprise-wechat](skills/wecom-cli-enterprise-wechat/) | [install](https://skills.sh/aradotso/trending-skills/wecom-cli-enterprise-wechat) | [WecomTeam/wecom-cli](https://github.com/WecomTeam/wecom-cli) | 2026-03-30 |
 | [awesome-harness-engineering](skills/awesome-harness-engineering/) | [install](https://skills.sh/aradotso/trending-skills/awesome-harness-engineering) | [walkinglabs/awesome-harness-engineering](https://github.com/walkinglabs/awesome-harness-engineering) | 2026-03-30 |
+| [hitcc-claude-code-reverse-engineering](skills/hitcc-claude-code-reverse-engineering/) | [install](https://skills.sh/aradotso/trending-skills/hitcc-claude-code-reverse-engineering) | [hitmux/HitCC](https://github.com/hitmux/HitCC) | 2026-03-30 |
 <!-- SKILL_INDEX -->
 
 ## How it works
