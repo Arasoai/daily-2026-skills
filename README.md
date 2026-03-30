@@ -219,6 +219,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [qclaw-openclaw-desktop](skills/qclaw-openclaw-desktop/) | [install](https://skills.sh/aradotso/trending-skills/qclaw-openclaw-desktop) | [qiuzhi2046/Qclaw](https://github.com/qiuzhi2046/Qclaw) | 2026-03-29 |
 | [ministack-aws-emulator](skills/ministack-aws-emulator/) | [install](https://skills.sh/aradotso/trending-skills/ministack-aws-emulator) | [Nahuel990/ministack](https://github.com/Nahuel990/ministack) | 2026-03-29 |
 | [awesome-hermes-agent](skills/awesome-hermes-agent/) | [install](https://skills.sh/aradotso/trending-skills/awesome-hermes-agent) | [0xNyk/awesome-hermes-agent](https://github.com/0xNyk/awesome-hermes-agent) | 2026-03-29 |
+| [wecom-cli-enterprise-wechat](skills/wecom-cli-enterprise-wechat/) | [install](https://skills.sh/aradotso/trending-skills/wecom-cli-enterprise-wechat) | [WecomTeam/wecom-cli](https://github.com/WecomTeam/wecom-cli) | 2026-03-30 |
 <!-- SKILL_INDEX -->
 
 ## How it works
