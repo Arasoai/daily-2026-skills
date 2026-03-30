@@ -224,6 +224,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [hitcc-claude-code-reverse-engineering](skills/hitcc-claude-code-reverse-engineering/) | [install](https://skills.sh/aradotso/trending-skills/hitcc-claude-code-reverse-engineering) | [hitmux/HitCC](https://github.com/hitmux/HitCC) | 2026-03-30 |
 | [leak-check-personal-info](skills/leak-check-personal-info/) | [install](https://skills.sh/aradotso/trending-skills/leak-check-personal-info) | [garinasset/leak-check](https://github.com/garinasset/leak-check) | 2026-03-30 |
 | [openclaw-auto-dream](skills/openclaw-auto-dream/) | [install](https://skills.sh/aradotso/trending-skills/openclaw-auto-dream) | [LeoYeAI/openclaw-auto-dream](https://github.com/LeoYeAI/openclaw-auto-dream) | 2026-03-30 |
+| [colleague-skill-creator](skills/colleague-skill-creator/) | [install](https://skills.sh/aradotso/trending-skills/colleague-skill-creator) | [titanwings/colleague-skill](https://github.com/titanwings/colleague-skill) | 2026-03-30 |
 <!-- SKILL_INDEX -->
 
 ## How it works
