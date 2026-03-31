@@ -231,6 +231,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [kordoc-korean-document-parser](skills/kordoc-korean-document-parser/) | [install](https://skills.sh/aradotso/trending-skills/kordoc-korean-document-parser) | [chrisryugj/kordoc](https://github.com/chrisryugj/kordoc) | 2026-03-31 |
 | [claude-token-efficient](skills/claude-token-efficient/) | [install](https://skills.sh/aradotso/trending-skills/claude-token-efficient) | [drona23/claude-token-efficient](https://github.com/drona23/claude-token-efficient) | 2026-03-31 |
 | [polymarket-copy-trading-bot](skills/polymarket-copy-trading-bot/) | [install](https://skills.sh/aradotso/trending-skills/polymarket-copy-trading-bot) | [Neron888/Polymarket-copy-trading-bot](https://github.com/Neron888/Polymarket-copy-trading-bot) | 2026-03-31 |
+| [phantom-ai-coworker](skills/phantom-ai-coworker/) | [install](https://skills.sh/aradotso/trending-skills/phantom-ai-coworker) | [ghostwright/phantom](https://github.com/ghostwright/phantom) | 2026-03-31 |
 <!-- SKILL_INDEX -->
 
 ## How it works
