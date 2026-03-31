@@ -237,6 +237,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [claw-code-harness](skills/claw-code-harness/) | [install](https://skills.sh/aradotso/trending-skills/claw-code-harness) | [instructkr/claw-code](https://github.com/instructkr/claw-code) | 2026-03-31 |
 | [claude-code-deep-dive](skills/claude-code-deep-dive/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-deep-dive) | [tvytlx/claude-code-deep-dive](https://github.com/tvytlx/claude-code-deep-dive) | 2026-03-31 |
 | [claude-code-system-prompts-research](skills/claude-code-system-prompts-research/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-system-prompts-research) | [Leonxlnx/claude-code-system-prompts](https://github.com/Leonxlnx/claude-code-system-prompts) | 2026-03-31 |
+| [open-agent-sdk](skills/open-agent-sdk/) | [install](https://skills.sh/aradotso/trending-skills/open-agent-sdk) | [shipany-ai/open-agent-sdk](https://github.com/shipany-ai/open-agent-sdk) | 2026-03-31 |
 <!-- SKILL_INDEX -->
 
 ## How it works
