@@ -229,6 +229,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [thereisnospoon-ml-primer](skills/thereisnospoon-ml-primer/) | [install](https://skills.sh/aradotso/trending-skills/thereisnospoon-ml-primer) | [dreddnafious/thereisnospoon](https://github.com/dreddnafious/thereisnospoon) | 2026-03-31 |
 | [t1code-terminal-ui](skills/t1code-terminal-ui/) | [install](https://skills.sh/aradotso/trending-skills/t1code-terminal-ui) | [maria-rcks/t1code](https://github.com/maria-rcks/t1code) | 2026-03-31 |
 | [kordoc-korean-document-parser](skills/kordoc-korean-document-parser/) | [install](https://skills.sh/aradotso/trending-skills/kordoc-korean-document-parser) | [chrisryugj/kordoc](https://github.com/chrisryugj/kordoc) | 2026-03-31 |
+| [claude-token-efficient](skills/claude-token-efficient/) | [install](https://skills.sh/aradotso/trending-skills/claude-token-efficient) | [drona23/claude-token-efficient](https://github.com/drona23/claude-token-efficient) | 2026-03-31 |
 <!-- SKILL_INDEX -->
 
 ## How it works
