@@ -234,6 +234,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [phantom-ai-coworker](skills/phantom-ai-coworker/) | [install](https://skills.sh/aradotso/trending-skills/phantom-ai-coworker) | [ghostwright/phantom](https://github.com/ghostwright/phantom) | 2026-03-31 |
 | [claude-code-source-analysis](skills/claude-code-source-analysis/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-source-analysis) | [sanbuphy/claude-code-source-code](https://github.com/sanbuphy/claude-code-source-code) | 2026-03-31 |
 | [clawd-code-python-port](skills/clawd-code-python-port/) | [install](https://skills.sh/aradotso/trending-skills/clawd-code-python-port) | [instructkr/clawd-code](https://github.com/instructkr/clawd-code) | 2026-03-31 |
+| [claw-code-harness](skills/claw-code-harness/) | [install](https://skills.sh/aradotso/trending-skills/claw-code-harness) | [instructkr/claw-code](https://github.com/instructkr/claw-code) | 2026-03-31 |
 <!-- SKILL_INDEX -->
 
 ## How it works
