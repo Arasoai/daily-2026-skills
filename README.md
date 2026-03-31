@@ -227,6 +227,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [colleague-skill-creator](skills/colleague-skill-creator/) | [install](https://skills.sh/aradotso/trending-skills/colleague-skill-creator) | [titanwings/colleague-skill](https://github.com/titanwings/colleague-skill) | 2026-03-30 |
 | [codex-plugin-cc](skills/codex-plugin-cc/) | [install](https://skills.sh/aradotso/trending-skills/codex-plugin-cc) | [openai/codex-plugin-cc](https://github.com/openai/codex-plugin-cc) | 2026-03-30 |
 | [thereisnospoon-ml-primer](skills/thereisnospoon-ml-primer/) | [install](https://skills.sh/aradotso/trending-skills/thereisnospoon-ml-primer) | [dreddnafious/thereisnospoon](https://github.com/dreddnafious/thereisnospoon) | 2026-03-31 |
+| [t1code-terminal-ui](skills/t1code-terminal-ui/) | [install](https://skills.sh/aradotso/trending-skills/t1code-terminal-ui) | [maria-rcks/t1code](https://github.com/maria-rcks/t1code) | 2026-03-31 |
 <!-- SKILL_INDEX -->
 
 ## How it works
