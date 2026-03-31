@@ -236,6 +236,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [clawd-code-python-port](skills/clawd-code-python-port/) | [install](https://skills.sh/aradotso/trending-skills/clawd-code-python-port) | [instructkr/clawd-code](https://github.com/instructkr/clawd-code) | 2026-03-31 |
 | [claw-code-harness](skills/claw-code-harness/) | [install](https://skills.sh/aradotso/trending-skills/claw-code-harness) | [instructkr/claw-code](https://github.com/instructkr/claw-code) | 2026-03-31 |
 | [claude-code-deep-dive](skills/claude-code-deep-dive/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-deep-dive) | [tvytlx/claude-code-deep-dive](https://github.com/tvytlx/claude-code-deep-dive) | 2026-03-31 |
+| [claude-code-system-prompts-research](skills/claude-code-system-prompts-research/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-system-prompts-research) | [Leonxlnx/claude-code-system-prompts](https://github.com/Leonxlnx/claude-code-system-prompts) | 2026-03-31 |
 <!-- SKILL_INDEX -->
 
 ## How it works
