@@ -232,6 +232,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [claude-token-efficient](skills/claude-token-efficient/) | [install](https://skills.sh/aradotso/trending-skills/claude-token-efficient) | [drona23/claude-token-efficient](https://github.com/drona23/claude-token-efficient) | 2026-03-31 |
 | [polymarket-copy-trading-bot](skills/polymarket-copy-trading-bot/) | [install](https://skills.sh/aradotso/trending-skills/polymarket-copy-trading-bot) | [Neron888/Polymarket-copy-trading-bot](https://github.com/Neron888/Polymarket-copy-trading-bot) | 2026-03-31 |
 | [phantom-ai-coworker](skills/phantom-ai-coworker/) | [install](https://skills.sh/aradotso/trending-skills/phantom-ai-coworker) | [ghostwright/phantom](https://github.com/ghostwright/phantom) | 2026-03-31 |
+| [claude-code-source-analysis](skills/claude-code-source-analysis/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-source-analysis) | [sanbuphy/claude-code-source-code](https://github.com/sanbuphy/claude-code-source-code) | 2026-03-31 |
 <!-- SKILL_INDEX -->
 
 ## How it works
