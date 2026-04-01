@@ -249,6 +249,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [cc-gateway-ai-proxy](skills/cc-gateway-ai-proxy/) | [install](https://skills.sh/aradotso/trending-skills/cc-gateway-ai-proxy) | [motiful/cc-gateway](https://github.com/motiful/cc-gateway) | 2026-04-01 |
 | [openclaude-multi-llm](skills/openclaude-multi-llm/) | [install](https://skills.sh/aradotso/trending-skills/openclaude-multi-llm) | [Gitlawb/openclaude](https://github.com/Gitlawb/openclaude) | 2026-04-01 |
 | [open-multi-agent-orchestration](skills/open-multi-agent-orchestration/) | [install](https://skills.sh/aradotso/trending-skills/open-multi-agent-orchestration) | [JackChen-me/open-multi-agent](https://github.com/JackChen-me/open-multi-agent) | 2026-04-01 |
+| [claude-code-source-recovery](skills/claude-code-source-recovery/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-source-recovery) | [ponponon/claude_code_src](https://github.com/ponponon/claude_code_src) | 2026-04-01 |
 <!-- SKILL_INDEX -->
 
 ## How it works
