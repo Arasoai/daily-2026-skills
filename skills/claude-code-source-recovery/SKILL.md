@@ -1,16 +1,16 @@
 ```markdown
 ---
 name: claude-code-source-recovery
-description: Skill for exploring and understanding the recovered Claude Code 2.1.88 TypeScript source code, its CLI architecture, command system, and MCP implementation.
+description: Skill for navigating, understanding, and working with the recovered Claude Code 2.1.88 TypeScript source code extracted from the accidental npm source map upload.
 triggers:
   - explore claude code source code
   - understand claude code architecture
-  - how does claude code cli work
-  - claude code command system internals
-  - claude code mcp implementation
-  - analyze claude code source map recovery
-  - claude code ink react terminal ui
-  - claude code 2.1.88 source structure
+  - navigate recovered claude code src
+  - work with claude code internals
+  - study claude code CLI structure
+  - analyze claude code MCP implementation
+  - read claude code command system
+  - investigate claude code terminal UI
 ---
 
 # Claude Code 2.1.88 Source Recovery
@@ -19,23 +19,9 @@ triggers:
 
 ## What This Project Is
 
-This repository contains the recovered TypeScript source code of `@anthropic-ai/claude-code` version 2.1.88, extracted from the accidentally published `cli.js.map` source map file (57MB). The recovered source spans ~700,000 lines of TypeScript and reveals the full CLI architecture, React/Ink terminal UI system, MCP integration, and command infrastructure.
+On 2026-03-31, Anthropic accidentally published `@anthropic-ai/claude-code@2.1.88` to npm with a `cli.js.map` source map file (~57MB) that contained the full TypeScript source in its `sourcesContent` field. After extraction, this yields ~700,000 lines of TypeScript code. This repository is the recovered and organized source tree for research and architectural study.
 
-**Key facts:**
-- Source was extracted from the `sourcesContent` field of `cli.js.map`
-- Original npm package `@anthropic-ai/claude-code@2.1.88` has been unpublished
-- Tencent mirror cache still hosts the original tarball
-- This is for **research and educational purposes only** — copyright belongs to Anthropic
-
----
-
-## Installing the Original 2.1.88 Package (via Mirror)
-
-Since the official npm version was pulled, use the Tencent mirror cache:
-
-```bash
-npm install -g https://mirrors.cloud.tencent.com/npm/@anthropic-ai/claude-code/-/claude-code-2.1.88.tgz
-```
+**This is NOT an official Anthropic release.** All copyright belongs to Anthropic.
 
 ---
 
@@ -43,259 +29,329 @@ npm install -g https://mirrors.cloud.tencent.com/npm/@anthropic-ai/claude-code/-
 
 ```
 src/
-├── entrypoints/        # CLI entry points and initialization
-├── commands/           # Command system (login, mcp, review, tasks, etc.)
+├── entrypoints/        # CLI bootstrap & initialization
+├── commands/           # Command system (login, mcp, review, tasks, ...)
 ├── components/         # React + Ink terminal UI components
-├── services/           # Core business logic (strategy, sync, remote capabilities)
+├── services/           # Core business logic (policy, sync, remote capabilities)
 ├── hooks/              # Interactive terminal state management
-├── utils/              # Auth, file ops, process management utilities
+├── utils/              # Auth, file ops, process management helpers
 └── ink/                # Custom terminal rendering infrastructure
+```
+
+---
+
+## Installing the Leaked Version (from Tencent mirror cache)
+
+The 2.1.88 version was pulled from npm. Use the Tencent CDN cache while it lasts:
+
+```bash
+npm install -g https://mirrors.cloud.tencent.com/npm/@anthropic-ai/claude-code/-/claude-code-2.1.88.tgz
+```
+
+---
+
+## Source Recovery: How the Extraction Works
+
+The source map format stores original sources in `sourcesContent`. To recover files:
+
+```typescript
+import * as fs from "fs";
+import * as path from "path";
+
+interface SourceMap {
+  sources: string[];
+  sourcesContent: (string | null)[];
+}
+
+function recoverSources(mapFilePath: string, outputDir: string): void {
+  const raw = fs.readFileSync(mapFilePath, "utf-8");
+  const map: SourceMap = JSON.parse(raw);
+
+  map.sources.forEach((sourcePath, i) => {
+    const content = map.sourcesContent[i];
+    if (!content) return;
+
+    // Normalize paths: strip leading ../ or webpack prefixes
+    const normalized = sourcePath.replace(/^(\.\.\/)+/, "").replace(/^webpack:\/\/\//, "");
+    const outPath = path.join(outputDir, normalized);
+
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.writeFileSync(outPath, content, "utf-8");
+    console.log(`Recovered: ${outPath}`);
+  });
+}
+
+recoverSources("./cli.js.map", "./recovered-src");
+```
+
+Run with:
+
+```bash
+npx ts-node recover.ts
+# or
+node -e "require('./recover.js')"
 ```
 
 ---
 
 ## Key Architectural Patterns
 
-### 1. CLI Entry Point Pattern
+### 1. Command System (`src/commands/`)
+
+Commands are loaded dynamically and support built-ins, skills, plugins, and MCP commands:
 
 ```typescript
-// src/entrypoints/cli.ts (typical pattern)
-import { render } from 'ink';
-import React from 'react';
-import { AppRoot } from '../components/AppRoot';
-
-async function main() {
-  const { waitUntilExit } = render(
-    React.createElement(AppRoot, { argv: process.argv.slice(2) })
-  );
-  await waitUntilExit();
+// Pattern observed in commands loader
+interface Command {
+  name: string;
+  description: string;
+  handler: (args: string[], context: CommandContext) => Promise<void>;
+  aliases?: string[];
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// Commands are registered via a central registry
+const commandRegistry = new Map<string, Command>();
+
+function registerCommand(cmd: Command): void {
+  commandRegistry.set(cmd.name, cmd);
+  cmd.aliases?.forEach((alias) => commandRegistry.set(alias, cmd));
+}
 ```
 
-### 2. Command Registration Pattern
+Key commands discovered in source:
+- `login` — OAuth and API key authentication
+- `mcp` — Model Context Protocol server management
+- `review` — Code review workflows
+- `tasks` — Task/todo management
+- `config` — Configuration management
 
-Commands are registered with a descriptor object and a handler:
+### 2. Terminal UI with React + Ink (`src/components/`)
 
-```typescript
-// src/commands/login.ts (illustrative pattern)
-import type { Command } from '../types/command';
+Claude Code renders its TUI using [Ink](https://github.com/vadimdemedes/ink) (React for CLIs):
 
-export const loginCommand: Command = {
-  name: 'login',
-  description: 'Authenticate with Anthropic',
-  aliases: [],
-  async run(args, context) {
-    const { config } = context;
-    // OAuth or API key flow
-    const apiKey = await promptForApiKey();
-    await config.set('apiKey', apiKey);
-    console.log('Logged in successfully.');
-  },
+```tsx
+import React, { useState, useEffect } from "react";
+import { Box, Text, useInput } from "ink";
+
+// Typical component pattern from recovered source
+const PromptInput: React.FC<{ onSubmit: (value: string) => void }> = ({ onSubmit }) => {
+  const [input, setInput] = useState("");
+
+  useInput((char, key) => {
+    if (key.return) {
+      onSubmit(input);
+      setInput("");
+    } else if (key.backspace || key.delete) {
+      setInput((prev) => prev.slice(0, -1));
+    } else if (char) {
+      setInput((prev) => prev + char);
+    }
+  });
+
+  return (
+    <Box>
+      <Text color="green">❯ </Text>
+      <Text>{input}</Text>
+    </Box>
+  );
 };
 ```
 
-### 3. React + Ink Terminal UI
-
-Claude Code uses [Ink](https://github.com/vadimdemedes/ink) for rendering React components in the terminal:
+### 3. MCP (Model Context Protocol) Integration (`src/commands/mcp/`)
 
 ```typescript
-// src/components/ChatView.tsx (illustrative)
-import React, { useState } from 'react';
-import { Box, Text, useInput } from 'ink';
+// MCP server configuration pattern
+interface MCPServerConfig {
+  name: string;
+  transport: "stdio" | "http" | "sse";
+  command?: string;       // for stdio transport
+  args?: string[];
+  url?: string;           // for http/sse transport
+  env?: Record<string, string>;
+}
 
-export function ChatView({ messages }: { messages: Message[] }) {
-  return (
-    <Box flexDirection="column">
-      {messages.map((msg, i) => (
-        <Box key={i} marginBottom={1}>
-          <Text color={msg.role === 'assistant' ? 'cyan' : 'white'}>
-            {msg.role === 'assistant' ? '🤖 Claude' : '👤 You'}: {msg.content}
-          </Text>
-        </Box>
-      ))}
-    </Box>
-  );
+// MCP servers are stored in config and loaded at startup
+async function loadMCPServers(configPath: string): Promise<MCPServerConfig[]> {
+  const config = await readConfig(configPath);
+  return config.mcpServers ?? [];
 }
 ```
 
-### 4. MCP (Model Context Protocol) Integration
+### 4. Authentication Utilities (`src/utils/`)
 
 ```typescript
-// src/services/mcp.ts (illustrative pattern)
-import { MCPClient } from '../mcp/client';
+// Auth pattern — uses env vars, never hardcoded keys
+const API_KEY = process.env.ANTHROPIC_API_KEY;
+const AUTH_TOKEN = process.env.CLAUDE_AUTH_TOKEN;
 
-export class MCPService {
-  private clients: Map<string, MCPClient> = new Map();
+interface AuthState {
+  apiKey?: string;
+  oauthToken?: string;
+  isAuthenticated: boolean;
+}
 
-  async connectServer(name: string, config: MCPServerConfig) {
-    const client = new MCPClient(config);
-    await client.connect();
-    this.clients.set(name, client);
-    return client;
+async function getAuthState(): Promise<AuthState> {
+  if (process.env.ANTHROPIC_API_KEY) {
+    return { apiKey: process.env.ANTHROPIC_API_KEY, isAuthenticated: true };
   }
-
-  async listTools(serverName: string) {
-    const client = this.clients.get(serverName);
-    if (!client) throw new Error(`MCP server '${serverName}' not connected`);
-    return client.listTools();
-  }
-
-  async callTool(serverName: string, toolName: string, args: unknown) {
-    const client = this.clients.get(serverName);
-    if (!client) throw new Error(`MCP server '${serverName}' not connected`);
-    return client.callTool(toolName, args);
-  }
+  // Fall back to stored OAuth token
+  const stored = await readStoredToken();
+  return stored
+    ? { oauthToken: stored, isAuthenticated: true }
+    : { isAuthenticated: false };
 }
 ```
 
-### 5. Command Loader (Mixed Sources)
+### 5. Feature Flags Pattern
 
-Claude Code supports built-in commands, dynamic skills, plugins, and MCP commands:
+Feature flags are baked at build time via `bun:bundle` macros:
 
 ```typescript
-// src/commands/loader.ts (illustrative)
-export async function loadAllCommands(context: AppContext): Promise<Command[]> {
-  const builtins = await loadBuiltinCommands();
-  const skills   = await loadSkillCommands(context.skillsDir);
-  const plugins  = await loadPluginCommands(context.pluginsDir);
-  const mcp      = await loadMCPCommands(context.mcpService);
+// Pattern seen throughout the source
+import { define } from "bun:bundle"; // build-time constant
 
-  return [...builtins, ...skills, ...plugins, ...mcp];
+const FEATURE_TASKS_ENABLED = define("FEATURE_TASKS", false);
+const FEATURE_REMOTE_MCP = define("FEATURE_REMOTE_MCP", true);
+
+if (FEATURE_TASKS_ENABLED) {
+  registerCommand(tasksCommand);
 }
 ```
 
-### 6. Feature Flags Pattern
-
-Feature flags are baked in at build time via `bun:bundle` macros:
-
-```typescript
-// src/utils/features.ts (illustrative)
-// These are replaced at build time — do not expect runtime toggling
-export const FEATURE_REMOTE_TASKS  = process.env.FEATURE_REMOTE_TASKS  === 'true';
-export const FEATURE_MCP_V2        = process.env.FEATURE_MCP_V2        === 'true';
-export const FEATURE_REVIEW_CMD    = process.env.FEATURE_REVIEW_CMD    === 'true';
-```
-
-### 7. Auth / API Key Utilities
-
-```typescript
-// src/utils/auth.ts (illustrative)
-export function getApiKey(): string {
-  const key = process.env.ANTHROPIC_API_KEY
-    ?? readStoredApiKey();  // reads from ~/.claude/config.json
-  if (!key) {
-    throw new Error(
-      'No API key found. Run `claude login` or set ANTHROPIC_API_KEY.'
-    );
-  }
-  return key;
-}
-```
+When studying the source, treat these as compile-time constants that may have been `true` or `false` at ship time.
 
 ---
 
-## Recovering Source From cli.js.map Yourself
+## Navigating the Source
 
-```typescript
-import fs from 'fs';
-import path from 'path';
+### Finding a Feature
 
-// 1. Load the source map
-const raw = fs.readFileSync('cli.js.map', 'utf8');
-const map = JSON.parse(raw);
-
-// 2. Iterate sources + sourcesContent
-map.sources.forEach((sourcePath: string, i: number) => {
-  const content = map.sourcesContent?.[i];
-  if (!content) return;
-
-  // Normalize path (strip webpack:// or similar prefixes)
-  const normalized = sourcePath.replace(/^.*?\/src\//, 'recovered/src/');
-  const outPath = path.resolve(normalized);
-
-  fs.mkdirSync(path.dirname(outPath), { recursive: true });
-  fs.writeFileSync(outPath, content, 'utf8');
-  console.log(`Wrote: ${outPath}`);
-});
-
-console.log('Recovery complete.');
-```
-
-Run with:
 ```bash
-npx tsx recover.ts
-# or
-bun recover.ts
+# Search for a specific command implementation
+grep -r "commandName.*review" src/commands/ --include="*.ts"
+
+# Find all Ink components
+find src/components -name "*.tsx" | head -20
+
+# Locate MCP-related code
+grep -r "ModelContextProtocol\|mcpServer\|MCPClient" src/ --include="*.ts" -l
 ```
 
----
+### Understanding the Entry Point
 
-## Exploring the Source: Common Entry Points
+```bash
+# Start here to understand bootstrap
+cat src/entrypoints/cli.ts
+# or
+cat src/entrypoints/index.ts
+```
 
-| Area | Path | What to Look For |
-|---|---|---|
-| CLI bootstrap | `src/entrypoints/` | `main()`, arg parsing, Ink render |
-| Commands | `src/commands/` | `login`, `mcp`, `review`, `tasks`, `config` |
-| Terminal UI | `src/components/` | `AppRoot`, `ChatView`, `Spinner`, `StatusBar` |
-| MCP client | `src/services/mcp.ts` | Tool discovery, server lifecycle |
-| Auth flow | `src/utils/auth.ts` | API key storage, OAuth tokens |
-| Hooks | `src/hooks/` | `useChat`, `useInput`, `useConfig` |
-| Ink layer | `src/ink/` | Custom renderers, layout primitives |
+### Tracing a Command Flow
+
+```
+User types command
+      ↓
+src/entrypoints/cli.ts        # parses argv
+      ↓
+src/commands/index.ts         # routes to command handler
+      ↓
+src/commands/<name>/index.ts  # executes command logic
+      ↓
+src/components/<UI>.tsx       # renders output via Ink
+      ↓
+src/services/                 # business logic & API calls
+```
 
 ---
 
 ## Attempting to Run the Recovered Source
 
-> ⚠️ The recovered source depends on internal Anthropic build tooling (`bun:bundle` macros, feature flags). Full execution is non-trivial.
+> ⚠️ This requires significant reconstruction effort.
 
 ```bash
-# 1. Install dependencies (you must infer them from imports)
+# 1. Initialize package.json
 npm init -y
-npm install ink react @anthropic-ai/sdk commander
 
-# 2. Add tsconfig
-npx tsc --init
+# 2. Install likely dependencies (inferred from imports in source)
+npm install ink react @anthropic-ai/sdk commander chalk zod
+npm install -D typescript @types/react @types/node bun
 
-# 3. Strip or stub bun:bundle macros
-# Find all: grep -r "bun:bundle" src/
+# 3. Compile TypeScript
+npx tsc --strict --target ES2022 --module NodeNext
 
-# 4. Try running an entrypoint
-npx tsx src/entrypoints/cli.ts --help
+# 4. Handle bun:bundle macros by replacing with literals
+# Find all `define(` calls and replace with hardcoded values
+
+# 5. Run entry point
+node dist/entrypoints/cli.js
 ```
 
 ---
 
-## Environment Variables Referenced in Source
+## Common Patterns When Studying This Code
 
-```bash
-ANTHROPIC_API_KEY=sk-ant-...         # Primary API key
-ANTHROPIC_BASE_URL=https://...       # Override API base URL
-CLAUDE_CONFIG_DIR=~/.claude          # Config directory override
-FEATURE_MCP_V2=true                  # Enable MCP v2 (build-time flag)
-FEATURE_REMOTE_TASKS=true            # Enable remote tasks (build-time flag)
-DEBUG=claude:*                       # Enable debug logging
+### Reading Service Layer
+
+```typescript
+// Services typically follow this shape
+class SyncService {
+  private config: Config;
+
+  constructor(config: Config) {
+    this.config = config;
+  }
+
+  async sync(): Promise<SyncResult> {
+    // implementation
+  }
+}
+
+// Instantiated in entrypoint or command handler:
+const syncService = new SyncService(loadConfig());
+await syncService.sync();
+```
+
+### Config File Location
+
+```typescript
+// Config is typically stored at:
+const CONFIG_DIR = path.join(
+  process.env.HOME ?? process.env.USERPROFILE ?? "~",
+  ".claude"
+);
+const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 ```
 
 ---
 
 ## Troubleshooting
 
-| Issue | Cause | Fix |
+| Problem | Likely Cause | Fix |
 |---|---|---|
-| `Cannot find module 'bun:bundle'` | Bun-specific macro | Stub it: `export const bundle = {}` |
-| `ink` render issues | Wrong React version | Pin `react@18`, `ink@4` or `ink@5` |
-| Missing source in recovery | `sourcesContent` entry is `null` | Those files were already minified/excluded |
-| `ANTHROPIC_API_KEY` not found | Env not set | `export ANTHROPIC_API_KEY=$YOUR_KEY` |
-| TypeScript path errors | Inferred `tsconfig` paths wrong | Add `paths` aliases matching `src/` layout |
+| `bun:bundle` import errors | Bun-specific build macro | Replace `define(...)` calls with literal values |
+| Missing type declarations | Incomplete extraction | Check `sourcesContent` for null entries (some files may be missing) |
+| Path resolution failures | Source map paths may be relative | Normalize `../` prefixes during recovery |
+| React/Ink version mismatch | Ink requires specific React version | Use `ink@4` with `react@18` |
+| `ANTHROPIC_API_KEY` not found | Auth env var missing | `export ANTHROPIC_API_KEY=your_key_here` |
 
 ---
 
-## Legal Notice
+## Important Notes for AI Agents
 
-This skill documents a research project. The recovered source code is the intellectual property of **Anthropic**. Use for personal study and architecture research only. Do not redistribute, commercialize, or deploy the recovered code. See the repository's disclaimer for full details.
+1. **Do not reproduce or redistribute** substantial portions of this source — copyright belongs to Anthropic.
+2. When helping a developer **understand** the architecture, reference file paths and patterns rather than copy-pasting large blocks.
+3. The source uses **Bun** as its runtime/bundler — some APIs (`bun:bundle`, `Bun.file`, etc.) are Bun-specific.
+4. The codebase is **TypeScript throughout** — all files are `.ts` or `.tsx`.
+5. The **MCP implementation** here is a reference for how a production CLI integrates Model Context Protocol — useful for building similar tools.
+6. Feature flag values at runtime (2.1.88) are unknown — analyze both branches when studying conditional code.
+
+---
+
+## References
+
+- [npm package (archived)](https://www.npmjs.com/package/@anthropic-ai/claude-code/v/2.1.88)
+- [Tencent mirror cache](https://mirrors.cloud.tencent.com/npm/@anthropic-ai/claude-code/-/claude-code-2.1.88.tgz)
+- [Ink — React for CLIs](https://github.com/vadimdemedes/ink)
+- [Model Context Protocol spec](https://modelcontextprotocol.io)
+- [Source Map spec (TC39)](https://tc39.es/source-map/)
 ```
