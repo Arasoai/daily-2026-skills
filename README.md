@@ -241,6 +241,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [see-through-anime-layer-decomposition](skills/see-through-anime-layer-decomposition/) | [install](https://skills.sh/aradotso/trending-skills/see-through-anime-layer-decomposition) | [shitagaki-lab/see-through](https://github.com/shitagaki-lab/see-through) | 2026-04-01 |
 | [clear-code-ai-coding-assistants](skills/clear-code-ai-coding-assistants/) | [install](https://skills.sh/aradotso/trending-skills/clear-code-ai-coding-assistants) | [chatgptprojects/clear-code](https://github.com/chatgptprojects/clear-code) | 2026-04-01 |
 | [claude-code-haha-local](skills/claude-code-haha-local/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-haha-local) | [NanmiCoder/claude-code-haha](https://github.com/NanmiCoder/claude-code-haha) | 2026-04-01 |
+| [ai-agent-deep-dive](skills/ai-agent-deep-dive/) | [install](https://skills.sh/aradotso/trending-skills/ai-agent-deep-dive) | [tvytlx/ai-agent-deep-dive](https://github.com/tvytlx/ai-agent-deep-dive) | 2026-04-01 |
 <!-- SKILL_INDEX -->
 
 ## How it works
