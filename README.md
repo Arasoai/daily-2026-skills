@@ -247,6 +247,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [learn-coding-agent](skills/learn-coding-agent/) | [install](https://skills.sh/aradotso/trending-skills/learn-coding-agent) | [sanbuphy/learn-coding-agent](https://github.com/sanbuphy/learn-coding-agent) | 2026-04-01 |
 | [agentic-ai-prompt-research](skills/agentic-ai-prompt-research/) | [install](https://skills.sh/aradotso/trending-skills/agentic-ai-prompt-research) | [Leonxlnx/agentic-ai-prompt-research](https://github.com/Leonxlnx/agentic-ai-prompt-research) | 2026-04-01 |
 | [cc-gateway-ai-proxy](skills/cc-gateway-ai-proxy/) | [install](https://skills.sh/aradotso/trending-skills/cc-gateway-ai-proxy) | [motiful/cc-gateway](https://github.com/motiful/cc-gateway) | 2026-04-01 |
+| [openclaude-multi-llm](skills/openclaude-multi-llm/) | [install](https://skills.sh/aradotso/trending-skills/openclaude-multi-llm) | [Gitlawb/openclaude](https://github.com/Gitlawb/openclaude) | 2026-04-01 |
 <!-- SKILL_INDEX -->
 
 ## How it works
