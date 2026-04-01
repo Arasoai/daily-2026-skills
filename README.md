@@ -244,6 +244,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [ai-agent-deep-dive](skills/ai-agent-deep-dive/) | [install](https://skills.sh/aradotso/trending-skills/ai-agent-deep-dive) | [tvytlx/ai-agent-deep-dive](https://github.com/tvytlx/ai-agent-deep-dive) | 2026-04-01 |
 | [claurst-claude-code-rust](skills/claurst-claude-code-rust/) | [install](https://skills.sh/aradotso/trending-skills/claurst-claude-code-rust) | [Kuberwastaken/claurst](https://github.com/Kuberwastaken/claurst) | 2026-04-01 |
 | [open-agent-sdk-typescript](skills/open-agent-sdk-typescript/) | [install](https://skills.sh/aradotso/trending-skills/open-agent-sdk-typescript) | [codeany-ai/open-agent-sdk-typescript](https://github.com/codeany-ai/open-agent-sdk-typescript) | 2026-04-01 |
+| [learn-coding-agent](skills/learn-coding-agent/) | [install](https://skills.sh/aradotso/trending-skills/learn-coding-agent) | [sanbuphy/learn-coding-agent](https://github.com/sanbuphy/learn-coding-agent) | 2026-04-01 |
 <!-- SKILL_INDEX -->
 
 ## How it works
