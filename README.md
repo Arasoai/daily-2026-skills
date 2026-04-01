@@ -242,6 +242,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [clear-code-ai-coding-assistants](skills/clear-code-ai-coding-assistants/) | [install](https://skills.sh/aradotso/trending-skills/clear-code-ai-coding-assistants) | [chatgptprojects/clear-code](https://github.com/chatgptprojects/clear-code) | 2026-04-01 |
 | [claude-code-haha-local](skills/claude-code-haha-local/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-haha-local) | [NanmiCoder/claude-code-haha](https://github.com/NanmiCoder/claude-code-haha) | 2026-04-01 |
 | [ai-agent-deep-dive](skills/ai-agent-deep-dive/) | [install](https://skills.sh/aradotso/trending-skills/ai-agent-deep-dive) | [tvytlx/ai-agent-deep-dive](https://github.com/tvytlx/ai-agent-deep-dive) | 2026-04-01 |
+| [claurst-claude-code-rust](skills/claurst-claude-code-rust/) | [install](https://skills.sh/aradotso/trending-skills/claurst-claude-code-rust) | [Kuberwastaken/claurst](https://github.com/Kuberwastaken/claurst) | 2026-04-01 |
 <!-- SKILL_INDEX -->
 
 ## How it works
