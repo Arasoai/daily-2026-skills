@@ -1,409 +1,377 @@
+```markdown
 ---
 name: claude-code-source-analysis
-description: Skill for exploring and understanding the recovered Claude Code 2.1.88 TypeScript source code structure, architecture, and implementation patterns.
+description: Expertise in the Claude Code v2.1.88 decompiled TypeScript source — architecture, tool system, telemetry, feature flags, hidden modules, and internal mechanisms
 triggers:
+  - analyze claude code source
+  - claude code internals
+  - claude code architecture
+  - claude code tool system
+  - claude code telemetry privacy
+  - claude code feature flags
+  - claude code hidden features
   - explore claude code source code
-  - understand claude code architecture
-  - analyze claude code implementation
-  - study claude code cli structure
-  - look at claude code mcp implementation
-  - examine claude code components
-  - understand how claude code works internally
-  - navigate claude code recovered source
 ---
 
-# Claude Code 2.1.88 Source Recovery
+# Claude Code Source Code Analysis
 
 > Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection.
 
-This project contains the recovered TypeScript source code of `@anthropic-ai/claude-code` version 2.1.88, extracted from the accidentally published `cli.js.map` source map file (57MB). The restored codebase is ~700,000 lines of TypeScript organized into a clean directory structure.
+This repository contains the decompiled and unbundled TypeScript source extracted from the `@anthropic-ai/claude-code` npm package (v2.1.88). The published package ships as a single ~12MB `cli.js` bundle; this repo reconstructs the `src/` directory for research and educational study. It includes deep analysis reports on telemetry, hidden features, undercover mode, remote control mechanisms, and future roadmap items.
 
-## How the Source Was Recovered
-
-The `cli.js.map` file contained a `sourcesContent` field with all original source files. The recovery process:
-
-```typescript
-// Conceptual recovery process
-import * as fs from 'fs';
-
-const sourceMap = JSON.parse(fs.readFileSync('cli.js.map', 'utf-8'));
-
-// sourceMap.sources = array of original file paths
-// sourceMap.sourcesContent = array of original file contents
-
-sourceMap.sources.forEach((filePath: string, index: number) => {
-  const content = sourceMap.sourcesContent[index];
-  if (content) {
-    fs.mkdirSync(path.dirname(filePath), { recursive: true });
-    fs.writeFileSync(filePath, content);
-  }
-});
-```
-
-## Installing the Original Package (Mirror)
-
-Since v2.1.88 was pulled from npm, use the Tencent mirror cache:
-
-```bash
-npm install -g https://mirrors.cloud.tencent.com/npm/@anthropic-ai/claude-code/-/claude-code-2.1.88.tgz
-```
+---
 
 ## Project Structure
 
 ```
-src/
-├── entrypoints/        # CLI entry points and initialization
-│   ├── cli.ts          # Main CLI bootstrap
-│   └── index.ts        # Module exports
-├── commands/           # Command system
-│   ├── login.ts        # Authentication command
-│   ├── mcp.ts          # MCP protocol command
-│   ├── review.ts       # Code review command
-│   └── tasks.ts        # Task management command
-├── components/         # React + Ink terminal UI components
-│   ├── Chat.tsx        # Main chat interface
-│   ├── Message.tsx     # Message rendering
-│   └── Prompt.tsx      # Input prompt component
-├── services/           # Core business logic
-│   ├── policy.ts       # Policy/permission management
-│   ├── sync.ts         # State synchronization
-│   └── remote.ts       # Remote capability handling
-├── hooks/              # React hooks for terminal state
-│   ├── useInput.ts     # Input handling hook
-│   └── useSession.ts   # Session state hook
-├── utils/              # Utility functions
-│   ├── auth.ts         # Authentication utilities
-│   ├── file.ts         # File operations
-│   └── process.ts      # Process management
-└── ink/                # Custom terminal rendering infrastructure
+/
+├── src/                  # Unbundled TypeScript source (extracted from cli.js)
+├── docs/
+│   ├── en/               # English analysis reports
+│   ├── ja/               # Japanese reports
+│   ├── ko/               # Korean reports
+│   └── zh/               # Chinese reports
+├── README.md
+└── README_CN.md / README_KR.md / README_JA.md
 ```
 
-## Key Architecture Patterns
+---
 
-### Command System
+## Key Analysis Reports (`docs/en/`)
 
-Claude Code uses a hybrid command loading mechanism:
+| File | Topic |
+|------|-------|
+| `01-telemetry-and-privacy.md` | What is collected, two analytics sinks, no UI opt-out |
+| `02-hidden-features-and-codenames.md` | Animal codenames, feature flags, hidden commands |
+| `03-undercover-mode.md` | AI authorship concealment in open-source repos |
+| `04-remote-control-and-killswitches.md` | Hourly settings polling, killswitches, GrowthBook flags |
+| `05-future-roadmap.md` | KAIROS, Numbat, voice mode, 17 unreleased tools |
 
-```typescript
-// Pattern: Command registration
-interface Command {
-  name: string;
-  description: string;
-  aliases?: string[];
-  handler: (args: string[], context: CommandContext) => Promise<void>;
-}
+---
 
-// Built-in commands are registered at startup
-const builtinCommands: Command[] = [
-  {
-    name: 'login',
-    description: 'Authenticate with Anthropic',
-    handler: async (args, ctx) => {
-      // OAuth flow or API key setup
-      const apiKey = process.env.ANTHROPIC_API_KEY;
-      await ctx.auth.initialize(apiKey);
-    }
-  },
-  {
-    name: 'mcp',
-    description: 'Manage MCP servers',
-    aliases: ['mcp-server'],
-    handler: async (args, ctx) => {
-      await ctx.mcp.handleCommand(args);
-    }
-  }
-];
+## Architecture Overview
+
+Claude Code follows an **Entry → Query Engine → Tools/Services/State** pipeline:
+
+```
+CLI Entry (cli.js)
+  └─► Query Engine (agent loop)
+        ├─► Tool System (40+ tools)
+        ├─► Services (telemetry, settings, session)
+        └─► State (conversation history, context)
 ```
 
-### Terminal UI with React + Ink
+### Agent Loop (simplified reconstruction)
 
 ```typescript
-import React, { useState, useEffect } from 'react';
-import { Box, Text, useInput, useApp } from 'ink';
+// Reconstructed from src/ analysis
+async function agentLoop(userMessage: string, context: AgentContext) {
+  while (true) {
+    const response = await callClaude(context.messages);
 
-// Pattern: Ink component for terminal rendering
-const ChatInterface: React.FC<{ session: Session }> = ({ session }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const { exit } = useApp();
+    if (response.stopReason === 'end_turn') break;
 
-  useInput((input, key) => {
-    if (key.escape) {
-      exit();
+    if (response.stopReason === 'tool_use') {
+      const toolResults = await executeTools(response.toolUses, context);
+      context.messages.push(...toolResults);
+      continue;
     }
-    if (key.return) {
-      handleSubmit(inputValue);
-      setInputValue('');
-    } else {
-      setInputValue(prev => prev + input);
-    }
-  });
 
-  return (
-    <Box flexDirection="column">
-      {messages.map((msg, i) => (
-        <Box key={i} marginBottom={1}>
-          <Text color={msg.role === 'assistant' ? 'cyan' : 'white'}>
-            {msg.content}
-          </Text>
-        </Box>
-      ))}
-      <Box>
-        <Text color="green">{'> '}</Text>
-        <Text>{inputValue}</Text>
-      </Box>
-    </Box>
-  );
-};
-```
-
-### MCP (Model Context Protocol) Integration
-
-```typescript
-// Pattern: MCP server connection
-interface MCPServerConfig {
-  name: string;
-  command: string;
-  args?: string[];
-  env?: Record<string, string>;
-}
-
-class MCPClient {
-  private servers: Map<string, MCPServer> = new Map();
-
-  async connectServer(config: MCPServerConfig): Promise<void> {
-    const server = new MCPServer({
-      command: config.command,
-      args: config.args ?? [],
-      env: {
-        ...process.env,
-        ...config.env
-      }
-    });
-
-    await server.initialize();
-    this.servers.set(config.name, server);
+    break;
   }
-
-  async listTools(serverName: string): Promise<Tool[]> {
-    const server = this.servers.get(serverName);
-    if (!server) throw new Error(`Server ${serverName} not connected`);
-    return server.listTools();
-  }
-
-  async callTool(serverName: string, toolName: string, params: unknown): Promise<ToolResult> {
-    const server = this.servers.get(serverName);
-    if (!server) throw new Error(`Server ${serverName} not connected`);
-    return server.callTool(toolName, params);
-  }
+  return response;
 }
 ```
 
-### Authentication Pattern
+---
+
+## Tool System Architecture
+
+Claude Code exposes **40+ tools** to the agent. They are split into categories:
+
+### Published Tools (in npm bundle)
 
 ```typescript
-// Pattern: API key management
-class AuthService {
-  private apiKey: string | null = null;
+// Core file tools
+BashTool          // Shell command execution
+ReadFileTool      // Read file contents
+WriteFileTool     // Write/overwrite files
+EditFileTool      // Patch-style edits
+ListFilesTool     // Directory listing
+GlobTool          // Pattern-based file search
+GrepTool          // Regex search in files
 
-  async initialize(key?: string): Promise<void> {
-    // Priority: explicit key > env var > stored config
-    this.apiKey = key
-      ?? process.env.ANTHROPIC_API_KEY
-      ?? await this.loadStoredKey();
+// Agent tools
+AgentTool         // Spawn sub-agents
+TaskTool          // Task management
+TodoReadTool      // Read todo list
+TodoWriteTool     // Write todo list
 
-    if (!this.apiKey) {
-      throw new Error('No API key found. Set ANTHROPIC_API_KEY or run: claude login');
+// Web / external
+WebFetchTool      // HTTP fetch
+WebSearchTool     // Web search (when enabled)
+
+// MCP
+MCPTool           // Model Context Protocol integration
+```
+
+### Feature-Gated Tools (stripped from bundle, type stubs only)
+
+```typescript
+// These exist in sdk-tools.d.ts but not in cli.js
+WebBrowserTool        // Browser automation     — WEB_BROWSER_TOOL flag
+REPLTool              // VM sandbox REPL         — internal (ant)
+SleepTool             // Agent loop delay        — PROACTIVE / KAIROS
+PushNotificationTool  // Push notifications      — KAIROS
+SubscribePRTool       // GitHub PR subscription  — KAIROS_GITHUB_WEBHOOKS
+WorkflowTool          // Workflow execution      — WORKFLOW_SCRIPTS
+MonitorTool           // MCP monitoring          — MONITOR_TOOL
+SnipTool              // Context snipping        — HISTORY_SNIP
+```
+
+---
+
+## Telemetry & Privacy
+
+### Two Analytics Sinks
+
+```
+User Action
+  ├─► 1st-party sink  → Anthropic servers  (no UI opt-out)
+  └─► Datadog          → metrics/monitoring (configurable)
+```
+
+### What Is Collected Per Event
+
+```typescript
+interface TelemetryEvent {
+  event_name: string;
+  session_id: string;
+  environment_fingerprint: string;  // OS, node version, shell
+  process_metrics: ProcessMetrics;  // CPU, memory
+  repo_hash: string;                // SHA of git remote URL
+  timestamp: number;
+  // ... additional fields
+}
+```
+
+### Enabling Full Tool Input Capture
+
+```bash
+# WARNING: captures full tool inputs including file contents
+export OTEL_LOG_TOOL_DETAILS=1
+claude
+```
+
+### Partial Opt-Out (Datadog only)
+
+```bash
+# In settings or environment — disables Datadog sink only
+CLAUDE_CODE_DISABLE_TELEMETRY=1
+```
+
+---
+
+## Feature Flags
+
+Feature flags use **random word-pair names** to obscure their purpose (e.g., `tengu_frond_boric`). They are fetched from GrowthBook and can change behavior remotely without user consent.
+
+```typescript
+// Pattern used throughout src/
+if (feature('KAIROS')) {
+  // load kairos assistant mode
+  await import('./assistant/index.js');
+}
+
+if (feature('DAEMON')) {
+  await import('./daemon/main.js');
+}
+
+if (feature('WEB_BROWSER_TOOL')) {
+  tools.push(new WebBrowserTool());
+}
+```
+
+### Known Feature Flags
+
+| Flag | Purpose |
+|------|---------|
+| `KAIROS` | Fully autonomous agent mode with `<tick>` heartbeats |
+| `DAEMON` | Background daemon supervisor |
+| `PROACTIVE` | Proactive notifications |
+| `COORDINATOR_MODE` | Multi-agent coordination |
+| `BRIDGE_MODE` | Peer session bridging |
+| `HISTORY_SNIP` | Context snip-based compaction |
+| `CACHED_MICROCOMPACT` | Reactive context compaction |
+| `EXPERIMENTAL_SKILL_SEARCH` | Remote skill discovery |
+| `WORKFLOW_SCRIPTS` | Workflow execution |
+| `KAIROS_GITHUB_WEBHOOKS` | PR subscription |
+| `WEB_BROWSER_TOOL` | Browser automation |
+| `BUDDY` | Buddy system notifications |
+| `FORK_SUBAGENT` | Fork sub-agent command |
+| `AUTO_THEME` | System theme watcher |
+| `UDS_INBOX` | Unix domain socket messaging |
+
+---
+
+## Remote Control Mechanism
+
+Claude Code polls `https://api.anthropic.com/api/claude_code/settings` **every hour**.
+
+```typescript
+// Reconstructed polling logic
+async function pollRemoteSettings() {
+  const settings = await fetch('/api/claude_code/settings');
+
+  if (settings.dangerous_change) {
+    const accepted = await showBlockingDialog(settings.change_description);
+    if (!accepted) {
+      process.exit(1);  // Reject = app exits
     }
   }
 
-  private async loadStoredKey(): Promise<string | null> {
-    const configPath = path.join(os.homedir(), '.claude', 'config.json');
-    try {
-      const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-      return config.apiKey ?? null;
-    } catch {
-      return null;
-    }
-  }
+  applySettings(settings);
+}
 
-  getHeaders(): Record<string, string> {
-    return {
-      'x-api-key': this.apiKey!,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json'
-    };
+setInterval(pollRemoteSettings, 60 * 60 * 1000);
+```
+
+### Known Killswitches (remotely togglable)
+
+- Bypass permissions
+- Fast mode toggle
+- Voice mode enable/disable
+- Analytics sink routing
+- Model override (force specific model)
+- Feature flag overrides via GrowthBook
+
+---
+
+## Undercover Mode
+
+When an **Anthropic employee** authenticates and works in a **public open-source repository**, undercover mode activates automatically:
+
+```typescript
+// Reconstructed from decompiled source
+if (isAnthropicEmployee(user) && isPublicRepo(repoContext)) {
+  systemPrompt += `
+    You are in undercover mode.
+    Do not blow your cover.
+    Strip all AI attribution from commits and code.
+    Write commits as a human developer would.
+    Do not mention Claude, Anthropic, or AI assistance.
+  `;
+}
+```
+
+**No force-OFF mechanism exists** in the published code.
+
+---
+
+## Model Codenames
+
+| Codename | Model |
+|----------|-------|
+| Capybara v8 | Claude 3.x (current) |
+| Tengu | Internal variant |
+| Fennec | Opus 4.6 |
+| **Numbat** | Next-gen (unreleased) |
+
+---
+
+## KAIROS — Autonomous Agent Mode
+
+KAIROS is a fully autonomous background-agent architecture found in feature-gated code:
+
+```typescript
+// Reconstructed KAIROS tick loop (not in npm bundle)
+async function kairosTick(session: KairosSession) {
+  // Heartbeat-driven autonomous loop
+  while (session.active) {
+    await processInbox(session);           // Check UDS inbox
+    await processPRSubscriptions(session); // GitHub webhook events
+    const tick = await generateTick(session);
+    await executeTick(tick);
+    await sleep(session.tickInterval);
   }
 }
 ```
 
-### Feature Flags Pattern
+Unreleased KAIROS tools: `PushNotificationTool`, `SubscribePRTool`, `SuggestBackgroundPRTool`, `SleepTool`, `SendUserFileTool`.
 
-```typescript
-// Pattern: Build-time feature flags (seen throughout source)
-const FEATURES = {
-  REMOTE_CAPABILITY: process.env.CLAUDE_FEATURE_REMOTE === 'true',
-  MCP_ENABLED: process.env.CLAUDE_MCP_ENABLED !== 'false',
-  TASKS_ENABLED: process.env.CLAUDE_TASKS_ENABLED === 'true',
-  DEBUG_MODE: process.env.CLAUDE_DEBUG === 'true',
-} as const;
+---
 
-function withFeatureFlag<T>(
-  flag: keyof typeof FEATURES,
-  handler: () => T,
-  fallback: T
-): T {
-  return FEATURES[flag] ? handler() : fallback;
-}
+## Hidden Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/btw` | Internal side-channel command |
+| `/stickers` | Internal sticker/easter egg |
+| `/fork` | Fork sub-agent (FORK_SUBAGENT flag) |
+| `/peers` | List active peers (BRIDGE_MODE flag) |
+| `/subscribe-pr` | GitHub PR subscription (KAIROS_GITHUB_WEBHOOKS) |
+
+---
+
+## 108 Missing Modules
+
+108 modules are referenced in the source but absent from the npm package (dead-code-eliminated or internal-only). They **cannot be recovered** from `cli.js`. Examples:
+
+```
+daemon/main.js                  — Background daemon
+proactive/index.js              — Proactive notifications
+contextCollapse/index.js        — Experimental context collapse
+skillSearch/remoteSkillLoader.js — Remote skill loader
+coordinator/workerAgent.js      — Multi-agent coordinator
+assistant/index.js              — KAIROS assistant mode
+bridge/peerSessions.js          — Peer session management
+commands/workflows/index.js     — Workflow commands
 ```
 
-### Session and State Management
+---
 
-```typescript
-// Pattern: Session hook
-function useSession() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+## Build Notes
 
-  const startSession = async (config: SessionConfig) => {
-    setIsLoading(true);
-    try {
-      const newSession = await Session.create({
-        apiKey: process.env.ANTHROPIC_API_KEY!,
-        model: config.model ?? 'claude-opus-4-5',
-        systemPrompt: config.systemPrompt,
-        tools: config.tools ?? []
-      });
-      setSession(newSession);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
-    } finally {
-      setIsLoading(false);
-    }
-  };
+This source is **not directly compilable** because:
 
-  return { session, isLoading, error, startSession };
-}
-```
+1. 108 internal modules are absent
+2. Generated files (`coreTypes.generated.js`) are missing
+3. Internal Anthropic infrastructure (`protectedNamespace.js`, `devtools.js`) is not published
+4. Some imports reference private npm scopes (`@anthropic-internal/*`)
+
+To study the code, use it as a **read-only reference** alongside the published `cli.js` bundle.
+
+---
 
 ## Exploring the Source
 
 ```bash
-# Clone the recovery repository
-git clone https://github.com/ponponon/claude_code_src.git
-cd claude_code_src
+# Clone the repo
+git clone https://github.com/sanbuphy/claude-code-source-code.git
+cd claude-code-source-code
 
-# Count total lines
-find src/ -name "*.ts" -o -name "*.tsx" | xargs wc -l | tail -1
+# Read architecture overview
+cat README.md
 
-# Find all command handlers
-grep -r "handler:" src/commands/ --include="*.ts" -l
+# Read telemetry report
+cat docs/en/01-telemetry-and-privacy.md
 
-# Explore MCP implementation
-find src/ -name "*mcp*" -type f
+# Browse source
+ls src/
 
-# Search for Ink component usage
-grep -r "from 'ink'" src/ --include="*.tsx" -l
-
-# Find all feature flag checks
-grep -r "FEATURES\." src/ --include="*.ts" -l
+# Cross-reference with published bundle (requires npm install)
+npm install -g @anthropic-ai/claude-code@2.1.88
+# Bundle location:
+node -e "console.log(require.resolve('@anthropic-ai/claude-code'))"
 ```
 
-## Key Dependencies (Inferred from Source)
+---
 
-```json
-{
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.x.x",
-    "ink": "^4.x.x",
-    "react": "^18.x.x",
-    "@modelcontextprotocol/sdk": "^1.x.x",
-    "commander": "^11.x.x",
-    "chalk": "^5.x.x",
-    "zod": "^3.x.x"
-  },
-  "devDependencies": {
-    "typescript": "^5.x.x",
-    "bun": "^1.x.x",
-    "@types/react": "^18.x.x"
-  }
-}
+## Ethical & Legal Notes
+
+- All source is **Anthropic's intellectual property**
+- This repo is for **research and education only**
+- **Commercial use is prohibited**
+- If you believe content infringes your rights, contact the repo owner for removal
+- The undercover mode and remote control findings raise **open-source transparency concerns** worth public discussion
 ```
-
-## Reconstructing to Run
-
-```bash
-# 1. Initialize package
-npm init -y
-
-# 2. Install inferred dependencies
-npm install @anthropic-ai/sdk ink react @modelcontextprotocol/sdk commander chalk zod
-npm install -D typescript @types/react @types/node bun-types
-
-# 3. Create tsconfig.json
-cat > tsconfig.json << 'EOF'
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react",
-    "strict": true,
-    "outDir": "dist",
-    "rootDir": "src"
-  },
-  "include": ["src/**/*"]
-}
-EOF
-
-# 4. Set environment variables
-export ANTHROPIC_API_KEY="your-key-from-env"
-
-# 5. Attempt build (note: bun:bundle macros may need replacement)
-bun build src/entrypoints/cli.ts --outfile dist/cli.js
-```
-
-## Common Research Tasks
-
-```bash
-# Find how tools are registered
-grep -r "registerTool\|addTool\|tools\.push" src/ --include="*.ts"
-
-# Understand streaming implementation
-grep -r "stream\|EventSource\|ReadableStream" src/ --include="*.ts" -l
-
-# Find retry/error handling logic
-grep -r "retry\|exponentialBackoff\|withRetry" src/ --include="*.ts"
-
-# Locate permission/policy checks
-grep -r "hasPermission\|checkPolicy\|canExecute" src/ --include="*.ts"
-
-# Find all slash commands
-grep -r "\/[a-z]" src/commands/ --include="*.ts"
-```
-
-## Troubleshooting
-
-**`bun:bundle` macro errors**: These are Bun-specific build macros. Replace with runtime equivalents or stub them:
-```typescript
-// Replace: import { version } from 'bun:bundle';
-const version = process.env.npm_package_version ?? '2.1.88';
-```
-
-**Missing type declarations**: Some internal types may reference Anthropic-internal packages. Create stub declaration files:
-```typescript
-// types/stubs.d.ts
-declare module '@anthropic-ai/internal-utils' {
-  export function someUtil(): void;
-}
-```
-
-**React/Ink version conflicts**: Pin to exact versions used circa early 2026:
-```bash
-npm install ink@4.4.1 react@18.3.1
-```
-
-## Legal Notice
-
-This repository contains source code recovered via source map. All intellectual property rights belong to Anthropic. This is for **research and educational purposes only**. Do not use for commercial purposes without proper licensing.
