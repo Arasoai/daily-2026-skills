@@ -1,16 +1,15 @@
-```markdown
 ---
 name: claude-code-source-recovery
-description: Skill for navigating, understanding, and working with the recovered Claude Code 2.1.88 TypeScript source code extracted from the npm source map
+description: Skill for exploring and understanding the recovered Claude Code 2.1.88 TypeScript source code, including its CLI architecture, command system, MCP integration, and Ink/React terminal UI components.
 triggers:
   - explore claude code source code
   - understand claude code architecture
-  - work with recovered claude code src
-  - navigate claude code commands
-  - study claude code mcp implementation
-  - analyze claude code terminal UI
-  - read claude code hooks and services
-  - build on top of claude code source
+  - how does claude code implement commands
+  - claude code mcp integration source
+  - claude code terminal ui components
+  - recover source from source map
+  - claude code cli internals
+  - study claude code codebase structure
 ---
 
 # Claude Code 2.1.88 Source Recovery
@@ -19,26 +18,12 @@ triggers:
 
 ## What This Project Is
 
-This repository contains the recovered TypeScript source code of `@anthropic-ai/claude-code` version 2.1.88. On 2026-03-31, Anthropic accidentally published the npm package with a `cli.js.map` source map file (~57MB) containing the full source in its `sourcesContent` field. After extraction and reconstruction, the result is ~700,000 lines of TypeScript across a structured `src/` directory.
+This repository contains the recovered TypeScript source code of `@anthropic-ai/claude-code` version 2.1.88. On 2026-03-31, Anthropic accidentally published a `cli.js.map` (57MB) source map to npm that contained the full `sourcesContent` of the bundled CLI. After extraction and reconstruction, the result is ~700,000 lines of TypeScript source code organized into a readable directory structure.
 
-The source reveals Claude Code's internal architecture: a React/Ink-based terminal UI, a rich command system, MCP (Model Context Protocol) integration, hooks-based state management, and a services layer.
-
----
-
-## Installing the Leaked Package (from Tencent Mirror Cache)
-
-The 2.1.88 version was pulled from official npm. Use the Tencent CDN cache:
-
-```bash
-npm install -g https://mirrors.cloud.tencent.com/npm/@anthropic-ai/claude-code/-/claude-code-2.1.88.tgz
-```
-
-Or clone and explore the recovered source:
-
-```bash
-git clone https://github.com/ponponon/claude_code_src.git
-cd claude_code_src
-```
+The project is useful for:
+- Studying production CLI architecture patterns (Ink/React in terminal)
+- Understanding how MCP (Model Context Protocol) is implemented in a real CLI
+- Learning how Claude Code manages sessions, commands, authentication, and tool execution
 
 ---
 
@@ -46,36 +31,93 @@ cd claude_code_src
 
 ```
 src/
-├── entrypoints/       # CLI entry points and bootstrapping
-├── commands/          # Command definitions (login, mcp, review, tasks, …)
-├── components/        # React + Ink terminal UI components
-├── services/          # Core business logic (policy, sync, remote capabilities)
-├── hooks/             # Terminal interaction state management
-├── utils/             # Auth, file ops, process management
-└── ink/               # Custom terminal rendering infrastructure
+├── entrypoints/        # CLI bootstrap and initialization
+├── commands/           # Command definitions (login, mcp, review, tasks, etc.)
+├── components/         # Ink/React terminal UI components
+├── services/           # Core business logic (sync, remote capabilities, policies)
+├── hooks/              # Terminal state management hooks
+├── utils/              # Auth, file ops, process management helpers
+└── ink/                # Custom terminal rendering infrastructure
+```
+
+---
+
+## Installing the Original 2.1.88 Package (Tencent Mirror Cache)
+
+The official npm version was pulled. Use the Tencent mirror cache while available:
+
+```bash
+npm install -g https://mirrors.cloud.tencent.com/npm/@anthropic-ai/claude-code/-/claude-code-2.1.88.tgz
+```
+
+---
+
+## Extracting Source from the Source Map
+
+If you have the original `cli.js.map`, you can recover sources programmatically:
+
+```typescript
+import fs from "fs";
+import path from "path";
+import zlib from "zlib";
+
+interface SourceMap {
+  version: number;
+  sources: string[];
+  sourcesContent: (string | null)[];
+  mappings: string;
+}
+
+async function extractSourceMap(mapPath: string, outDir: string) {
+  const raw = fs.readFileSync(mapPath, "utf-8");
+  const sourceMap: SourceMap = JSON.parse(raw);
+
+  for (let i = 0; i < sourceMap.sources.length; i++) {
+    const sourcePath = sourceMap.sources[i];
+    const content = sourceMap.sourcesContent[i];
+
+    if (!content) continue;
+
+    // Normalize path: strip webpack/bundle prefixes
+    const normalized = sourcePath
+      .replace(/^webpack:\/\/\//, "")
+      .replace(/^\.\//, "");
+
+    const outPath = path.join(outDir, normalized);
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.writeFileSync(outPath, content, "utf-8");
+  }
+
+  console.log(`Extracted ${sourceMap.sources.length} source files to ${outDir}`);
+}
+
+extractSourceMap("cli.js.map", "./recovered-src");
 ```
 
 ---
 
 ## Key Architectural Patterns
 
-### 1. Entry Point Bootstrap (`src/entrypoints/`)
-
-The CLI initializes by loading commands, resolving config, and mounting the Ink React tree.
+### 1. CLI Entrypoint Bootstrap
 
 ```typescript
-// src/entrypoints/cli.ts (reconstructed pattern)
-import { render } from 'ink';
-import React from 'react';
-import { App } from '../components/App';
-import { loadCommands } from '../commands';
-import { resolveConfig } from '../utils/config';
+// src/entrypoints/cli.ts (representative pattern)
+import { render } from "ink";
+import React from "react";
+import { App } from "../components/App";
+import { parseArgs } from "../utils/args";
 
 async function main() {
-  const config = await resolveConfig();
-  const commands = await loadCommands(config);
+  const args = parseArgs(process.argv.slice(2));
 
-  render(React.createElement(App, { commands, config }));
+  if (args.command) {
+    // Dispatch to named command handler
+    const handler = await loadCommand(args.command);
+    await handler.run(args);
+  } else {
+    // Default: launch interactive REPL via Ink
+    render(React.createElement(App, { initialArgs: args }));
+  }
 }
 
 main().catch((err) => {
@@ -84,242 +126,296 @@ main().catch((err) => {
 });
 ```
 
-### 2. Command System (`src/commands/`)
+### 2. Command Loading System
 
-Commands are loaded from multiple sources: built-ins, dynamic skills, plugins, and MCP commands.
+Commands support built-in, dynamic skills, plugins, and MCP sources:
 
 ```typescript
-// Pattern for defining a built-in command
-export interface Command {
+// src/commands/loader.ts (representative pattern)
+type CommandSource = "builtin" | "skill" | "plugin" | "mcp";
+
+interface Command {
   name: string;
+  source: CommandSource;
   description: string;
-  aliases?: string[];
-  hidden?: boolean;
-  handler: (args: string[], ctx: CommandContext) => Promise<void>;
+  run(args: ParsedArgs): Promise<void>;
 }
 
-// Example: a simple built-in command
-export const loginCommand: Command = {
-  name: 'login',
-  description: 'Authenticate with Anthropic',
-  async handler(args, ctx) {
-    const token = process.env.ANTHROPIC_API_KEY;
-    if (!token) {
-      ctx.output.error('Set ANTHROPIC_API_KEY environment variable');
-      process.exit(1);
+async function loadCommand(name: string): Promise<Command> {
+  // 1. Check built-in commands first
+  const builtin = builtinCommands.get(name);
+  if (builtin) return builtin;
+
+  // 2. Check MCP-registered commands
+  const mcpCmd = await mcpRegistry.resolve(name);
+  if (mcpCmd) return mcpCmd;
+
+  // 3. Dynamic skill loading
+  const skill = await loadSkillCommand(name);
+  if (skill) return skill;
+
+  throw new Error(`Unknown command: ${name}`);
+}
+```
+
+### 3. Ink/React Terminal UI Component Pattern
+
+```typescript
+// src/components/ChatView.tsx (representative pattern)
+import React, { useState, useEffect } from "react";
+import { Box, Text, useInput } from "ink";
+import { useConversation } from "../hooks/useConversation";
+
+interface ChatViewProps {
+  sessionId: string;
+}
+
+export function ChatView({ sessionId }: ChatViewProps) {
+  const { messages, sendMessage, isStreaming } = useConversation(sessionId);
+  const [input, setInput] = useState("");
+
+  useInput((char, key) => {
+    if (key.return) {
+      sendMessage(input);
+      setInput("");
+    } else if (key.backspace) {
+      setInput((prev) => prev.slice(0, -1));
+    } else {
+      setInput((prev) => prev + char);
     }
-    await ctx.services.auth.login(token);
-    ctx.output.success('Logged in successfully');
-  },
+  });
+
+  return (
+    <Box flexDirection="column" height="100%">
+      <Box flexDirection="column" flexGrow={1} overflowY="hidden">
+        {messages.map((msg, i) => (
+          <Box key={i} marginBottom={1}>
+            <Text color={msg.role === "assistant" ? "cyan" : "white"}>
+              {msg.role === "assistant" ? "Claude: " : "You: "}
+            </Text>
+            <Text>{msg.content}</Text>
+          </Box>
+        ))}
+        {isStreaming && <Text color="gray">▋</Text>}
+      </Box>
+      <Box borderStyle="single" paddingX={1}>
+        <Text>{">"} </Text>
+        <Text>{input}</Text>
+      </Box>
+    </Box>
+  );
+}
+```
+
+### 4. MCP (Model Context Protocol) Integration
+
+```typescript
+// src/services/mcpClient.ts (representative pattern)
+import { McpClient, Transport } from "@anthropic-ai/mcp";
+
+interface McpServerConfig {
+  name: string;
+  command: string;
+  args: string[];
+  env?: Record<string, string>;
+}
+
+class McpRegistry {
+  private clients = new Map<string, McpClient>();
+
+  async connect(config: McpServerConfig): Promise<void> {
+    const transport = new StdioTransport({
+      command: config.command,
+      args: config.args,
+      env: { ...process.env, ...config.env },
+    });
+
+    const client = new McpClient({ name: "claude-code", version: "2.1.88" });
+    await client.connect(transport);
+
+    // Discover tools exposed by this MCP server
+    const { tools } = await client.listTools();
+    for (const tool of tools) {
+      this.registerTool(config.name, tool);
+    }
+
+    this.clients.set(config.name, client);
+  }
+
+  async callTool(serverName: string, toolName: string, args: unknown) {
+    const client = this.clients.get(serverName);
+    if (!client) throw new Error(`MCP server not connected: ${serverName}`);
+    return client.callTool({ name: toolName, arguments: args as Record<string, unknown> });
+  }
+
+  async resolve(commandName: string): Promise<Command | null> {
+    // Map MCP tool names to CLI commands
+    for (const [server, tools] of this.toolRegistry) {
+      const tool = tools.find((t) => t.name === commandName);
+      if (tool) {
+        return {
+          name: commandName,
+          source: "mcp",
+          description: tool.description ?? "",
+          run: async (args) => {
+            const result = await this.callTool(server, commandName, args);
+            console.log(result.content);
+          },
+        };
+      }
+    }
+    return null;
+  }
+
+  private toolRegistry = new Map<string, Array<{ name: string; description?: string }>>();
+
+  private registerTool(server: string, tool: { name: string; description?: string }) {
+    const existing = this.toolRegistry.get(server) ?? [];
+    this.toolRegistry.set(server, [...existing, tool]);
+  }
+}
+
+export const mcpRegistry = new McpRegistry();
+```
+
+### 5. Authentication Utilities
+
+```typescript
+// src/utils/auth.ts (representative pattern)
+import fs from "fs";
+import path from "path";
+import os from "os";
+
+const CONFIG_DIR = path.join(os.homedir(), ".claude");
+const CREDENTIALS_FILE = path.join(CONFIG_DIR, "credentials.json");
+
+interface Credentials {
+  apiKey?: string;
+  sessionToken?: string;
+  expiresAt?: string;
+}
+
+export function loadCredentials(): Credentials {
+  if (!fs.existsSync(CREDENTIALS_FILE)) return {};
+  return JSON.parse(fs.readFileSync(CREDENTIALS_FILE, "utf-8"));
+}
+
+export function saveCredentials(creds: Credentials): void {
+  fs.mkdirSync(CONFIG_DIR, { recursive: true });
+  fs.writeFileSync(CREDENTIALS_FILE, JSON.stringify(creds, null, 2), {
+    mode: 0o600, // owner read/write only
+  });
+}
+
+export function getApiKey(): string {
+  // Priority: env var > credentials file
+  if (process.env.ANTHROPIC_API_KEY) {
+    return process.env.ANTHROPIC_API_KEY;
+  }
+  const creds = loadCredentials();
+  if (creds.apiKey) return creds.apiKey;
+  throw new Error("No API key found. Run `claude login` or set ANTHROPIC_API_KEY.");
+}
+```
+
+### 6. Feature Flags Pattern
+
+```typescript
+// src/utils/featureFlags.ts (representative pattern)
+// Feature flags are resolved at build time via bun:bundle macros
+// and at runtime via environment variables
+
+type FeatureFlag =
+  | "ENABLE_MCP_STREAMING"
+  | "ENABLE_TASKS_COMMAND"
+  | "ENABLE_REVIEW_COMMAND"
+  | "ENABLE_REMOTE_CAPABILITIES";
+
+const RUNTIME_FLAGS: Record<FeatureFlag, boolean> = {
+  ENABLE_MCP_STREAMING: process.env.CLAUDE_FF_MCP_STREAMING === "1",
+  ENABLE_TASKS_COMMAND: process.env.CLAUDE_FF_TASKS === "1",
+  ENABLE_REVIEW_COMMAND: process.env.CLAUDE_FF_REVIEW === "1",
+  ENABLE_REMOTE_CAPABILITIES: process.env.CLAUDE_FF_REMOTE === "1",
 };
-```
 
-### 3. Terminal UI with React + Ink (`src/components/`)
-
-Claude Code renders its entire TUI using [Ink](https://github.com/vadimdemedes/ink), treating terminal output as a React component tree.
-
-```typescript
-// src/components/StatusBar.tsx (reconstructed pattern)
-import React from 'react';
-import { Box, Text } from 'ink';
-
-interface StatusBarProps {
-  model: string;
-  tokenCount: number;
-  isStreaming: boolean;
+export function isEnabled(flag: FeatureFlag): boolean {
+  return RUNTIME_FLAGS[flag] ?? false;
 }
 
-export const StatusBar: React.FC<StatusBarProps> = ({
-  model,
-  tokenCount,
-  isStreaming,
-}) => (
-  <Box borderStyle="single" paddingX={1}>
-    <Text color="cyan">{model}</Text>
-    <Text> | Tokens: {tokenCount}</Text>
-    {isStreaming && <Text color="yellow"> ⟳ streaming…</Text>}
-  </Box>
-);
+// Usage in command loader:
+// if (isEnabled("ENABLE_TASKS_COMMAND")) {
+//   registerCommand(tasksCommand);
+// }
 ```
 
-### 4. Hooks for State Management (`src/hooks/`)
+---
 
-Interactive terminal state is managed via React hooks, similar to a web app.
+## Commands Documented in Source
+
+| Command | Description |
+|---------|-------------|
+| `claude login` | OAuth/API key authentication flow |
+| `claude mcp` | Manage MCP server connections |
+| `claude review` | Code review workflow |
+| `claude tasks` | Task/todo management |
+| `claude config` | View and edit configuration |
+
+---
+
+## Hooks: Terminal State Management
 
 ```typescript
-// src/hooks/useConversation.ts (reconstructed pattern)
-import { useState, useCallback } from 'react';
+// src/hooks/useConversation.ts (representative pattern)
+import { useState, useCallback, useRef } from "react";
+import Anthropic from "@anthropic-ai/sdk";
 
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
-export function useConversation() {
+export function useConversation(sessionId: string) {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const clientRef = useRef(new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }));
 
   const sendMessage = useCallback(async (content: string) => {
-    setIsLoading(true);
-    setMessages((prev) => [...prev, { role: 'user', content }]);
+    const userMessage: Message = { role: "user", content };
+    setMessages((prev) => [...prev, userMessage]);
+    setIsStreaming(true);
+
+    let assistantContent = "";
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': process.env.ANTHROPIC_API_KEY!,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'claude-opus-4-5',
-          max_tokens: 8096,
-          messages,
-        }),
+      const stream = await clientRef.current.messages.stream({
+        model: "claude-opus-4-5",
+        max_tokens: 8096,
+        messages: [...messages, userMessage].map((m) => ({
+          role: m.role,
+          content: m.content,
+        })),
       });
-      const data = await response.json();
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: data.content[0].text },
-      ]);
+
+      for await (const chunk of stream) {
+        if (
+          chunk.type === "content_block_delta" &&
+          chunk.delta.type === "text_delta"
+        ) {
+          assistantContent += chunk.delta.text;
+          setMessages((prev) => {
+            const next = [...prev];
+            const last = next[next.length - 1];
+            if (last?.role === "assistant") {
+              next[next.length - 1] = { ...last, content: assistantContent };
+            } else {
+              next.push({ role: "assistant", content: assistantContent });
+            }
+            return next;
+          });
+        }
+      }
     } finally {
-      setIsLoading(false);
+      setIsStreaming(false);
     }
   }, [messages]);
 
-  return { messages, isLoading, sendMessage };
+  return { messages, sendMessage, isStreaming };
 }
-```
-
-### 5. MCP Integration (`src/commands/mcp.ts`)
-
-Model Context Protocol commands manage MCP server connections.
-
-```typescript
-// Reconstructed MCP command pattern
-import { Command } from '../types';
-import { MCPClient } from '../services/mcp';
-
-export const mcpCommand: Command = {
-  name: 'mcp',
-  description: 'Manage MCP servers',
-  async handler(args, ctx) {
-    const [subcommand, ...rest] = args;
-
-    switch (subcommand) {
-      case 'add':
-        await ctx.services.mcp.addServer({
-          name: rest[0],
-          transport: 'stdio',
-          command: rest[1],
-          args: rest.slice(2),
-        });
-        break;
-
-      case 'list':
-        const servers = await ctx.services.mcp.listServers();
-        servers.forEach((s) => ctx.output.info(`• ${s.name} (${s.status})`));
-        break;
-
-      case 'remove':
-        await ctx.services.mcp.removeServer(rest[0]);
-        break;
-
-      default:
-        ctx.output.error(`Unknown mcp subcommand: ${subcommand}`);
-    }
-  },
-};
-```
-
-### 6. Services Layer (`src/services/`)
-
-```typescript
-// src/services/auth.ts (reconstructed pattern)
-export class AuthService {
-  private tokenKey = 'ANTHROPIC_API_KEY';
-
-  async login(token: string): Promise<void> {
-    // Persists token to ~/.claude/config.json
-    await this.persistToken(token);
-  }
-
-  getToken(): string | undefined {
-    return process.env[this.tokenKey];
-  }
-
-  isAuthenticated(): boolean {
-    return Boolean(this.getToken());
-  }
-
-  private async persistToken(token: string): Promise<void> {
-    const fs = await import('fs/promises');
-    const os = await import('os');
-    const path = await import('path');
-    const configDir = path.join(os.homedir(), '.claude');
-    await fs.mkdir(configDir, { recursive: true });
-    await fs.writeFile(
-      path.join(configDir, 'config.json'),
-      JSON.stringify({ apiKey: token }, null, 2),
-    );
-  }
-}
-```
-
----
-
-## Extracting Source from cli.js.map Yourself
-
-If you have the original package, extract sources programmatically:
-
-```typescript
-import fs from 'fs';
-import path from 'path';
-
-const mapFile = fs.readFileSync('cli.js.map', 'utf-8');
-const sourceMap = JSON.parse(mapFile);
-
-const { sources, sourcesContent } = sourceMap;
-
-for (let i = 0; i < sources.length; i++) {
-  const sourcePath = sources[i].replace(/^webpack:\/\/\//, '');
-  const content = sourcesContent[i];
-  if (!content) continue;
-
-  const outPath = path.join('recovered', sourcePath);
-  fs.mkdirSync(path.dirname(outPath), { recursive: true });
-  fs.writeFileSync(outPath, content, 'utf-8');
-}
-
-console.log(`Recovered ${sources.length} source files`);
-```
-
----
-
-## Feature Flags Pattern
-
-The source uses compile-time feature flags (`bun:bundle` macros):
-
-```typescript
-// Pattern seen throughout the source
-declare const __FEATURE_MCP_ENABLED__: boolean;
-declare const __FEATURE_REMOTE_TASKS__: boolean;
-
-if (__FEATURE_MCP_ENABLED__) {
-  commands.push(mcpCommand);
-}
-
-if (__FEATURE_REMOTE_TASKS__) {
-  commands.push(tasksCommand);
-}
-```
-
-When attempting to build, stub these globals:
-
-```typescript
-// build-stubs.ts
-(globalThis as any).__FEATURE_MCP_ENABLED__ = true;
-(globalThis as any).__FEATURE_REMOTE_TASKS__ = true;
 ```
 
 ---
@@ -327,142 +423,72 @@ When attempting to build, stub these globals:
 ## Environment Variables
 
 | Variable | Purpose |
-|---|---|
-| `ANTHROPIC_API_KEY` | Required for all API calls |
-| `CLAUDE_MODEL` | Override default model |
-| `CLAUDE_CONFIG_DIR` | Override `~/.claude` config directory |
-| `CLAUDE_DEBUG` | Enable verbose debug logging |
-| `MCP_SERVER_URL` | Override MCP server endpoint |
+|----------|---------|
+| `ANTHROPIC_API_KEY` | Primary API key for Claude API calls |
+| `CLAUDE_FF_MCP_STREAMING` | Enable MCP streaming feature flag (`1`/`0`) |
+| `CLAUDE_FF_TASKS` | Enable tasks command feature flag |
+| `CLAUDE_FF_REVIEW` | Enable review command feature flag |
+| `CLAUDE_FF_REMOTE` | Enable remote capabilities feature flag |
+| `CLAUDE_CONFIG_DIR` | Override default `~/.claude` config directory |
 
 ---
 
 ## Attempting to Run the Recovered Source
 
 ```bash
-# 1. Initialize package
+# 1. Clone the repo
+git clone https://github.com/ponponon/claude_code_src
 cd claude_code_src
-npm init -y
 
-# 2. Install core dependencies (inferred from source imports)
-npm install ink react @anthropic-ai/sdk commander zod
-
-npm install -D typescript @types/react @types/node tsx
-
-# 3. Create tsconfig
-cat > tsconfig.json << 'EOF'
+# 2. Add a package.json (not included — must be reconstructed)
+cat > package.json << 'EOF'
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "jsx": "react",
-    "strict": true,
-    "outDir": "dist",
-    "rootDir": "src"
+  "name": "claude-code-recovered",
+  "version": "2.1.88",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.51.0",
+    "ink": "^5.0.0",
+    "react": "^18.0.0",
+    "commander": "^12.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/react": "^18.0.0",
+    "@types/node": "^22.0.0"
   }
 }
 EOF
 
-# 4. Stub feature flags and attempt compilation
-npx tsx src/entrypoints/cli.ts
+# 3. Install deps
+npm install
+
+# 4. Set your API key
+export ANTHROPIC_API_KEY=your_key_here
+
+# 5. Compile (bun:bundle macros will need stubs)
+npx tsc --noEmit  # type-check only
 ```
 
----
-
-## Navigating the Codebase
-
-```bash
-# Find all command definitions
-grep -r "export const.*Command" src/commands/ --include="*.ts" -l
-
-# Find MCP-related code
-grep -r "MCP\|ModelContext\|mcp" src/ --include="*.ts" -l
-
-# Find all Ink components
-grep -r "from 'ink'" src/ --include="*.tsx" -l
-
-# Find auth/token handling
-grep -r "ANTHROPIC_API_KEY\|apiKey\|token" src/utils/ --include="*.ts" -l
-
-# Find feature flags
-grep -r "__FEATURE_" src/ --include="*.ts"
-```
-
----
-
-## Common Patterns in the Source
-
-### Streaming responses
-
-```typescript
-// Pattern for streaming from Anthropic API
-import Anthropic from '@anthropic-ai/sdk';
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
-async function* streamResponse(userMessage: string) {
-  const stream = await client.messages.stream({
-    model: 'claude-opus-4-5',
-    max_tokens: 8096,
-    messages: [{ role: 'user', content: userMessage }],
-  });
-
-  for await (const chunk of stream) {
-    if (
-      chunk.type === 'content_block_delta' &&
-      chunk.delta.type === 'text_delta'
-    ) {
-      yield chunk.delta.text;
-    }
-  }
-}
-```
-
-### Config file access
-
-```typescript
-import fs from 'fs/promises';
-import os from 'os';
-import path from 'path';
-
-const CONFIG_DIR = process.env.CLAUDE_CONFIG_DIR ?? path.join(os.homedir(), '.claude');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-
-async function readConfig(): Promise<Record<string, unknown>> {
-  try {
-    const raw = await fs.readFile(CONFIG_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch {
-    return {};
-  }
-}
-```
+> **Note**: The source uses `bun:bundle` macros for feature flag tree-shaking. You'll need to stub these or use Bun to build.
 
 ---
 
 ## Troubleshooting
 
-**`bun:bundle` macro errors during build**
-- These are Bun-specific bundler macros. Stub them as constants or use Bun to build:
-  ```bash
-  bun build src/entrypoints/cli.ts --outdir dist
-  ```
-
-**Missing module errors**
-- The source has many inferred dependencies. Check the import statement and install the corresponding npm package.
-
-**Feature flag `ReferenceError`**
-- Add the stubs from the "Feature Flags" section above before running.
-
-**Ink rendering issues in non-TTY environments**
-- Set `CI=true` to disable interactive rendering, or redirect stderr:
-  ```bash
-  FORCE_COLOR=0 npx tsx src/entrypoints/cli.ts 2>/dev/null
-  ```
+| Problem | Solution |
+|---------|----------|
+| `bun:bundle` import errors | Replace with runtime flag checks or use Bun as the build tool |
+| Missing `package.json` | Reconstruct from `node_modules` references in source imports |
+| `cli.js.map` too large to parse in-memory | Stream-parse with `stream-json` npm package |
+| Tencent mirror link broken | Check archive.org or other npm mirror caches |
+| TypeScript path aliases unresolved | Add `paths` to `tsconfig.json` matching the original bundle's alias structure |
 
 ---
 
-## Legal Notice
+## Legal Notes
 
-This project is for archival and educational research only. All original code is copyright Anthropic. Do not use for commercial purposes without legal review.
-```
+- This repository is **not affiliated with Anthropic**.
+- Original code copyright belongs to **Anthropic**.
+- This project is for **archival and research purposes only**.
+- Do not use recovered code in production or commercial products without proper licensing.
