@@ -253,6 +253,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [claude-reviews-claude-architecture](skills/claude-reviews-claude-architecture/) | [install](https://skills.sh/aradotso/trending-skills/claude-reviews-claude-architecture) | [openedclaude/claude-reviews-claude](https://github.com/openedclaude/claude-reviews-claude) | 2026-04-01 |
 | [awesome-design-md](skills/awesome-design-md/) | [install](https://skills.sh/aradotso/trending-skills/awesome-design-md) | [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) | 2026-04-01 |
 | [claude-code-book-agent-harness](skills/claude-code-book-agent-harness/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-book-agent-harness) | [lintsinghua/claude-code-book](https://github.com/lintsinghua/claude-code-book) | 2026-04-02 |
+| [how-claude-code-works](skills/how-claude-code-works/) | [install](https://skills.sh/aradotso/trending-skills/how-claude-code-works) | [Windy3f3f3f3f/how-claude-code-works](https://github.com/Windy3f3f3f3f/how-claude-code-works) | 2026-04-02 |
 <!-- SKILL_INDEX -->
 
 ## How it works
