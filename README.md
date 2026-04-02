@@ -255,6 +255,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [claude-code-book-agent-harness](skills/claude-code-book-agent-harness/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-book-agent-harness) | [lintsinghua/claude-code-book](https://github.com/lintsinghua/claude-code-book) | 2026-04-02 |
 | [how-claude-code-works](skills/how-claude-code-works/) | [install](https://skills.sh/aradotso/trending-skills/how-claude-code-works) | [Windy3f3f3f3f/how-claude-code-works](https://github.com/Windy3f3f3f3f/how-claude-code-works) | 2026-04-02 |
 | [ex-skill-distill](skills/ex-skill-distill/) | [install](https://skills.sh/aradotso/trending-skills/ex-skill-distill) | [therealXiaomanChu/ex-skill](https://github.com/therealXiaomanChu/ex-skill) | 2026-04-02 |
+| [emdash-cms](skills/emdash-cms/) | [install](https://skills.sh/aradotso/trending-skills/emdash-cms) | [emdash-cms/emdash](https://github.com/emdash-cms/emdash) | 2026-04-02 |
 <!-- SKILL_INDEX -->
 
 ## How it works
