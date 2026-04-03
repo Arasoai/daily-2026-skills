@@ -1,406 +1,635 @@
 ```markdown
 ---
 name: claude-code-source-analysis
-description: Skill for analyzing, navigating, and understanding the Claude Code v2.1.88 decompiled TypeScript source, its architecture, tools, feature flags, and internal systems
+description: Expertise in exploring, understanding, and extending the Claude Code decompiled source archive and its Python reimplementation (claw-code)
 triggers:
-  - analyze claude code source
-  - explore claude code internals
+  - explore claude code source code
   - understand claude code architecture
-  - claude code tool system
-  - claude code feature flags
-  - navigate claude code source
-  - claude code telemetry analysis
-  - claude code agent loop internals
+  - analyze claude code internals
+  - work with claude code tools system
+  - study claude code agent loop
+  - implement claude code patterns
+  - extend claude code slash commands
+  - understand claude code memory system
 ---
 
-# Claude Code Source Code Analysis
+# Claude Code Source Code Collection
 
-> Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection.
+> Skill by [ara.so](https://ara.so) — Daily 2026 Skills collection
 
-This repository contains the **unbundled TypeScript source** extracted from the `@anthropic-ai/claude-code` npm package (v2.1.88). The published package ships a single ~12MB `cli.js` bundle; this repo reverse-engineers and presents the internal module structure for research and educational purposes. It covers the query engine, 40+ tools, permission model, telemetry systems, feature flags, remote control mechanisms, and future roadmap codenames.
-
----
-
-## What This Repository Is
-
-- **Source**: Extracted from `@anthropic-ai/claude-code@2.1.88` on npm
-- **Language**: TypeScript (unbundled from `cli.js`)
-- **Purpose**: Technical research, education, architecture study
-- **License**: Intellectual property of Anthropic — no commercial use
-- **Incomplete**: 108 modules are missing (internal Anthropic monorepo only)
+A research repository containing the decompiled TypeScript source of Claude Code v2.1.88 (~163,318 lines across 1,884 files) and a clean-room Python reimplementation (`claw-code`). Use this repository to study, extend, or reimplement Anthropic's CLI coding agent.
 
 ---
 
 ## Repository Structure
 
 ```
-claude-code-source-code/
-├── src/                  # Unbundled TypeScript source modules
-├── docs/
-│   ├── en/               # English deep-analysis reports
-│   ├── ja/               # 日本語
-│   ├── ko/               # 한국어
-│   └── zh/               # 中文
-├── README.md
-├── README_CN.md
-├── README_KR.md
-└── README_JA.md
+collection-claude-code-source-code/
+├── claude-code-source-code/   # Decompiled TypeScript (v2.1.88)
+│   └── src/
+│       ├── main.tsx           # CLI entry + REPL bootstrap
+│       ├── query.ts           # Core agent loop (785KB)
+│       ├── QueryEngine.ts     # SDK/Headless lifecycle engine
+│       ├── Tool.ts            # Tool interface + buildTool factory
+│       ├── commands.ts        # Slash command definitions
+│       ├── tools/             # 40+ tool implementations
+│       ├── commands/          # ~87 slash command handlers
+│       ├── components/        # React/Ink terminal UI
+│       ├── services/          # Business logic layer
+│       ├── coordinator/       # Multi-agent coordination
+│       ├── memdir/            # Long-term memory management
+│       └── plugins/           # Plugin system
+├── claw-code/                 # Python clean-room rewrite (66 files)
+└── docs/                      # Bilingual analysis (en/ + zh/)
 ```
 
 ---
 
-## Key Analysis Reports (`docs/en/`)
-
-| File | Topic |
-|------|-------|
-| `01-telemetry-and-privacy.md` | What data is collected, Datadog + 1P sinks, no opt-out |
-| `02-hidden-features-and-codenames.md` | Capybara/Tengu/Numbat codenames, feature flags, hidden commands |
-| `03-undercover-mode.md` | AI authorship hiding in open-source repos |
-| `04-remote-control-and-killswitches.md` | Hourly settings polling, killswitches, GrowthBook flags |
-| `05-future-roadmap.md` | KAIROS autonomous mode, voice mode, 17 unreleased tools |
-
----
-
-## Architecture Overview
-
-### Entry → Query Engine → Tools/Services/State
-
-```
-CLI Entry (cli.js)
-  └── Query Engine
-        ├── Agent Loop  (message → tool call → result → repeat)
-        ├── Tool System (40+ registered tools)
-        ├── Permission Manager
-        ├── State / Session
-        └── Services
-              ├── Telemetry (Anthropic 1P + Datadog)
-              ├── Remote Settings (hourly poll)
-              └── Feature Flags (GrowthBook)
-```
-
-### The 12 Progressive Harness Mechanisms
-
-Claude Code layers production features on top of the base agent loop:
-
-1. **System prompt injection** — role, context, repo hash
-2. **Tool registration** — dynamic based on feature flags
-3. **Permission gating** — user approval flow per tool
-4. **Telemetry hooks** — event on every tool call/result
-5. **Remote settings overlay** — managed org policies
-6. **Feature flag evaluation** — GrowthBook per-user
-7. **Undercover mode** — strips AI attribution in public repos
-8. **Sub-agent spawning** — coordinator/worker pattern
-9. **Context compaction** — sliding window + micro-compact
-10. **Killswitch enforcement** — remote disable of capabilities
-11. **Model override** — remote can change model mid-session
-12. **Effort anchors** — internal users get higher quality prompts
-
----
-
-## Tool System Architecture
-
-### Published Tools (40+)
-
-Claude Code registers tools dynamically. Core published tools include:
-
-```typescript
-// Tool registration pattern (from src/)
-interface Tool {
-  name: string;
-  description: string;
-  input_schema: JSONSchema;
-  execute(input: unknown, context: ToolContext): Promise<ToolResult>;
-}
-
-// Example: BashTool
-const BashTool: Tool = {
-  name: "Bash",
-  description: "Execute shell commands in the current working directory",
-  input_schema: {
-    type: "object",
-    properties: {
-      command: { type: "string" },
-      timeout: { type: "number" }
-    },
-    required: ["command"]
-  },
-  async execute({ command, timeout }, ctx) {
-    // Permission check → exec → return stdout/stderr
-  }
-};
-```
-
-### Feature-Gated Tools (not in npm bundle)
-
-```typescript
-// These exist in sdk-tools.d.ts type signatures but are DCE'd:
-// REPLTool         — interactive VM sandbox (internal)
-// WebBrowserTool   — browser automation (WEB_BROWSER_TOOL flag)
-// SleepTool        — agent loop delay (KAIROS/PROACTIVE)
-// PushNotificationTool — push notifs (KAIROS)
-// SubscribePRTool  — GitHub PR webhooks (KAIROS_GITHUB_WEBHOOKS)
-// VerifyPlanExecutionTool — plan verification
-// DiscoverSkillsTool — skill discovery (EXPERIMENTAL_SKILL_SEARCH)
-```
-
-### Permission Flow
-
-```typescript
-// Simplified permission model
-type PermissionLevel = "always" | "ask" | "never";
-
-interface PermissionRequest {
-  tool: string;
-  input: unknown;
-  riskLevel: "low" | "medium" | "high";
-}
-
-// Flow: Tool.execute() → PermissionManager.check() → 
-//   if "ask": show UI prompt → user approves/denies
-//   if "always": proceed
-//   if "never": throw PermissionDeniedError
-```
-
----
-
-## Telemetry System
-
-### Two Analytics Sinks
-
-```typescript
-// 1st-party sink — Anthropic internal
-// 2nd-party sink — Datadog
-
-// Every event includes:
-interface TelemetryEvent {
-  event_name: string;
-  session_id: string;
-  repo_hash: string;         // hashed git remote URL
-  environment_fingerprint: string;
-  process_metrics: ProcessMetrics;
-  timestamp: number;
-  // ...tool-specific fields
-}
-
-// Enable full tool input capture (research/debug):
-// OTEL_LOG_TOOL_DETAILS=1 claude ...
-```
-
-### No UI Opt-Out for 1P Logging
-
-The `DISABLE_TELEMETRY` / `CLAUDE_CODE_DISABLE_NONESSENTIAL_MEMORY` env vars affect some sinks but **not** the first-party Anthropic analytics stream. This is documented in `docs/en/01-telemetry-and-privacy.md`.
-
----
-
-## Feature Flags
-
-### GrowthBook Integration
-
-```typescript
-// Feature flags use obfuscated random-word-pair names to hide purpose:
-// "tengu_frond_boric"   → enables Tengu model routing
-// "capybara_v8_stable"  → Capybara v8 rollout
-
-// Evaluation happens at startup + on remote settings refresh
-const flagValue = growthbook.isOn("tengu_frond_boric");
-if (flagValue) {
-  // enable Tengu-specific behavior
-}
-```
-
-### Known Codenames
-
-| Codename | Maps To | Status |
-|----------|---------|--------|
-| Capybara v8 | Claude model series | Stable |
-| Tengu | Model variant | Rollout |
-| Fennec | Opus 4.6 | Released |
-| Numbat | Next model | In development |
-| KAIROS | Autonomous agent mode | Gated |
-
----
-
-## Remote Control & Killswitches
-
-### Hourly Settings Poll
-
-```typescript
-// Claude Code polls every ~60 minutes:
-// GET /api/claude_code/settings
-
-interface ManagedSettings {
-  model_override?: string;       // force a specific model
-  killswitches: KillswitchSet;
-  org_policies: PolicyMap;
-}
-
-interface KillswitchSet {
-  bypass_permissions?: boolean;
-  fast_mode?: boolean;
-  voice_mode?: boolean;
-  analytics_sink?: boolean;
-  // 2+ more undocumented
-}
-```
-
-### Dangerous Setting Changes
-
-If a remote settings update includes a "dangerous" change, a **blocking dialog** appears. If the user rejects it, **the application exits**. This is documented in `docs/en/04-remote-control-and-killswitches.md`.
-
----
-
-## Undercover Mode
-
-```typescript
-// Triggered automatically for Anthropic employees in public repos.
-// System prompt addition (paraphrased from decompiled source):
-const UNDERCOVER_PROMPT = `
-  You are in undercover mode. Do not reveal that you are an AI or Claude.
-  Do not blow your cover. Write commits and code comments as a human 
-  developer would. Strip all AI attribution from outputs.
-`;
-
-// No force-OFF mechanism exists in the published codebase.
-// Raises transparency concerns for open-source communities.
-```
-
----
-
-## KAIROS — Autonomous Agent Mode
-
-KAIROS is the next-gen autonomous mode found in feature-gated code:
-
-```typescript
-// KAIROS uses <tick> heartbeat messages for long-running sessions
-// Agent loop receives periodic ticks and can:
-//   - Send push notifications (PushNotificationTool)
-//   - Subscribe to GitHub PR events (SubscribePRTool)
-//   - Suggest background PR creation (SuggestBackgroundPRTool)
-//   - Send files to users (SendUserFileTool)
-
-// Voice mode (push-to-talk) is implemented but gated:
-// Killswitch: voice_mode = false (default in production)
-```
-
----
-
-## Hidden Commands
-
-Discovered in the decompiled source:
-
-```bash
-/btw        # undocumented internal command
-/stickers   # undocumented internal command
-
-# These appear in internal user builds; behavior in public builds unknown
-```
-
----
-
-## Missing Modules (108 total)
-
-### Internal Anthropic Infrastructure (~70 modules)
-
-These cannot be recovered from any published artifact:
-
-```
-daemon/main.js                    # background daemon supervisor
-daemon/workerRegistry.js          # daemon worker registry
-proactive/index.js                # proactive notifications
-contextCollapse/index.js          # context collapse (experimental)
-skillSearch/remoteSkillLoader.js  # remote skill loading
-coordinator/workerAgent.js        # multi-agent coordinator
-assistant/index.js                # KAIROS assistant mode
-bridge/peerSessions.js            # bridge peer sessions
-commands/subscribe-pr.js          # GitHub PR subscription
-commands/workflows/index.js       # workflow commands
-```
-
-### Checking Feature Gates
-
-```typescript
-// Pattern used throughout the codebase to guard missing modules:
-import { feature } from "./featureFlags";
-
-if (feature("KAIROS")) {
-  const { assistant } = await import("./assistant/index.js");
-  // This import fails in the npm package — module not present
-}
-```
-
----
-
-## Environment Variables Reference
-
-```bash
-# Telemetry
-OTEL_LOG_TOOL_DETAILS=1          # capture full tool inputs in telemetry
-DISABLE_TELEMETRY=1              # disables SOME sinks (not 1P Anthropic)
-CLAUDE_CODE_DISABLE_NONESSENTIAL_MEMORY=1  # reduces memory telemetry
-
-# Debug / Research
-CLAUDE_CODE_DEBUG=1              # verbose logging
-ANTHROPIC_LOG=debug              # SDK-level debug logs
-
-# API
-ANTHROPIC_API_KEY=$YOUR_KEY      # standard API key
-ANTHROPIC_BASE_URL=https://...   # custom base URL (proxy, etc.)
-
-# Feature flags (internal)
-CLAUDE_CODE_ENABLE_FEATURE=...   # override specific feature gates
-```
-
----
-
-## Navigating the Source
+## Installation & Setup
 
 ```bash
 # Clone the repository
-git clone https://github.com/sanbuphy/claude-code-source-code
+git clone https://github.com/chauncygu/collection-claude-code-source-code.git
+cd collection-claude-code-source-code
+
+# Explore the TypeScript source
 cd claude-code-source-code
+npm install   # if package.json dependencies are needed for tooling
 
-# Read analysis reports
-cat docs/en/01-telemetry-and-privacy.md
-cat docs/en/05-future-roadmap.md
-
-# Browse source modules
-ls src/
-
-# Search for specific patterns
-grep -r "KAIROS" src/
-grep -r "undercover" src/
-grep -r "killswitch" src/
-grep -r "feature(" src/ | head -40
+# Work with the Python rewrite
+cd ../claw-code
+pip install -r requirements.txt
 ```
 
-> **Note**: The `src/` directory is **not directly compilable** — 108 modules are missing, type references are incomplete, and the build system relies on Anthropic's internal monorepo infrastructure.
+---
+
+## Core Architecture: The Agent Loop
+
+The central execution model lives in `src/query.ts`. Understanding it is key to understanding the whole system.
+
+```typescript
+// Simplified agent loop pattern from query.ts
+async function* query(
+  userMessage: string,
+  context: ConversationContext,
+  tools: Tool[],
+): AsyncGenerator<SDKMessage> {
+  // 1. Assemble system prompt from parts
+  const systemPromptParts = await fetchSystemPromptParts(context);
+
+  // 2. Run streaming tool executor with auto-compaction
+  const executor = new StreamingToolExecutor(tools);
+
+  while (true) {
+    const response = await callClaude({ systemPromptParts, userMessage, tools });
+
+    // 3. Yield streamed messages back to consumer
+    for await (const chunk of response) {
+      yield chunk;
+    }
+
+    // 4. Execute tool calls in parallel
+    const toolResults = await executor.runTools(response.toolCalls);
+
+    // 5. Auto-compact context if approaching token limit
+    if (shouldCompact(context)) {
+      await autoCompact(context);
+    }
+
+    if (!hasMoreToolCalls(response)) break;
+  }
+}
+```
+
+### Entry Point Pattern (`main.tsx`)
+
+```typescript
+// CLI bootstrap pattern
+import { render } from 'ink';
+import { App } from './components/App';
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2));
+
+  if (args.headless) {
+    // SDK/headless mode via QueryEngine
+    const engine = new QueryEngine(args);
+    await engine.run();
+  } else {
+    // Interactive REPL mode via React/Ink
+    render(<App initialArgs={args} />);
+  }
+}
+
+main().catch(console.error);
+```
+
+---
+
+## Tool System
+
+### Tool Interface (`src/Tool.ts`)
+
+```typescript
+interface Tool {
+  name: string;
+  description: string;
+  inputSchema: ZodSchema;
+  execute(input: unknown, context: ToolContext): Promise<ToolResult>;
+}
+
+// buildTool factory pattern
+const MyTool = buildTool({
+  name: 'my_tool',
+  description: 'Does something useful',
+  inputSchema: z.object({
+    path: z.string().describe('File path to operate on'),
+    content: z.string().optional(),
+  }),
+  async execute({ path, content }, ctx) {
+    // tool implementation
+    return { type: 'text', text: `Processed ${path}` };
+  },
+});
+```
+
+### Key Built-in Tools
+
+```typescript
+// File operations
+import { FileReadTool }  from './tools/FileReadTool';
+import { FileEditTool }  from './tools/FileEditTool';
+import { FileWriteTool } from './tools/FileWriteTool';
+
+// Code search
+import { GlobTool } from './tools/GlobTool';
+import { GrepTool } from './tools/GrepTool';
+
+// Execution
+import { BashTool } from './tools/BashTool';
+
+// Web
+import { WebFetchTool }  from './tools/WebFetchTool';
+import { WebSearchTool } from './tools/WebSearchTool';
+
+// Sub-agents
+import { AgentTool } from './tools/AgentTool';
+
+// Memory
+import { TodoWriteTool } from './tools/TodoWriteTool';
+```
+
+### Registering Tools (`src/tools.ts`)
+
+```typescript
+// Tool registration pattern
+export function getTools(config: Config): Tool[] {
+  const baseTools = [
+    FileReadTool,
+    FileEditTool,
+    FileWriteTool,
+    GlobTool,
+    GrepTool,
+    BashTool,
+  ];
+
+  if (config.enableWebTools) {
+    baseTools.push(WebFetchTool, WebSearchTool);
+  }
+
+  if (config.enableAgentTools) {
+    baseTools.push(AgentTool);
+  }
+
+  return baseTools;
+}
+```
+
+---
+
+## Slash Commands
+
+### Command Definition Pattern (`src/commands/`)
+
+```typescript
+// Pattern for defining a slash command
+export const reviewCommand = {
+  name: 'review',
+  description: 'Review code changes',
+  aliases: ['/review'],
+  async execute(args: string[], context: CommandContext) {
+    const diff = await context.tools.bash.execute('git diff HEAD');
+    return context.query(`Please review these changes:\n${diff}`);
+  },
+};
+
+// Registration in commands.ts
+export const SLASH_COMMANDS = [
+  reviewCommand,
+  commitCommand,
+  sessionCommand,
+  memoryCommand,
+  configCommand,
+  // ... ~87 total
+];
+```
+
+### Common Slash Commands Reference
+
+| Command | Purpose |
+|---|---|
+| `/commit` | Stage and commit changes |
+| `/commit-push-pr` | Commit, push, and open PR |
+| `/review` | Review current diff |
+| `/resume` | Resume last session |
+| `/memory` | Manage long-term memory |
+| `/config` | Edit configuration |
+| `/skills` | List available skills |
+| `/permissions` | Manage tool permissions |
+| `/mcp` | MCP server management |
+| `/vim` | Toggle vim keybindings |
+
+---
+
+## Permission System
+
+```typescript
+// Three permission modes
+type PermissionMode = 'default' | 'bypass' | 'strict';
+
+// default  → ask user before executing sensitive tools
+// bypass   → auto-allow all tools (headless/CI use)
+// strict   → auto-deny all unwhitelisted tools
+
+// Permission rule structure
+interface PermissionRule {
+  tool: string;           // e.g. 'bash', 'file_write'
+  pattern?: string;       // glob pattern for path-based rules
+  mode: PermissionMode;
+}
+
+// Checking permissions at runtime
+async function checkPermission(
+  tool: Tool,
+  input: unknown,
+  rules: PermissionRule[],
+): Promise<'allow' | 'deny' | 'ask'> {
+  const matchingRule = rules.find(r => matchesRule(r, tool, input));
+  if (matchingRule) return matchingRule.mode === 'bypass' ? 'allow' : 'deny';
+  return 'ask'; // default: prompt user
+}
+```
+
+---
+
+## Context Management & Auto-Compaction
+
+```typescript
+// Auto-compact strategies from query.ts
+type CompactionStrategy =
+  | 'reactive'   // compress when near token limit
+  | 'micro'      // compress small incremental chunks
+  | 'trimmed';   // trim oldest turns first
+
+async function autoCompact(
+  context: ConversationContext,
+  strategy: CompactionStrategy = 'reactive',
+): Promise<void> {
+  const tokenCount = await estimateTokens(context.messages);
+
+  if (tokenCount > CONTEXT_COLLAPSE_THRESHOLD) {
+    const summary = await summarizeHistory(context.messages);
+    context.messages = [
+      { role: 'system', content: summary },
+      ...context.messages.slice(-KEEP_LAST_N_MESSAGES),
+    ];
+  }
+}
+
+// Token estimation utility
+function estimateTokens(messages: Message[]): number {
+  return messages.reduce((sum, m) => sum + Math.ceil(m.content.length / 4), 0);
+}
+```
+
+---
+
+## Memory System (`src/memdir/`)
+
+Claude Code implements a 7-layer memory architecture:
+
+```typescript
+// Memory layer types
+type MemoryLayer =
+  | 'working'       // current session context window
+  | 'episodic'      // compressed past session summaries
+  | 'semantic'      // extracted facts and preferences
+  | 'procedural'    // learned workflows and patterns
+  | 'external'      // files, docs, codebases
+  | 'meta'          // memory about memory (indexing)
+  | 'dream';        // background consolidation process
+
+// Writing to long-term memory
+import { TodoWriteTool } from './tools/TodoWriteTool';
+
+// Memory entries are stored as structured markdown in ~/.claude/memory/
+interface MemoryEntry {
+  id: string;
+  layer: MemoryLayer;
+  content: string;
+  embedding?: number[];  // for semantic search
+  createdAt: Date;
+  tags: string[];
+}
+```
+
+---
+
+## Multi-Agent Coordination (`src/coordinator/`)
+
+```typescript
+// Sub-agent spawning via AgentTool
+const result = await AgentTool.execute({
+  task: 'Analyze the test failures in src/utils/',
+  tools: ['file_read', 'grep', 'bash'],
+  context: {
+    maxTokens: 8192,
+    systemPrompt: 'You are a debugging specialist.',
+  },
+});
+
+// Coordinator pattern for parallel agents
+class AgentCoordinator {
+  async runParallel(tasks: AgentTask[]): Promise<AgentResult[]> {
+    return Promise.all(tasks.map(task => this.spawnAgent(task)));
+  }
+
+  async runSequential(tasks: AgentTask[]): Promise<AgentResult[]> {
+    const results = [];
+    for (const task of tasks) {
+      results.push(await this.spawnAgent(task));
+    }
+    return results;
+  }
+}
+```
+
+---
+
+## QueryEngine (Headless/SDK Mode)
+
+```typescript
+// Using QueryEngine for programmatic access
+import { QueryEngine } from './QueryEngine';
+
+const engine = new QueryEngine({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  model: 'claude-opus-4-5',
+  permissionMode: 'bypass',  // for CI environments
+  tools: getTools({ enableWebTools: true }),
+});
+
+// Single query
+const result = await engine.query('Refactor the auth module to use JWT');
+
+// Streaming
+for await (const chunk of engine.queryStream('Write tests for UserService')) {
+  process.stdout.write(chunk.text ?? '');
+}
+```
+
+---
+
+## Python Rewrite: claw-code
+
+```python
+# claw-code mirrors the TypeScript architecture in Python
+# Core agent loop
+from claw_code.agent import ClawAgent
+from claw_code.tools import FileReadTool, BashTool, GrepTool
+
+agent = ClawAgent(
+    api_key=os.environ["ANTHROPIC_API_KEY"],
+    model="claude-opus-4-5",
+    tools=[FileReadTool(), BashTool(), GrepTool()],
+)
+
+# Run a task
+result = agent.run("Find all TODO comments and create a summary report")
+print(result)
+
+# Async streaming
+async for chunk in agent.stream("Refactor the database layer"):
+    print(chunk, end="", flush=True)
+```
+
+```python
+# Implementing a custom tool in claw-code
+from claw_code.tools.base import BaseTool
+from pydantic import BaseModel
+
+class MyToolInput(BaseModel):
+    path: str
+    pattern: str
+
+class MyCustomTool(BaseTool):
+    name = "my_custom_tool"
+    description = "Search files matching a pattern"
+    input_schema = MyToolInput
+
+    def execute(self, input: MyToolInput, context) -> str:
+        import subprocess
+        result = subprocess.run(
+            ["grep", "-r", input.pattern, input.path],
+            capture_output=True, text=True
+        )
+        return result.stdout
+```
+
+---
+
+## MCP Integration
+
+```typescript
+// Model Context Protocol tool registration
+import { MCPTool } from './tools/MCPTool';
+
+// Connect to an MCP server
+const mcpTool = new MCPTool({
+  serverUrl: process.env.MCP_SERVER_URL,
+  capabilities: ['resources', 'tools', 'prompts'],
+});
+
+// Tools exposed by MCP servers are auto-discovered
+const mcpTools = await mcpTool.discoverTools();
+// Returns standard Tool[] that integrate seamlessly
+```
+
+---
+
+## React/Ink Terminal UI Patterns
+
+```typescript
+// Component pattern from src/components/
+import React, { useState } from 'react';
+import { Box, Text, useInput } from 'ink';
+
+const AgentOutput: React.FC<{ messages: Message[] }> = ({ messages }) => {
+  return (
+    <Box flexDirection="column">
+      {messages.map((msg, i) => (
+        <Box key={i} marginBottom={1}>
+          <Text color={msg.role === 'assistant' ? 'cyan' : 'white'}>
+            {msg.role === 'assistant' ? '🤖 ' : '👤 '}
+            {msg.content}
+          </Text>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
+// Custom hook for agent state
+function useAgentState() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isThinking, setIsThinking] = useState(false);
+
+  async function sendMessage(text: string) {
+    setIsThinking(true);
+    for await (const chunk of queryStream(text)) {
+      setMessages(prev => appendChunk(prev, chunk));
+    }
+    setIsThinking(false);
+  }
+
+  return { messages, isThinking, sendMessage };
+}
+```
+
+---
+
+## Configuration
+
+```typescript
+// Config structure (src/setup.ts)
+interface ClaudeCodeConfig {
+  model: string;                    // Default: 'claude-opus-4-5'
+  permissionMode: PermissionMode;   // Default: 'default'
+  maxTokens: number;                // Default: 8192
+  enableWebTools: boolean;
+  enableVoice: boolean;
+  enableVim: boolean;
+  mcpServers: MCPServerConfig[];
+  memoryDir: string;                // Default: ~/.claude/memory
+  apiKey: string;                   // From ANTHROPIC_API_KEY env var
+}
+
+// Config is stored at ~/.claude/config.json
+// Editable via /config slash command or directly
+```
+
+```bash
+# Environment variables used by the system
+export ANTHROPIC_API_KEY="..."          # Required
+export CLAUDE_MODEL="claude-opus-4-5"  # Optional override
+export CLAUDE_PERMISSION_MODE="bypass" # For CI: bypass | strict | default
+export CLAUDE_MCP_SERVER_URL="..."     # Optional MCP server
+export CLAUDE_MEMORY_DIR="~/.claude/memory"
+```
+
+---
+
+## Common Patterns
+
+### Pattern 1: Adding a New Tool
+
+```typescript
+// 1. Create src/tools/MyNewTool.ts
+import { buildTool } from '../Tool';
+import { z } from 'zod';
+
+export const MyNewTool = buildTool({
+  name: 'my_new_tool',
+  description: 'What this tool does',
+  inputSchema: z.object({
+    input: z.string(),
+  }),
+  async execute({ input }, ctx) {
+    const result = await doSomething(input);
+    return { type: 'text', text: result };
+  },
+});
+
+// 2. Register in src/tools.ts
+import { MyNewTool } from './tools/MyNewTool';
+export function getTools(config) {
+  return [...existingTools, MyNewTool];
+}
+```
+
+### Pattern 2: Adding a Slash Command
+
+```typescript
+// src/commands/myCommand.ts
+export const myCommand = {
+  name: 'my-command',
+  description: 'Does something useful',
+  usage: '/my-command [args]',
+  async execute(args: string[], ctx: CommandContext) {
+    const [target] = args;
+    return ctx.query(`Please do something with: ${target}`);
+  },
+};
+
+// Register in src/commands.ts
+export const SLASH_COMMANDS = [...existingCommands, myCommand];
+```
+
+### Pattern 3: Reading Analysis Docs
+
+```bash
+# English architecture analysis
+cat docs/en/architecture-overview.md
+
+# Deep dive PDF
+open docs/claude-code-deep-dive-xelatex.pdf
+```
 
 ---
 
 ## Troubleshooting
 
-### "Cannot find module" errors when trying to build
+### TypeScript source won't compile
+```bash
+# The source is decompiled — some types may need stubs
+cd claude-code-source-code
+ls stubs/   # Check existing stubs
+# Add missing module stubs in stubs/ directory
+```
 
-Expected — 108 internal modules are missing. This source is for **analysis only**, not compilation.
+### Python claw-code import errors
+```bash
+cd claw-code
+pip install -e .   # Install in editable mode
+python -c "from claw_code.agent import ClawAgent; print('OK')"
+```
 
-### Feature flag behavior differs from docs
+### Understanding a specific module
+```bash
+# Use grep to trace a concept through the codebase
+grep -r "autoCompact" claude-code-source-code/src/ --include="*.ts" -l
+grep -r "StreamingToolExecutor" claude-code-source-code/src/ --include="*.ts"
+```
 
-GrowthBook flags are evaluated per-user and can change remotely. Internal Anthropic users get different flag states than external users.
+### Token/context issues in agent loop
+```typescript
+// Adjust compaction threshold in query.ts
+const CONTEXT_COLLAPSE_THRESHOLD = 150_000; // tokens
+const KEEP_LAST_N_MESSAGES = 20;
+```
 
-### Telemetry still fires with DISABLE_TELEMETRY=1
-
-Correct per the analysis — the 1st-party Anthropic sink bypasses the standard opt-out mechanism. See `docs/en/01-telemetry-and-privacy.md` for full details.
-
-### Undercover mode active unexpectedly
-
-Undercover mode auto-activates for Anthropic employee accounts in detected public repos. No toggle exists in the published codebase.
-
----
-
-## Related Resources
-
-- [npm package](https://www.npmjs.com/package/@anthropic-ai/claude-code) — `@anthropic-ai/claude-code`
-- [Anthropic Docs](https://docs.anthropic.com/claude/docs/claude-code) — Official Claude Code documentation
-- [Analysis thread](https://x.com/Fried_rice/status/2038894956459290963) — Original discovery thread
-- `docs/` directory — Full quadrilingual analysis reports
+### Finding where a slash command is handled
+```bash
+grep -r "name: 'commit'" claude-code-source-code/src/commands/ --include="*.ts"
+```
 ```
