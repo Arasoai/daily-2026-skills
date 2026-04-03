@@ -257,6 +257,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [ex-skill-distill](skills/ex-skill-distill/) | [install](https://skills.sh/aradotso/trending-skills/ex-skill-distill) | [therealXiaomanChu/ex-skill](https://github.com/therealXiaomanChu/ex-skill) | 2026-04-02 |
 | [emdash-cms](skills/emdash-cms/) | [install](https://skills.sh/aradotso/trending-skills/emdash-cms) | [emdash-cms/emdash](https://github.com/emdash-cms/emdash) | 2026-04-02 |
 | [claw-code-parity](skills/claw-code-parity/) | [install](https://skills.sh/aradotso/trending-skills/claw-code-parity) | [ultraworkers/claw-code-parity](https://github.com/ultraworkers/claw-code-parity) | 2026-04-02 |
+| [cc-haha-claude-code-local](skills/cc-haha-claude-code-local/) | [install](https://skills.sh/aradotso/trending-skills/cc-haha-claude-code-local) | [NanmiCoder/cc-haha](https://github.com/NanmiCoder/cc-haha) | 2026-04-03 |
 <!-- SKILL_INDEX -->
 
 ## How it works
