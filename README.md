@@ -261,6 +261,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [openharness-agent](skills/openharness-agent/) | [install](https://skills.sh/aradotso/trending-skills/openharness-agent) | [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness) | 2026-04-03 |
 | [collection-claude-code-source-code](skills/collection-claude-code-source-code/) | [install](https://skills.sh/aradotso/trending-skills/collection-claude-code-source-code) | [chauncygu/collection-claude-code-source-code](https://github.com/chauncygu/collection-claude-code-source-code) | 2026-04-03 |
 | [boneyard-skeleton-loading](skills/boneyard-skeleton-loading/) | [install](https://skills.sh/aradotso/trending-skills/boneyard-skeleton-loading) | [0xGF/boneyard](https://github.com/0xGF/boneyard) | 2026-04-03 |
+| [autoagent-harness-engineering](skills/autoagent-harness-engineering/) | [install](https://skills.sh/aradotso/trending-skills/autoagent-harness-engineering) | [kevinrgu/autoagent](https://github.com/kevinrgu/autoagent) | 2026-04-04 |
 <!-- SKILL_INDEX -->
 
 ## How it works
