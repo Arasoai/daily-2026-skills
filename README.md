@@ -263,6 +263,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [boneyard-skeleton-loading](skills/boneyard-skeleton-loading/) | [install](https://skills.sh/aradotso/trending-skills/boneyard-skeleton-loading) | [0xGF/boneyard](https://github.com/0xGF/boneyard) | 2026-04-03 |
 | [autoagent-harness-engineering](skills/autoagent-harness-engineering/) | [install](https://skills.sh/aradotso/trending-skills/autoagent-harness-engineering) | [kevinrgu/autoagent](https://github.com/kevinrgu/autoagent) | 2026-04-04 |
 | [omnivoice-tts](skills/omnivoice-tts/) | [install](https://skills.sh/aradotso/trending-skills/omnivoice-tts) | [k2-fsa/OmniVoice](https://github.com/k2-fsa/OmniVoice) | 2026-04-05 |
+| [pretext-text-measurement](skills/pretext-text-measurement/) | [install](https://skills.sh/aradotso/trending-skills/pretext-text-measurement) | [chenglou/pretext](https://github.com/chenglou/pretext) | 2026-04-05 |
 <!-- SKILL_INDEX -->
 
 ## How it works
