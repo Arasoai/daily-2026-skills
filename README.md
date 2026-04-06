@@ -265,6 +265,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [omnivoice-tts](skills/omnivoice-tts/) | [install](https://skills.sh/aradotso/trending-skills/omnivoice-tts) | [k2-fsa/OmniVoice](https://github.com/k2-fsa/OmniVoice) | 2026-04-05 |
 | [pretext-text-measurement](skills/pretext-text-measurement/) | [install](https://skills.sh/aradotso/trending-skills/pretext-text-measurement) | [chenglou/pretext](https://github.com/chenglou/pretext) | 2026-04-05 |
 | [career-ops-job-search](skills/career-ops-job-search/) | [install](https://skills.sh/aradotso/trending-skills/career-ops-job-search) | [santifer/career-ops](https://github.com/santifer/career-ops) | 2026-04-05 |
+| [caveman-token-optimizer](skills/caveman-token-optimizer/) | [install](https://skills.sh/aradotso/trending-skills/caveman-token-optimizer) | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | 2026-04-06 |
 <!-- SKILL_INDEX -->
 
 ## How it works
