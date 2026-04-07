@@ -283,6 +283,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [yourself-skill-digital-self](skills/yourself-skill-digital-self/) | [install](https://skills.sh/aradotso/trending-skills/yourself-skill-digital-self) | [notdog1998/yourself-skill](https://github.com/notdog1998/yourself-skill) | 2026-04-07 |
 | [paper2code-arxiv-implementation](skills/paper2code-arxiv-implementation/) | [install](https://skills.sh/aradotso/trending-skills/paper2code-arxiv-implementation) | [PrathamLearnsToCode/paper2code](https://github.com/PrathamLearnsToCode/paper2code) | 2026-04-07 |
 | [port-whisperer-cli](skills/port-whisperer-cli/) | [install](https://skills.sh/aradotso/trending-skills/port-whisperer-cli) | [LarsenCundric/port-whisperer](https://github.com/LarsenCundric/port-whisperer) | 2026-04-07 |
+| [harness-engineering-cc-to-ai-coding](skills/harness-engineering-cc-to-ai-coding/) | [install](https://skills.sh/aradotso/trending-skills/harness-engineering-cc-to-ai-coding) | [ZhangHanDong/harness-engineering-from-cc-to-ai-coding](https://github.com/ZhangHanDong/harness-engineering-from-cc-to-ai-coding) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
