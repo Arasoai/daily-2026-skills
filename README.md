@@ -271,6 +271,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [parlor-on-device-ai](skills/parlor-on-device-ai/) | [install](https://skills.sh/aradotso/trending-skills/parlor-on-device-ai) | [fikrikarim/parlor](https://github.com/fikrikarim/parlor) | 2026-04-07 |
 | [mempalace-ai-memory](skills/mempalace-ai-memory/) | [install](https://skills.sh/aradotso/trending-skills/mempalace-ai-memory) | [milla-jovovich/mempalace](https://github.com/milla-jovovich/mempalace) | 2026-04-07 |
 | [metatron-pentest-assistant](skills/metatron-pentest-assistant/) | [install](https://skills.sh/aradotso/trending-skills/metatron-pentest-assistant) | [sooryathejas/METATRON](https://github.com/sooryathejas/METATRON) | 2026-04-07 |
+| [fieldtheory-cli-bookmarks](skills/fieldtheory-cli-bookmarks/) | [install](https://skills.sh/aradotso/trending-skills/fieldtheory-cli-bookmarks) | [afar1/fieldtheory-cli](https://github.com/afar1/fieldtheory-cli) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
