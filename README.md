@@ -280,6 +280,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [anti-distill-skill-sanitizer](skills/anti-distill-skill-sanitizer/) | [install](https://skills.sh/aradotso/trending-skills/anti-distill-skill-sanitizer) | [leilei926524-tech/anti-distill](https://github.com/leilei926524-tech/anti-distill) | 2026-04-07 |
 | [nothing-design-skill](skills/nothing-design-skill/) | [install](https://skills.sh/aradotso/trending-skills/nothing-design-skill) | [dominikmartn/nothing-design-skill](https://github.com/dominikmartn/nothing-design-skill) | 2026-04-07 |
 | [claude-code-source-study](skills/claude-code-source-study/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-source-study) | [luyao618/Claude-Code-Source-Study](https://github.com/luyao618/Claude-Code-Source-Study) | 2026-04-07 |
+| [yourself-skill-digital-self](skills/yourself-skill-digital-self/) | [install](https://skills.sh/aradotso/trending-skills/yourself-skill-digital-self) | [notdog1998/yourself-skill](https://github.com/notdog1998/yourself-skill) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
