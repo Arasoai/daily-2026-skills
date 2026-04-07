@@ -267,6 +267,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [career-ops-job-search](skills/career-ops-job-search/) | [install](https://skills.sh/aradotso/trending-skills/career-ops-job-search) | [santifer/career-ops](https://github.com/santifer/career-ops) | 2026-04-05 |
 | [caveman-token-optimizer](skills/caveman-token-optimizer/) | [install](https://skills.sh/aradotso/trending-skills/caveman-token-optimizer) | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | 2026-04-06 |
 | [nuwa-skill-distiller](skills/nuwa-skill-distiller/) | [install](https://skills.sh/aradotso/trending-skills/nuwa-skill-distiller) | [alchaincyf/nuwa-skill](https://github.com/alchaincyf/nuwa-skill) | 2026-04-07 |
+| [graphify-knowledge-graph](skills/graphify-knowledge-graph/) | [install](https://skills.sh/aradotso/trending-skills/graphify-knowledge-graph) | [safishamsi/graphify](https://github.com/safishamsi/graphify) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
