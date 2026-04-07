@@ -275,6 +275,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [khazix-skills-agent](skills/khazix-skills-agent/) | [install](https://skills.sh/aradotso/trending-skills/khazix-skills-agent) | [KKKKhazix/khazix-skills](https://github.com/KKKKhazix/khazix-skills) | 2026-04-07 |
 | [tong-jincheng-relationship-skill](skills/tong-jincheng-relationship-skill/) | [install](https://skills.sh/aradotso/trending-skills/tong-jincheng-relationship-skill) | [hotcoffeeshake/tong-jincheng-skill](https://github.com/hotcoffeeshake/tong-jincheng-skill) | 2026-04-07 |
 | [free-code-claude-cli](skills/free-code-claude-cli/) | [install](https://skills.sh/aradotso/trending-skills/free-code-claude-cli) | [paoloanzn/free-code](https://github.com/paoloanzn/free-code) | 2026-04-07 |
+| [tong-jincheng-interpersonal-skill](skills/tong-jincheng-interpersonal-skill/) | [install](https://skills.sh/aradotso/trending-skills/tong-jincheng-interpersonal-skill) | [hotcoffeeshake/tong-jincheng-skill](https://github.com/hotcoffeeshake/tong-jincheng-skill) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
