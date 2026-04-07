@@ -285,6 +285,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [port-whisperer-cli](skills/port-whisperer-cli/) | [install](https://skills.sh/aradotso/trending-skills/port-whisperer-cli) | [LarsenCundric/port-whisperer](https://github.com/LarsenCundric/port-whisperer) | 2026-04-07 |
 | [harness-engineering-cc-to-ai-coding](skills/harness-engineering-cc-to-ai-coding/) | [install](https://skills.sh/aradotso/trending-skills/harness-engineering-cc-to-ai-coding) | [ZhangHanDong/harness-engineering-from-cc-to-ai-coding](https://github.com/ZhangHanDong/harness-engineering-from-cc-to-ai-coding) | 2026-04-07 |
 | [claude-code-prompts](skills/claude-code-prompts/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-prompts) | [repowise-dev/claude-code-prompts](https://github.com/repowise-dev/claude-code-prompts) | 2026-04-07 |
+| [clawgod-claude-code-patch](skills/clawgod-claude-code-patch/) | [install](https://skills.sh/aradotso/trending-skills/clawgod-claude-code-patch) | [0Chencc/clawgod](https://github.com/0Chencc/clawgod) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
