@@ -286,6 +286,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [harness-engineering-cc-to-ai-coding](skills/harness-engineering-cc-to-ai-coding/) | [install](https://skills.sh/aradotso/trending-skills/harness-engineering-cc-to-ai-coding) | [ZhangHanDong/harness-engineering-from-cc-to-ai-coding](https://github.com/ZhangHanDong/harness-engineering-from-cc-to-ai-coding) | 2026-04-07 |
 | [claude-code-prompts](skills/claude-code-prompts/) | [install](https://skills.sh/aradotso/trending-skills/claude-code-prompts) | [repowise-dev/claude-code-prompts](https://github.com/repowise-dev/claude-code-prompts) | 2026-04-07 |
 | [clawgod-claude-code-patch](skills/clawgod-claude-code-patch/) | [install](https://skills.sh/aradotso/trending-skills/clawgod-claude-code-patch) | [0Chencc/clawgod](https://github.com/0Chencc/clawgod) | 2026-04-07 |
+| [cabinet-ai-knowledge-base](skills/cabinet-ai-knowledge-base/) | [install](https://skills.sh/aradotso/trending-skills/cabinet-ai-knowledge-base) | [hilash/cabinet](https://github.com/hilash/cabinet) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
