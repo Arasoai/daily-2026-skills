@@ -278,6 +278,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [tong-jincheng-interpersonal-skill](skills/tong-jincheng-interpersonal-skill/) | [install](https://skills.sh/aradotso/trending-skills/tong-jincheng-interpersonal-skill) | [hotcoffeeshake/tong-jincheng-skill](https://github.com/hotcoffeeshake/tong-jincheng-skill) | 2026-04-07 |
 | [sheets-terminal-spreadsheet](skills/sheets-terminal-spreadsheet/) | [install](https://skills.sh/aradotso/trending-skills/sheets-terminal-spreadsheet) | [maaslalani/sheets](https://github.com/maaslalani/sheets) | 2026-04-07 |
 | [anti-distill-skill-sanitizer](skills/anti-distill-skill-sanitizer/) | [install](https://skills.sh/aradotso/trending-skills/anti-distill-skill-sanitizer) | [leilei926524-tech/anti-distill](https://github.com/leilei926524-tech/anti-distill) | 2026-04-07 |
+| [nothing-design-skill](skills/nothing-design-skill/) | [install](https://skills.sh/aradotso/trending-skills/nothing-design-skill) | [dominikmartn/nothing-design-skill](https://github.com/dominikmartn/nothing-design-skill) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
