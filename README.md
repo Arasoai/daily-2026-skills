@@ -269,6 +269,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [nuwa-skill-distiller](skills/nuwa-skill-distiller/) | [install](https://skills.sh/aradotso/trending-skills/nuwa-skill-distiller) | [alchaincyf/nuwa-skill](https://github.com/alchaincyf/nuwa-skill) | 2026-04-07 |
 | [graphify-knowledge-graph](skills/graphify-knowledge-graph/) | [install](https://skills.sh/aradotso/trending-skills/graphify-knowledge-graph) | [safishamsi/graphify](https://github.com/safishamsi/graphify) | 2026-04-07 |
 | [parlor-on-device-ai](skills/parlor-on-device-ai/) | [install](https://skills.sh/aradotso/trending-skills/parlor-on-device-ai) | [fikrikarim/parlor](https://github.com/fikrikarim/parlor) | 2026-04-07 |
+| [mempalace-ai-memory](skills/mempalace-ai-memory/) | [install](https://skills.sh/aradotso/trending-skills/mempalace-ai-memory) | [milla-jovovich/mempalace](https://github.com/milla-jovovich/mempalace) | 2026-04-07 |
 <!-- SKILL_INDEX -->
 
 ## How it works
