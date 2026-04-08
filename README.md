@@ -297,6 +297,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [clawchief-openclaw-chief-of-staff](skills/clawchief-openclaw-chief-of-staff/) | [install](https://skills.sh/aradotso/trending-skills/clawchief-openclaw-chief-of-staff) | [snarktank/clawchief](https://github.com/snarktank/clawchief) | 2026-04-08 |
 | [bluehammer-vulnerability-poc](skills/bluehammer-vulnerability-poc/) | [install](https://skills.sh/aradotso/trending-skills/bluehammer-vulnerability-poc) | [Nightmare-Eclipse/BlueHammer](https://github.com/Nightmare-Eclipse/BlueHammer) | 2026-04-08 |
 | [alayarenderer-generative-world](skills/alayarenderer-generative-world/) | [install](https://skills.sh/aradotso/trending-skills/alayarenderer-generative-world) | [ShandaAI/AlayaRenderer](https://github.com/ShandaAI/AlayaRenderer) | 2026-04-08 |
+| [gemma-tuner-multimodal](skills/gemma-tuner-multimodal/) | [install](https://skills.sh/aradotso/trending-skills/gemma-tuner-multimodal) | [mattmireles/gemma-tuner-multimodal](https://github.com/mattmireles/gemma-tuner-multimodal) | 2026-04-08 |
 <!-- SKILL_INDEX -->
 
 ## How it works
