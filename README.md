@@ -292,6 +292,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [karpathytalk-community](skills/karpathytalk-community/) | [install](https://skills.sh/aradotso/trending-skills/karpathytalk-community) | [karpathy/KarpathyTalk](https://github.com/karpathy/KarpathyTalk) | 2026-04-08 |
 | [tailslayer-dram-hedged-reads](skills/tailslayer-dram-hedged-reads/) | [install](https://skills.sh/aradotso/trending-skills/tailslayer-dram-hedged-reads) | [LaurieWired/tailslayer](https://github.com/LaurieWired/tailslayer) | 2026-04-08 |
 | [bazi-skill-chinese-astrology](skills/bazi-skill-chinese-astrology/) | [install](https://skills.sh/aradotso/trending-skills/bazi-skill-chinese-astrology) | [jinchenma94/bazi-skill](https://github.com/jinchenma94/bazi-skill) | 2026-04-08 |
+| [claude-skill-app-onboarding-questionnaire](skills/claude-skill-app-onboarding-questionnaire/) | [install](https://skills.sh/aradotso/trending-skills/claude-skill-app-onboarding-questionnaire) | [adamlyttleapps/claude-skill-app-onboarding-questionnaire](https://github.com/adamlyttleapps/claude-skill-app-onboarding-questionnaire) | 2026-04-08 |
 <!-- SKILL_INDEX -->
 
 ## How it works
