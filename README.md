@@ -295,6 +295,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [claude-skill-app-onboarding-questionnaire](skills/claude-skill-app-onboarding-questionnaire/) | [install](https://skills.sh/aradotso/trending-skills/claude-skill-app-onboarding-questionnaire) | [adamlyttleapps/claude-skill-app-onboarding-questionnaire](https://github.com/adamlyttleapps/claude-skill-app-onboarding-questionnaire) | 2026-04-08 |
 | [gemma-gem-browser-ai](skills/gemma-gem-browser-ai/) | [install](https://skills.sh/aradotso/trending-skills/gemma-gem-browser-ai) | [kessler/gemma-gem](https://github.com/kessler/gemma-gem) | 2026-04-08 |
 | [clawchief-openclaw-chief-of-staff](skills/clawchief-openclaw-chief-of-staff/) | [install](https://skills.sh/aradotso/trending-skills/clawchief-openclaw-chief-of-staff) | [snarktank/clawchief](https://github.com/snarktank/clawchief) | 2026-04-08 |
+| [bluehammer-vulnerability-poc](skills/bluehammer-vulnerability-poc/) | [install](https://skills.sh/aradotso/trending-skills/bluehammer-vulnerability-poc) | [Nightmare-Eclipse/BlueHammer](https://github.com/Nightmare-Eclipse/BlueHammer) | 2026-04-08 |
 <!-- SKILL_INDEX -->
 
 ## How it works
