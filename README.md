@@ -288,6 +288,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [clawgod-claude-code-patch](skills/clawgod-claude-code-patch/) | [install](https://skills.sh/aradotso/trending-skills/clawgod-claude-code-patch) | [0Chencc/clawgod](https://github.com/0Chencc/clawgod) | 2026-04-07 |
 | [cabinet-ai-knowledge-base](skills/cabinet-ai-knowledge-base/) | [install](https://skills.sh/aradotso/trending-skills/cabinet-ai-knowledge-base) | [hilash/cabinet](https://github.com/hilash/cabinet) | 2026-04-07 |
 | [x-mentor-skill-nuwa](skills/x-mentor-skill-nuwa/) | [install](https://skills.sh/aradotso/trending-skills/x-mentor-skill-nuwa) | [alchaincyf/x-mentor-skill](https://github.com/alchaincyf/x-mentor-skill) | 2026-04-08 |
+| [steve-jobs-skill-cognitive-framework](skills/steve-jobs-skill-cognitive-framework/) | [install](https://skills.sh/aradotso/trending-skills/steve-jobs-skill-cognitive-framework) | [alchaincyf/steve-jobs-skill](https://github.com/alchaincyf/steve-jobs-skill) | 2026-04-08 |
 <!-- SKILL_INDEX -->
 
 ## How it works
