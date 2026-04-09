@@ -302,6 +302,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [zhangxuefeng-skill](skills/zhangxuefeng-skill/) | [install](https://skills.sh/aradotso/trending-skills/zhangxuefeng-skill) | [alchaincyf/zhangxuefeng-skill](https://github.com/alchaincyf/zhangxuefeng-skill) | 2026-04-08 |
 | [awesome-persona-skills](skills/awesome-persona-skills/) | [install](https://skills.sh/aradotso/trending-skills/awesome-persona-skills) | [tmstack/awesome-persona-skills](https://github.com/tmstack/awesome-persona-skills) | 2026-04-09 |
 | [hermes-agent-nous-research](skills/hermes-agent-nous-research/) | [install](https://skills.sh/aradotso/trending-skills/hermes-agent-nous-research) | [alchaincyf/hermes-agent-orange-book](https://github.com/alchaincyf/hermes-agent-orange-book) | 2026-04-09 |
+| [awesome-persona-distill-skills](skills/awesome-persona-distill-skills/) | [install](https://skills.sh/aradotso/trending-skills/awesome-persona-distill-skills) | [xixu-me/awesome-persona-distill-skills](https://github.com/xixu-me/awesome-persona-distill-skills) | 2026-04-09 |
 <!-- SKILL_INDEX -->
 
 ## How it works
