@@ -303,6 +303,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [awesome-persona-skills](skills/awesome-persona-skills/) | [install](https://skills.sh/aradotso/trending-skills/awesome-persona-skills) | [tmstack/awesome-persona-skills](https://github.com/tmstack/awesome-persona-skills) | 2026-04-09 |
 | [hermes-agent-nous-research](skills/hermes-agent-nous-research/) | [install](https://skills.sh/aradotso/trending-skills/hermes-agent-nous-research) | [alchaincyf/hermes-agent-orange-book](https://github.com/alchaincyf/hermes-agent-orange-book) | 2026-04-09 |
 | [awesome-persona-distill-skills](skills/awesome-persona-distill-skills/) | [install](https://skills.sh/aradotso/trending-skills/awesome-persona-distill-skills) | [xixu-me/awesome-persona-distill-skills](https://github.com/xixu-me/awesome-persona-distill-skills) | 2026-04-09 |
+| [binance-futures-signal-bot](skills/binance-futures-signal-bot/) | [install](https://skills.sh/aradotso/trending-skills/binance-futures-signal-bot) | [Whit1985/Binance-Futures-Signal-Bot](https://github.com/Whit1985/Binance-Futures-Signal-Bot) | 2026-04-09 |
 <!-- SKILL_INDEX -->
 
 ## How it works
