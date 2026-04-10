@@ -308,6 +308,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [phoneclaw-ios-ai-agent](skills/phoneclaw-ios-ai-agent/) | [install](https://skills.sh/aradotso/trending-skills/phoneclaw-ios-ai-agent) | [kellyvv/PhoneClaw](https://github.com/kellyvv/PhoneClaw) | 2026-04-09 |
 | [keychron-keyboards-hardware-design](skills/keychron-keyboards-hardware-design/) | [install](https://skills.sh/aradotso/trending-skills/keychron-keyboards-hardware-design) | [Keychron/Keychron-Keyboards-Hardware-Design](https://github.com/Keychron/Keychron-Keyboards-Hardware-Design) | 2026-04-09 |
 | [happy-horse-video-generator](skills/happy-horse-video-generator/) | [install](https://skills.sh/aradotso/trending-skills/happy-horse-video-generator) | [brooks376/Happy-Horse-1.0](https://github.com/brooks376/Happy-Horse-1.0) | 2026-04-10 |
+| [llm-wiki-skill](skills/llm-wiki-skill/) | [install](https://skills.sh/aradotso/trending-skills/llm-wiki-skill) | [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) | 2026-04-10 |
 <!-- SKILL_INDEX -->
 
 ## How it works
