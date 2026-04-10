@@ -309,6 +309,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [keychron-keyboards-hardware-design](skills/keychron-keyboards-hardware-design/) | [install](https://skills.sh/aradotso/trending-skills/keychron-keyboards-hardware-design) | [Keychron/Keychron-Keyboards-Hardware-Design](https://github.com/Keychron/Keychron-Keyboards-Hardware-Design) | 2026-04-09 |
 | [happy-horse-video-generator](skills/happy-horse-video-generator/) | [install](https://skills.sh/aradotso/trending-skills/happy-horse-video-generator) | [brooks376/Happy-Horse-1.0](https://github.com/brooks376/Happy-Horse-1.0) | 2026-04-10 |
 | [llm-wiki-skill](skills/llm-wiki-skill/) | [install](https://skills.sh/aradotso/trending-skills/llm-wiki-skill) | [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) | 2026-04-10 |
+| [claude-memory-compiler](skills/claude-memory-compiler/) | [install](https://skills.sh/aradotso/trending-skills/claude-memory-compiler) | [coleam00/claude-memory-compiler](https://github.com/coleam00/claude-memory-compiler) | 2026-04-10 |
 <!-- SKILL_INDEX -->
 
 ## How it works
