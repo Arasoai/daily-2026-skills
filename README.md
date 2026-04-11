@@ -311,6 +311,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [llm-wiki-skill](skills/llm-wiki-skill/) | [install](https://skills.sh/aradotso/trending-skills/llm-wiki-skill) | [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) | 2026-04-10 |
 | [claude-memory-compiler](skills/claude-memory-compiler/) | [install](https://skills.sh/aradotso/trending-skills/claude-memory-compiler) | [coleam00/claude-memory-compiler](https://github.com/coleam00/claude-memory-compiler) | 2026-04-10 |
 | [gbrain-agent-knowledge](skills/gbrain-agent-knowledge/) | [install](https://skills.sh/aradotso/trending-skills/gbrain-agent-knowledge) | [garrytan/gbrain](https://github.com/garrytan/gbrain) | 2026-04-10 |
+| [pyre-code-ml-practice](skills/pyre-code-ml-practice/) | [install](https://skills.sh/aradotso/trending-skills/pyre-code-ml-practice) | [whwangovo/pyre-code](https://github.com/whwangovo/pyre-code) | 2026-04-11 |
 <!-- SKILL_INDEX -->
 
 ## How it works
