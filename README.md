@@ -318,6 +318,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [pokeclaw-android-ai-agent](skills/pokeclaw-android-ai-agent/) | [install](https://skills.sh/aradotso/trending-skills/pokeclaw-android-ai-agent) | [agents-io/PokeClaw](https://github.com/agents-io/PokeClaw) | 2026-04-11 |
 | [friday-tony-stark-voice-assistant](skills/friday-tony-stark-voice-assistant/) | [install](https://skills.sh/aradotso/trending-skills/friday-tony-stark-voice-assistant) | [SAGAR-TAMANG/friday-tony-stark-demo](https://github.com/SAGAR-TAMANG/friday-tony-stark-demo) | 2026-04-11 |
 | [codex-oauth-automation-extension](skills/codex-oauth-automation-extension/) | [install](https://skills.sh/aradotso/trending-skills/codex-oauth-automation-extension) | [QLHazyCoder/codex-oauth-automation-extension](https://github.com/QLHazyCoder/codex-oauth-automation-extension) | 2026-04-11 |
+| [claude-howto-guide](skills/claude-howto-guide/) | [install](https://skills.sh/aradotso/trending-skills/claude-howto-guide) | [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) | 2026-04-11 |
 <!-- SKILL_INDEX -->
 
 ## How it works
