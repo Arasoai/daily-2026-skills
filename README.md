@@ -315,6 +315,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [littlesnitch-linux](skills/littlesnitch-linux/) | [install](https://skills.sh/aradotso/trending-skills/littlesnitch-linux) | [obdev/littlesnitch-linux](https://github.com/obdev/littlesnitch-linux) | 2026-04-11 |
 | [claude-obsidian-wiki](skills/claude-obsidian-wiki/) | [install](https://skills.sh/aradotso/trending-skills/claude-obsidian-wiki) | [AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) | 2026-04-11 |
 | [hermes-hudui-consciousness-monitor](skills/hermes-hudui-consciousness-monitor/) | [install](https://skills.sh/aradotso/trending-skills/hermes-hudui-consciousness-monitor) | [joeynyc/hermes-hudui](https://github.com/joeynyc/hermes-hudui) | 2026-04-11 |
+| [pokeclaw-android-ai-agent](skills/pokeclaw-android-ai-agent/) | [install](https://skills.sh/aradotso/trending-skills/pokeclaw-android-ai-agent) | [agents-io/PokeClaw](https://github.com/agents-io/PokeClaw) | 2026-04-11 |
 <!-- SKILL_INDEX -->
 
 ## How it works
