@@ -322,6 +322,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [fireworks-tech-graph](skills/fireworks-tech-graph/) | [install](https://skills.sh/aradotso/trending-skills/fireworks-tech-graph) | [yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) | 2026-04-11 |
 | [skillclaw-skill-evolution](skills/skillclaw-skill-evolution/) | [install](https://skills.sh/aradotso/trending-skills/skillclaw-skill-evolution) | [AMAP-ML/SkillClaw](https://github.com/AMAP-ML/SkillClaw) | 2026-04-12 |
 | [sbti-personality-test](skills/sbti-personality-test/) | [install](https://skills.sh/aradotso/trending-skills/sbti-personality-test) | [UnluckyNinja/SBTI-test](https://github.com/UnluckyNinja/SBTI-test) | 2026-04-12 |
+| [simpleauthflow-chrome-extension](skills/simpleauthflow-chrome-extension/) | [install](https://skills.sh/aradotso/trending-skills/simpleauthflow-chrome-extension) | [NyxTides/SimpleAuthFlow](https://github.com/NyxTides/SimpleAuthFlow) | 2026-04-12 |
 <!-- SKILL_INDEX -->
 
 ## How it works
