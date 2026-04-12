@@ -320,6 +320,7 @@ npx skills add Aradotso/trending-skills --skill lightpanda-browser
 | [codex-oauth-automation-extension](skills/codex-oauth-automation-extension/) | [install](https://skills.sh/aradotso/trending-skills/codex-oauth-automation-extension) | [QLHazyCoder/codex-oauth-automation-extension](https://github.com/QLHazyCoder/codex-oauth-automation-extension) | 2026-04-11 |
 | [claude-howto-guide](skills/claude-howto-guide/) | [install](https://skills.sh/aradotso/trending-skills/claude-howto-guide) | [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) | 2026-04-11 |
 | [fireworks-tech-graph](skills/fireworks-tech-graph/) | [install](https://skills.sh/aradotso/trending-skills/fireworks-tech-graph) | [yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) | 2026-04-11 |
+| [skillclaw-skill-evolution](skills/skillclaw-skill-evolution/) | [install](https://skills.sh/aradotso/trending-skills/skillclaw-skill-evolution) | [AMAP-ML/SkillClaw](https://github.com/AMAP-ML/SkillClaw) | 2026-04-12 |
 <!-- SKILL_INDEX -->
 
 ## How it works
